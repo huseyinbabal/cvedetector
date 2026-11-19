@@ -1,0 +1,11 @@
+id: memcached
+name: "Memcached"
+images:
+  - docker.io/library/memcached
+  - docker.io/bitnami/memcached
+nvd:
+  cpes:
+    - cpe:2.3:a:memcached:memcached
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.6.32-alpine": "1.6.32"

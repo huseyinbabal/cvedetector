@@ -34,22 +34,3 @@ spec:
                 port: { name: http }
           {{- end }}
 {{- end }}
-{{- if .Values.serviceMonitor.enabled }}
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: {{ include "cvedetector.fullname" . }}
-  labels:
-    {{- include "cvedetector.labels" . | nindent 4 }}
-    {{- with .Values.serviceMonitor.labels }}{{ toYaml . | nindent 4 }}{{ end }}
-spec:
-  selector:
-    matchExpressions:
-      - { key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name | quote }}] }
-      - { key: app.kubernetes.io/component, operator: In, values: [api, agent] }
-  endpoints:
-    - port: http
-      path: /metrics
-      interval: {{ .Values.serviceMonitor.interval }}
-{{- end }}

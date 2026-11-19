@@ -19,6 +19,8 @@ type Collector struct {
 	ttl              time.Duration
 	workloadMetrics  bool
 	vulns, kev       *prometheus.Desc
+	clusterVulns     *prometheus.Desc
+	clusterKEV       *prometheus.Desc
 	images, reportAt *prometheus.Desc
 	feedAge          *prometheus.Desc
 	workload         *prometheus.Desc
@@ -33,8 +35,12 @@ type Collector struct {
 func New(pool *pgxpool.Pool, log *slog.Logger, workloadMetrics bool) *Collector {
 	return &Collector{
 		pool: pool, log: log, ttl: 30 * time.Second, workloadMetrics: workloadMetrics,
-		vulns:    prometheus.NewDesc("cvedetector_vulnerabilities", "Distinct open vulnerabilities affecting running workloads.", []string{"cluster", "namespace", "severity"}, nil),
-		kev:      prometheus.NewDesc("cvedetector_kev_vulnerabilities", "Distinct open vulnerabilities listed in CISA KEV.", []string{"cluster", "namespace"}, nil),
+		vulns: prometheus.NewDesc("cvedetector_vulnerabilities", "Distinct open vulnerabilities affecting running workloads.", []string{"cluster", "namespace", "severity"}, nil),
+		kev:   prometheus.NewDesc("cvedetector_kev_vulnerabilities", "Distinct open vulnerabilities listed in CISA KEV.", []string{"cluster", "namespace"}, nil),
+		clusterVulns: prometheus.NewDesc("cvedetector_cluster_vulnerabilities",
+			"Distinct open vulnerabilities per cluster (a CVE in several namespaces counts once).", []string{"cluster", "severity"}, nil),
+		clusterKEV: prometheus.NewDesc("cvedetector_cluster_kev_vulnerabilities",
+			"Distinct open CISA KEV vulnerabilities per cluster.", []string{"cluster"}, nil),
 		images:   prometheus.NewDesc("cvedetector_images", "Distinct running images by match status.", []string{"cluster", "status"}, nil),
 		reportAt: prometheus.NewDesc("cvedetector_cluster_last_report_timestamp_seconds", "Unix time of the last inventory report.", []string{"cluster"}, nil),
 		feedAge:  prometheus.NewDesc("cvedetector_feed_age_seconds", "Seconds since the stored feed was generated (-1 when none).", nil, nil),
@@ -44,7 +50,7 @@ func New(pool *pgxpool.Pool, log *slog.Logger, workloadMetrics bool) *Collector 
 
 // Describe implements prometheus.Collector.
 func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
-	for _, d := range []*prometheus.Desc{c.vulns, c.kev, c.images, c.reportAt, c.feedAge, c.workload} {
+	for _, d := range []*prometheus.Desc{c.vulns, c.kev, c.clusterVulns, c.clusterKEV, c.images, c.reportAt, c.feedAge, c.workload} {
 		ch <- d
 	}
 }
@@ -99,6 +105,43 @@ func (c *Collector) query(ctx context.Context) ([]prometheus.Metric, error) {
 	}
 	for key, n := range kev {
 		add(c.kev, n, key[0], key[1])
+	}
+	rows, err = c.pool.Query(ctx, `
+		SELECT f.cluster, v.severity, count(DISTINCT (f.product, f.vuln_id)),
+		       count(DISTINCT (f.product, f.vuln_id)) FILTER (WHERE v.kev)
+		FROM findings f JOIN vulns v ON v.product = f.product AND v.id = f.vuln_id
+		WHERE f.resolved_at IS NULL
+		GROUP BY 1, 2`)
+	if err != nil {
+		return nil, err
+	}
+	clusterKEV := map[string]float64{}
+	for rows.Next() {
+		var cl, sev string
+		var n, k float64
+		if err := rows.Scan(&cl, &sev, &n, &k); err != nil {
+			return nil, err
+		}
+		add(c.clusterVulns, n, cl, sev)
+		clusterKEV[cl] += k
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	// Every cluster gets a KEV series (0 included) so alerts and panels can rely on it.
+	rows, err = c.pool.Query(ctx, `SELECT name FROM clusters`)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var cl string
+		if err := rows.Scan(&cl); err != nil {
+			return nil, err
+		}
+		add(c.clusterKEV, clusterKEV[cl], cl)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
 	}
 	rows, err = c.pool.Query(ctx, `SELECT cluster, status, count(*) FROM images GROUP BY 1, 2`)
 	if err != nil {

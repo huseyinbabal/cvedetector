@@ -3,3 +3,4 @@ node_modules/
 apps/ui/dist/
 *.test
 .DS_Store
+.discover-cache.json

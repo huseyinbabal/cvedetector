@@ -1,4 +1,4 @@
-import { CircleHelp, CirclePlus, Copy, ExternalLink, Tag } from "lucide-react";
+import { CircleHelp, CirclePlus, Copy, ExternalLink, GitPullRequest, Tag } from "lucide-react";
 import { type Image, type Page, query, useApi } from "@/api";
 import { StatusBadge } from "@/components/app/badges";
 import { EmptyState, ErrorState, PageHeader, PageSkeleton, Section } from "@/components/app/page";
@@ -18,7 +18,7 @@ export function Unknown({ cluster }: { cluster: string }) {
   if ((unknown.loading && !unknown.data) || (noVersion.loading && !noVersion.data)) return <PageSkeleton />;
   if (error && !unknown.data) return <ErrorState error={error} />;
 
-  // Group by repository: that's what products.yaml maps.
+  // Group by repository: that's what product files map.
   const repos = new Map<string, Image[]>();
   for (const i of unknown.data?.items ?? []) repos.set(i.repository, [...(repos.get(i.repository) ?? []), i]);
   const unversioned = noVersion.data?.items ?? [];
@@ -35,7 +35,7 @@ export function Unknown({ cluster }: { cluster: string }) {
           {repos.size ? (
             <>
               <p className="mb-3 text-[13px] text-muted-foreground">
-                Add a product to <code>feed/products.yaml</code> to start tracking a repository. Your own application images usually land here
+                Add a product file under <code>feed/products/</code> with a pull request to start tracking a repository. Your own application images usually land here
                 and can't be tracked this way.
                 {truncated && " Showing the first 500 images."}
               </p>
@@ -56,7 +56,7 @@ export function Unknown({ cluster }: { cluster: string }) {
                         <TableCell className="font-mono text-xs whitespace-normal">{[...new Set(imgs.map((i) => i.tag ?? "(digest)"))].join(", ")}</TableCell>
                         <TableCell className="text-right tabular-nums">{imgs.reduce((n, i) => n + i.pods, 0)}</TableCell>
                         <TableCell className="pr-4 text-right">
-                          <Suggest repo={repo} />
+                          <Suggest repo={repo} tags={[...new Set(imgs.map((i) => i.tag ?? "(digest)"))]} />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -95,13 +95,25 @@ export function Unknown({ cluster }: { cluster: string }) {
   );
 }
 
-function Suggest({ repo }: { repo: string }) {
+/** Proposes a product file. "Open pull request" opens GitHub's new-file page
+ * pre-filled; for people without write access GitHub forks and opens a PR. */
+function Suggest({ repo, tags }: { repo: string; tags: string[] }) {
   const id = repo.split("/").pop()!.toLowerCase().replace(/[^a-z0-9-]/g, "-");
-  const snippet = `  - id: ${id}\n    name: ${id}\n    images: [${repo}]\n    nvd:\n      cpes: [cpe:2.3:a:<vendor>:<product>]\n`;
-  const issue = `${REPO_URL}/issues/new?${new URLSearchParams({
-    title: `Track ${repo} in the feed`,
-    body: `Please add this repository to feed/products.yaml:\n\n\`\`\`yaml\n${snippet}\`\`\``,
-  })}`;
+  const sample = tags.filter((t) => t !== "(digest)").slice(0, 3);
+  const testTags = (sample.length ? sample : ["<a tag you run>"]).map((t) => `  "${t}": "<version in this tag>"`).join("\n");
+  const snippet = `# ${repo}
+id: ${id}
+name: "${id}"
+images:
+  - ${repo}
+nvd:
+  cpes:
+    - cpe:2.3:a:<vendor>:<product>   # https://nvd.nist.gov/products/cpe/search
+testTags:
+${testTags}
+`;
+  const newFile = `${REPO_URL}/new/main?${new URLSearchParams({ filename: `feed/products/${id}.yaml`, value: snippet })}`;
+  const issue = `${REPO_URL}/issues/new?${new URLSearchParams({ template: "product.yml", title: `Track ${repo} in the feed` })}`;
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -109,18 +121,24 @@ function Suggest({ repo }: { repo: string }) {
           <CirclePlus /> Add to feed
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-80">
+      <PopoverContent align="end" className="w-96">
         <p className="mb-2 text-xs text-muted-foreground">
-          Entry for <code>feed/products.yaml</code>. Fill in the CPE or an OSV package.
+          New file <code>feed/products/{id}.yaml</code>. Fill in the CPE (or an OSV package) and the versions, then open a pull request. A
+          check queries the source and reports what would match.
         </p>
-        <pre className="mb-3 overflow-x-auto rounded-md bg-muted p-2.5 font-mono text-xs leading-relaxed">{snippet}</pre>
-        <div className="flex gap-2">
-          <Button size="xs" variant="secondary" onClick={() => void copyText(snippet, "Snippet copied")}>
+        <pre className="mb-3 max-h-56 overflow-auto rounded-md bg-muted p-2.5 font-mono text-xs leading-relaxed">{snippet}</pre>
+        <div className="flex flex-wrap gap-2">
+          <Button size="xs" asChild>
+            <a href={newFile} target="_blank" rel="noreferrer noopener" className="text-primary-foreground no-underline hover:no-underline">
+              <GitPullRequest /> Open pull request
+            </a>
+          </Button>
+          <Button size="xs" variant="secondary" onClick={() => void copyText(snippet, "Product file copied")}>
             <Copy /> Copy
           </Button>
-          <Button size="xs" variant="secondary" asChild>
+          <Button size="xs" variant="ghost" asChild>
             <a href={issue} target="_blank" rel="noreferrer noopener" className="no-underline hover:no-underline">
-              <ExternalLink /> Open issue
+              <ExternalLink /> Request instead
             </a>
           </Button>
         </div>

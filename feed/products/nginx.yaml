@@ -1,0 +1,16 @@
+# Web server and reverse proxy.
+id: nginx
+name: "NGINX"
+images:
+  - docker.io/library/nginx
+  - docker.io/nginxinc/nginx-unprivileged
+  - docker.io/bitnami/nginx
+nvd:
+  cpes:
+    - cpe:2.3:a:f5:nginx
+    - cpe:2.3:a:nginx:nginx
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.27.3-alpine": "1.27.3"
+  "1.27": "1.27"
+  "latest": ""

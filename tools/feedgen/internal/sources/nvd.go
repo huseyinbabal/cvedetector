@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -249,4 +250,88 @@ func truncate(s string, n int) string {
 		return s
 	}
 	return strings.TrimSpace(s[:n]) + "…"
+}
+
+const nvdCPEURL = "https://services.nvd.nist.gov/rest/json/cpes/2.0"
+
+// SearchCPEProducts returns the distinct "cpe:2.3:a:<vendor>:<product>"
+// prefixes of application CPEs whose product name equals one of names.
+func (n *NVD) SearchCPEProducts(ctx context.Context, keyword string, names []string) ([]string, error) {
+	want := map[string]bool{}
+	for _, nm := range names {
+		want[strings.ToLower(nm)] = true
+	}
+	set := map[string]bool{}
+	for start := 0; ; {
+		if err := n.wait(ctx); err != nil {
+			return nil, err
+		}
+		q := url.Values{}
+		q.Set("keywordSearch", keyword)
+		q.Set("resultsPerPage", "10000")
+		q.Set("startIndex", strconv.Itoa(start))
+		u := nvdCPEURL + "?" + q.Encode()
+		body, err := n.Client.Do(ctx, func() (*http.Request, error) {
+			req, err := http.NewRequest(http.MethodGet, u, nil)
+			if err == nil && n.APIKey != "" {
+				req.Header.Set("apiKey", n.APIKey)
+			}
+			return req, err
+		})
+		if err != nil {
+			return nil, fmt.Errorf("nvd cpe search %q: %w", keyword, err)
+		}
+		var page struct {
+			TotalResults int `json:"totalResults"`
+			Products     []struct {
+				CPE struct {
+					Name       string `json:"cpeName"`
+					Deprecated bool   `json:"deprecated"`
+				} `json:"cpe"`
+			} `json:"products"`
+		}
+		if err := json.Unmarshal(body, &page); err != nil {
+			return nil, fmt.Errorf("nvd cpe search %q: decode: %w", keyword, err)
+		}
+		for _, p := range page.Products {
+			f := splitCPE(p.CPE.Name)
+			if p.CPE.Deprecated || len(f) < 5 || f[2] != "a" || !want[strings.ToLower(f[4])] {
+				continue
+			}
+			set["cpe:2.3:a:"+f[3]+":"+f[4]] = true
+		}
+		start += len(page.Products)
+		if len(page.Products) == 0 || start >= page.TotalResults || start >= 50000 {
+			break
+		}
+	}
+	out := make([]string, 0, len(set))
+	for c := range set {
+		out = append(out, c)
+	}
+	sort.Strings(out)
+	return out, nil
+}
+
+// CountCVEs returns how many CVEs mark a CPE prefix vulnerable.
+func (n *NVD) CountCVEs(ctx context.Context, cpePrefix string) (int, error) {
+	if err := n.wait(ctx); err != nil {
+		return 0, err
+	}
+	u := nvdURL + "?" + url.Values{"virtualMatchString": {cpePrefix}, "resultsPerPage": {"1"}}.Encode() + "&noRejected"
+	body, err := n.Client.Do(ctx, func() (*http.Request, error) {
+		req, err := http.NewRequest(http.MethodGet, u, nil)
+		if err == nil && n.APIKey != "" {
+			req.Header.Set("apiKey", n.APIKey)
+		}
+		return req, err
+	})
+	if err != nil {
+		return 0, fmt.Errorf("nvd count %s: %w", cpePrefix, err)
+	}
+	var page struct {
+		TotalResults int `json:"totalResults"`
+	}
+	err = json.Unmarshal(body, &page)
+	return page.TotalResults, err
 }

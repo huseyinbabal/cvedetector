@@ -1,0 +1,12 @@
+id: mongodb
+name: "MongoDB"
+images:
+  - docker.io/library/mongo
+  - docker.io/bitnami/mongodb
+nvd:
+  cpes:
+    - cpe:2.3:a:mongodb:mongodb
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "8.0.3": "8.0.3"
+  "7.0.15-jammy": "7.0.15"

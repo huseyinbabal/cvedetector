@@ -99,6 +99,9 @@ app.kubernetes.io/component: {{ .component }}
 {{- fail "agent.existingTokenSecret (or agent.token) is required when api.enabled=false" -}}
 {{- end -}}
 {{- end -}}
+{{- if and $v.dashboard.enabled (not $v.metrics.enabled) -}}
+{{- fail "dashboard.enabled needs metrics.enabled: the dashboard reads the Prometheus metrics" -}}
+{{- end -}}
 {{- if and $v.ui.enabled (not $v.api.enabled) -}}
 {{- fail "ui.enabled requires api.enabled in the same release" -}}
 {{- end -}}

@@ -147,6 +147,9 @@ func run(ctx context.Context, cfg config, log *slog.Logger) error {
 	}, []string{"result"})
 	feedErrors := prometheus.NewCounter(prometheus.CounterOpts{Name: "cvedetector_feed_sync_errors_total", Help: "Failed feed syncs."})
 	reg.MustRegister(ingests, feedErrors)
+	for _, r := range []string{"changed", "unchanged", "error"} {
+		ingests.WithLabelValues(r) // export 0 before the first report so rate() works
+	}
 
 	api := &httpapi.Server{
 		Store: st, IngestTokens: tokens, Log: log,

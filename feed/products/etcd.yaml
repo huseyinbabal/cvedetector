@@ -1,0 +1,13 @@
+id: etcd
+name: "etcd"
+images:
+  - registry.k8s.io/etcd
+  - quay.io/coreos/etcd
+  - docker.io/bitnami/etcd
+nvd:
+  cpes:
+    - cpe:2.3:a:etcd:etcd
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.5.15-0": "3.5.15"
+  "v3.5.17": "3.5.17"

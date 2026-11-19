@@ -1,11 +1,14 @@
-// Package config loads feed/products.yaml.
+// Package config loads the product catalog: one YAML file per product in
+// feed/products/<id>.yaml (so contributions don't conflict).
 package config
 
 import (
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
+	"sort"
 	"strings"
 
 	"sigs.k8s.io/yaml"
@@ -13,9 +16,10 @@ import (
 	"github.com/huseyinbabal/cvedetector/pkg/feed"
 )
 
-// Config is the root of products.yaml.
+// Config is the product catalog.
 type Config struct {
 	Products []Product `json:"products"`
+	files    map[string]string
 }
 
 // Product describes how to recognize a product's images and where its CVEs live.
@@ -27,6 +31,9 @@ type Product struct {
 	MinSegments    int          `json:"minSegments,omitempty"`
 	NVD            *NVDSource   `json:"nvd,omitempty"`
 	OSV            []OSVPackage `json:"osv,omitempty"`
+	// TestTags maps example image tags to the version that must be read from
+	// them ("" = no version, e.g. "latest"). Checked by Validate.
+	TestTags map[string]string `json:"testTags"`
 }
 
 // NVDSource lists CPE prefixes ("cpe:2.3:a:<vendor>:<product>").
@@ -42,65 +49,118 @@ type OSVPackage struct {
 
 var idRe = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 
-// Load reads and validates a config file.
-func Load(file string) (*Config, error) {
-	b, err := os.ReadFile(file)
+// Load reads a directory of <id>.yaml product files.
+func Load(dir string) (*Config, error) {
+	entries, err := os.ReadDir(dir)
 	if err != nil {
 		return nil, err
 	}
-	var c Config
-	if err := yaml.UnmarshalStrict(b, &c); err != nil {
-		return nil, fmt.Errorf("%s: %w", file, err)
+	c := &Config{files: map[string]string{}}
+	for _, e := range entries {
+		if e.IsDir() || !(strings.HasSuffix(e.Name(), ".yaml") || strings.HasSuffix(e.Name(), ".yml")) {
+			continue
+		}
+		file := filepath.Join(dir, e.Name())
+		b, err := os.ReadFile(file)
+		if err != nil {
+			return nil, err
+		}
+		var p Product
+		if err := yaml.UnmarshalStrict(b, &p); err != nil {
+			return nil, fmt.Errorf("%s: %w", file, err)
+		}
+		if want := strings.TrimSuffix(strings.TrimSuffix(e.Name(), ".yaml"), ".yml"); p.ID != want {
+			return nil, fmt.Errorf("%s: id %q must match the file name (%s)", file, p.ID, want)
+		}
+		c.Products = append(c.Products, p)
+		c.files[p.ID] = file
 	}
-	return &c, c.Validate()
+	sort.Slice(c.Products, func(i, j int) bool { return c.Products[i].ID < c.Products[j].ID })
+	if len(c.Products) == 0 {
+		return nil, fmt.Errorf("%s: no product files", dir)
+	}
+	return c, c.Validate()
 }
 
-// Validate checks ids, image patterns, version patterns and sources.
+// File returns the file a product was loaded from.
+func (c *Config) File(id string) string { return c.files[id] }
+
+// Validate checks ids, image patterns, version patterns, test tags and sources.
 func (c *Config) Validate() error {
 	ids := map[string]bool{}
 	images := map[string]string{}
-	for i, p := range c.Products {
-		where := fmt.Sprintf("products[%d] (%s)", i, p.ID)
+	var errs []string
+	for _, p := range c.Products {
+		where := p.ID
+		if f := c.files[p.ID]; f != "" {
+			where = f
+		}
+		fail := func(format string, a ...any) { errs = append(errs, where+": "+fmt.Sprintf(format, a...)) }
 		if !idRe.MatchString(p.ID) {
-			return fmt.Errorf("%s: id must match %s", where, idRe)
+			fail("id must match %s", idRe)
 		}
 		if ids[p.ID] {
-			return fmt.Errorf("%s: duplicate id", where)
+			fail("duplicate id")
 		}
 		ids[p.ID] = true
+		if strings.TrimSpace(p.Name) == "" {
+			fail("name is required")
+		}
 		if len(p.Images) == 0 {
-			return fmt.Errorf("%s: at least one image is required", where)
+			fail("at least one image is required")
 		}
 		for _, img := range p.Images {
 			if _, err := path.Match(img, ""); err != nil {
-				return fmt.Errorf("%s: bad image pattern %q: %w", where, img, err)
+				fail("bad image pattern %q: %v", img, err)
 			}
-			if strings.Contains(img, ":") && !strings.Contains(strings.SplitN(img, "/", 2)[0], ":") {
-				return fmt.Errorf("%s: image %q must be a repository without a tag", where, img)
+			first := strings.SplitN(img, "/", 2)[0]
+			if !strings.Contains(first, ".") && first != "localhost" {
+				fail("image %q must start with its registry (e.g. docker.io/library/nginx)", img)
+			}
+			if strings.Contains(strings.TrimPrefix(img, first), ":") || strings.Contains(img, "@") {
+				fail("image %q must be a repository without tag or digest", img)
 			}
 			if other, ok := images[img]; ok {
-				return fmt.Errorf("%s: image %q already mapped to %s", where, img, other)
+				fail("image %q is already mapped to %s", img, other)
 			}
 			images[img] = p.ID
 		}
-		if _, err := feed.CompileVersionPattern(p.VersionPattern); err != nil {
-			return fmt.Errorf("%s: %w", where, err)
+		re, err := feed.CompileVersionPattern(p.VersionPattern)
+		if err != nil {
+			fail("%v", err)
+		}
+		if len(p.TestTags) == 0 {
+			fail(`testTags is required: example tags and the version they contain, e.g. {"1.27.3-alpine": "1.27.3", "latest": ""}`)
+		}
+		if re != nil {
+			for tag, want := range p.TestTags {
+				got := ""
+				if m := re.FindStringSubmatch(tag); m != nil {
+					got = m[re.SubexpIndex("version")]
+				}
+				if got != want {
+					fail("testTags: tag %q gives version %q, expected %q", tag, got, want)
+				}
+			}
 		}
 		if (p.NVD == nil || len(p.NVD.CPEs) == 0) && len(p.OSV) == 0 {
-			return fmt.Errorf("%s: needs an nvd or osv source", where)
+			fail("needs an nvd or osv source")
 		}
 		if p.NVD != nil {
 			for _, cpe := range p.NVD.CPEs {
-				if len(strings.Split(cpe, ":")) != 5 || !strings.HasPrefix(cpe, "cpe:2.3:") {
-					return fmt.Errorf("%s: cpe %q must look like cpe:2.3:a:<vendor>:<product>", where, cpe)
+				if parts := strings.Split(cpe, ":"); len(parts) != 5 || !strings.HasPrefix(cpe, "cpe:2.3:") {
+					fail("cpe %q must look like cpe:2.3:a:<vendor>:<product>", cpe)
 				}
 			}
 		}
 		for _, o := range p.OSV {
 			if o.Ecosystem == "" || o.Package == "" {
-				return fmt.Errorf("%s: osv entries need ecosystem and package", where)
+				fail("osv entries need ecosystem and package")
 			}
 		}
+	}
+	if len(errs) > 0 {
+		return fmt.Errorf("invalid products:\n  %s", strings.Join(errs, "\n  "))
 	}
 	return nil
 }

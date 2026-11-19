@@ -21,3 +21,7 @@ token from this release:
 {{- if .Values.agent.enabled }}
 Agent reports as cluster "{{ .Values.agent.clusterName }}" to {{ .Values.agent.apiUrl | default (include "cvedetector.apiURL" .) }}.
 {{- end }}
+{{- if .Values.metrics.enabled }}
+
+Metrics: {{ if .Values.metrics.serviceMonitor.enabled }}ServiceMonitor{{ else }}prometheus.io/scrape annotations{{ end }}{{ if .Values.metrics.prometheusRule.enabled }}, alerting rules{{ end }}{{ if .Values.dashboard.enabled }}, Grafana dashboard ConfigMap "{{ include "cvedetector.fullname" . }}-dashboard" in {{ .Values.dashboard.namespace | default .Release.Namespace }}{{ end }}.
+{{- end }}

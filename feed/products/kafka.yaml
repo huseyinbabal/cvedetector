@@ -1,0 +1,11 @@
+id: kafka
+name: "Apache Kafka"
+images:
+  - docker.io/apache/kafka
+  - docker.io/bitnami/kafka
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:kafka
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.9.0": "3.9.0"

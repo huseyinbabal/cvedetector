@@ -1,0 +1,12 @@
+id: prometheus
+name: "Prometheus"
+images:
+  - quay.io/prometheus/prometheus
+  - docker.io/prom/prometheus
+  - docker.io/bitnami/prometheus
+nvd:
+  cpes:
+    - cpe:2.3:a:prometheus:prometheus
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v3.0.1": "3.0.1"

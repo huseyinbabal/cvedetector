@@ -1,0 +1,14 @@
+id: grafana
+name: "Grafana"
+images:
+  - docker.io/grafana/grafana
+  - docker.io/grafana/grafana-oss
+  - docker.io/grafana/grafana-enterprise
+  - docker.io/bitnami/grafana
+nvd:
+  cpes:
+    - cpe:2.3:a:grafana:grafana
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "11.3.1": "11.3.1"
+  "11.3.1-ubuntu": "11.3.1"

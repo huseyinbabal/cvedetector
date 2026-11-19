@@ -1,0 +1,12 @@
+id: httpd
+name: "Apache HTTP Server"
+images:
+  - docker.io/library/httpd
+  - docker.io/bitnami/apache
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:http_server
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.4.62-alpine": "2.4.62"
+  "latest": ""

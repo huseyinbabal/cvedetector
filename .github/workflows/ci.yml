@@ -34,7 +34,7 @@ jobs:
       - run: go vet ./...
       # -p 1: the database-backed packages share TEST_DATABASE_URL.
       - run: go test -race -p 1 ./...
-      - name: Validate products.yaml
+      - name: Validate product files
         run: go run ./tools/feedgen -validate
 
   ui:
@@ -64,9 +64,12 @@ jobs:
           helm template t $C > /dev/null
           helm template t $C --set postgresql.enabled=false,externalDatabase.host=db,externalDatabase.existingSecret=db > /dev/null
           helm template t $C --set api.enabled=false,ui.enabled=false,postgresql.enabled=false,agent.apiUrl=https://x,agent.existingTokenSecret=t > /dev/null
+          helm template t $C --set metrics.enabled=true,metrics.serviceMonitor.enabled=true,metrics.prometheusRule.enabled=true,dashboard.enabled=true > /dev/null
+          python3 -c "import json; json.load(open('$C/dashboards/cvedetector.json'))"
           # Invalid combinations must fail. (`! cmd` would not fail the step under bash -e.)
           if helm template t $C --set postgresql.enabled=false >/dev/null 2>&1; then echo "missing database was accepted"; exit 1; fi
           if helm template t $C --set agent.clusterName=Bad_Name >/dev/null 2>&1; then echo "invalid cluster name was accepted"; exit 1; fi
+          if helm template t $C --set dashboard.enabled=true >/dev/null 2>&1; then echo "dashboard without metrics was accepted"; exit 1; fi
 
   image:
     runs-on: ubuntu-latest

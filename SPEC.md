@@ -1,6 +1,6 @@
 # SPEC: cvedetector
 
-> Durum: v0.5, feed `data` branch'inde, chart huseyinbabal/charts'ta · Tarih: 2026-11-19
+> Durum: v0.6, ürün kataloğu PR ile büyüyor, otomatik keşif eklendi · Tarih: 2026-11-19
 
 ## 1. Amaç
 
@@ -27,7 +27,8 @@ Sadece imajın ana yazılımının CVE'leri bulunur. İmajın içindeki işletim
 
 ```
  GitHub ───────────────────────────────────────────────────────────────
-  feed/products.yaml ─► Actions feed.yml (günlük) ─► tools/feedgen
+  feed/products/*.yaml ─► Actions feed.yml (günlük) ─► tools/feedgen
+  (PR + discover.yml)
                          NVD + OSV (+ KEV, EPSS) ─► v1/index.json + v1/products/<id>.json
                                                     sadece değişiklikte commit → `data` branch'i
                                                               │ HTTPS (ETag)
@@ -62,13 +63,13 @@ cvedetector/
 │   ├── agent/          # Go. cmd/agent, internal/{discovery,report}. Dockerfile (distroless)
 │   ├── api/            # Go. cmd/api, internal/{db,store,matcher,feedsync,httpapi,metrics}. Dockerfile (distroless)
 │   └── ui/             # React + TS + Vite + Tailwind + shadcn/ui. Dockerfile (nginx-unprivileged), nginx.conf.template
-├── tools/feedgen/      # feed üretici (NVD, OSV, CISA KEV, EPSS)
+├── tools/feedgen/      # feed üretici (NVD, OSV, CISA KEV, EPSS); discover/ = otomatik keşif
 ├── pkg/
 │   ├── feed/           # feed şeması + aralık eşleştirme
 │   ├── inventory/      # agent → API rapor sözleşmesi
 │   ├── version/        # gevşek semver karşılaştırma
 │   └── imageref/       # imaj referansı normalizasyonu
-├── feed/products.yaml  # izlenen ürünler
+├── feed/products/      # ürün kataloğu: <id>.yaml, PR ile büyür
 ├── deploy/helm/cvedetector/
 └── .github/workflows/{ci,feed,release}.yml
 ```
@@ -79,18 +80,34 @@ cvedetector/
 
 ## 4. Feed
 
-### 4.1 Üretim
-`feed/products.yaml` ürünleri tanımlar: repository listesi (glob destekli), sürüm regex'i, `minSegments`, NVD CPE'leri ve/veya OSV paketleri. `tools/feedgen` bu listeye göre:
-- NVD'den (CPE ile) ve OSV'den CVE'leri ve etkilenen sürüm aralıklarını çeker ve birleştirir,
-- CISA KEV ile zenginleştirir,
-- EPSS skorlarını ayrı bir dosyaya yazar.
+### 4.1 Ürün kataloğu: `feed/products/<id>.yaml`
+CVE veritabanları imaja göre değil **ürüne** göre tutulur: NVD'de "`cpe:2.3:a:php:php` sürüm 8.3.0 ile 8.3.14 arası etkilenir" gibi kayıtlar vardır. "`docker.io/library/php` imajı = `php:php` ürünü" eşlemesini hiçbir veritabanı tutmaz. Bütün CVE'leri çekmek tek başına bir işe yaramaz; asıl iş bu eşlemeyi kurmak. Katalog bu eşlemedir ve iki yoldan büyür:
+
+1. **Pull request ile katkı.**
+   - Her ürün ayrı bir dosyada olduğu için aynı anda yapılan katkılar çakışmaz.
+   - Dosyanın içeriği: `id` (dosya adıyla aynı olmalı), `name`, `images` (registry dahil tam repository adları), `nvd.cpes` ve/veya `osv` paketleri, gerekiyorsa `versionPattern` ve `minSegments`, ve **zorunlu `testTags`**: gerçek tag'ler ve onlardan okunması gereken sürüm.
+   - `feedgen -validate` şunları kontrol eder: şema, dosya adı ile id'nin uyuşması, registry'siz ya da tag'li imaj adı, aynı imajın iki ürüne eşlenmesi, test tag'lerinin beklenen sürümü vermesi, CPE formatı.
+   - `products.yml` workflow'u PR'da değişen ürünler için `feedgen -probe` çalıştırır: her kaynak kaç CVE döndürüyor, test tag'lerinin sürümleri kaç CVE'den etkileniyor. Rapor job özetine yazılır. Hiç kayıt döndürmeyen bir kaynak (genelde yanlış CPE ya da paket adı) kontrolü başarısız yapar.
+   - UI'daki Coverage gaps sayfasında, cluster'da çalışan tag'lerle önceden doldurulmuş bir dosyayla GitHub'ın yeni dosya sayfası açılır. Yazma yetkisi olmayan biri için GitHub otomatik olarak fork açar ve PR'a yönlendirir.
+   - `CONTRIBUTING.md`, PR şablonu ve "Track an image" issue formu da bu akışı destekler.
+2. **Otomatik keşif** (`tools/feedgen/discover`, `discover.yml`, her pazartesi):
+   - **Adaylar** gerçekten çalıştırılan imajlardan toplanır: Artifact Hub'ın en çok yıldız alan 300 Helm chart'ının kullandığı imajlar (`containers_images`), Docker Official Images (`docker-library/official-images`) ve Bitnami imajları (`bitnami/containers`). Kaç chart'ta geçtiklerine göre sıralanır.
+   - **Tag'ler** registry'den okunur (sadece metadata; Docker Hub API'si ya da OCI `/v2/tags/list` anonim token ile). Tag'lerin çoğu sürüm taşımıyorsa (MinIO'nun `RELEASE.…` tag'leri gibi) imaj elenir. Test tag'leri gerçek tag'lerden üretilir.
+   - **NVD CPE sözlüğünde** imaj adıyla ürün aranır. Sadece adı birebir eşleşen ve CVE kaydı olan ürünler kabul edilir. Sürümü değiştirmeyen ekler (`-server`, `-community`, `-oss`, `-ce`, `-ee`) dışında isim kırpılmaz; `-operator` ya da `-k8s` gibi ekler asla kırpılmaz. Örnek: `vault-k8s` Vault değildir.
+   - **Sürüm tutarlılığı kontrolü:** imajın en yeni sürümünün major numarası, ürünün CVE aralıklarında geçmiyorsa eşleşme reddedilir.
+   - **Birden fazla üretici** varsa üretici adı ürün adına ya da imajın namespace'ine eşitse o seçilir; değilse imaj raporda "elle incelenmeli" olarak listelenir.
+   - Mevcut bir ürünün CPE'sine düşen imaj, o ürünün `images` listesine eklenir (örneğin `docker.gitea.com/gitea` → `gitea`).
+   - Sonuçlar **asla doğrudan `main`'e yazılmaz**; rapor gövdesiyle birlikte bir PR açılır. NVD yanıtları cache'lenir, böylece sonraki haftalarda sadece yeni adaylar sorgulanır.
+
+### 4.2 Üretim
+`tools/feedgen` NVD'den (CPE ile) ve OSV'den CVE'leri ve etkilenen sürüm aralıklarını çeker ve birleştirir, CISA KEV ile zenginleştirir, EPSS skorlarını ayrı bir dosyaya yazar.
 
 Bilinen tuzaklar:
 - CoreDNS NVD'de bulunmuyor, OSV Go modülü kullanılıyor.
 - Prometheus ve Grafana'nın Go modül sürümleri imaj tag'leriyle uyuşmuyor, NVD CPE kullanılıyor.
-- `envoy:distroless-v…` gibi tag'ler için özel bir `versionPattern` gerekiyor.
+- Probe'da external-dns, kube-state-metrics, metrics-server, node-exporter, thanos, rook ve longhorn için OSV hiç kayıt döndürmedi; katalogda yoklar.
 
-### 4.2 Saklama: `data` branch'i
+### 4.3 Saklama: `data` branch'i
 Feed, kodla aynı repoda ama ayrı bir **`data` branch'inde** (geçmişiyle birlikte) tutulur. `main` bot commit'leriyle kirlenmez, klonlaması hafif kalır.
 
 ```
@@ -118,13 +135,13 @@ Bunun yerine `v1/` altında **ürün başına güncel durum** tutuluyor; tarihç
 
 **İlk gerçek veriyle ölçülen:** 3 ürünle iki ardışık çalıştırmada ilki "initial import" commit'i üretti, ikincisi "unchanged" dedi ve hiçbir dosyaya dokunmadı.
 
-### 4.3 Workflow (`feed.yml`)
-- Her gün 03:17 UTC'de çalışır; ayrıca elle ve `main`'de `products.yaml` ya da `tools/feedgen` değişince tetiklenir.
+### 4.4 Workflow (`feed.yml`)
+- Her gün 03:17 UTC'de çalışır; ayrıca elle ve `main`'de `feed/products/` ya da `tools/feedgen` değişince tetiklenir.
 - Adımlar: testler → `data` branch'i bir worktree'ye alınır (yoksa orphan olarak oluşturulur) → `feedgen -out data -changes data/changes -commit-message …` → değişiklik varsa `github-actions[bot]` adına commit ve push. Özet, job'ın Summary sayfasına yazılır.
 - `NVD_API_KEY` secret'ı opsiyonel. Anahtarsız bir çalışma yaklaşık 5 dakika, anahtarla yaklaşık 1 dakika sürer. Private repoda Actions dakikaları aylık kotadan düşer.
 - Cosign imzası kaldırıldı: keyless imza herkese açık transparency log'a (Rekor) private reponun adını yazardı. Repo public olunca geri eklenebilir.
 
-### 4.4 Tüketim
+### 4.5 Tüketim
 - API feed'i `https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/` adresinden okur.
 - Repo private olduğu için `FEED_TOKEN` gerekir: `contents: read` yetkili, fine-grained bir GitHub token'ı. Helm'de `api.feed.existingTokenSecret` ile verilir.
 - Go HTTP istemcisi, bir yönlendirme başka bir host'a giderse `Authorization` başlığını göndermez; token sızmaz.
@@ -232,6 +249,7 @@ CVE listesinin varsayılan sırası önceliklendirmeye göre: önce KEV, sonra s
 
 ### 6.5 Metrikler
 Metrikler veritabanından okunur ve 30 saniye önbelleklenir. Her replika aynı değerleri raporladığı için toplarken `sum()` değil `max()` kullanılmalı.
+- `cvedetector_cluster_vulnerabilities{cluster,severity}`, `cvedetector_cluster_kev_vulnerabilities{cluster}`: cluster bazında tekil sayı
 - `cvedetector_vulnerabilities{cluster,namespace,severity}`
 - `cvedetector_kev_vulnerabilities{cluster,namespace}`
 - `cvedetector_images{cluster,status}`
@@ -304,7 +322,20 @@ Tek chart, bileşenler ayrı ayrı açılıp kapatılabiliyor:
   - Ingest token ve PostgreSQL şifresi ilk kurulumda üretilir. `lookup` ile upgrade'lerde korunur ve `helm.sh/resource-policy: keep` ile uninstall'da silinmez; şifre kaybolursa API veri volume'una erişemez.
   - Ek token'lar `api.extraTokensSecret` ile verilir.
 - **Ingress:** `/api` doğrudan API'ye gider (uzak agent'lar ingest yapabilsin diye), `/` UI'a gider.
-- **ServiceMonitor:** API ve agent servislerini kapsar.
+- **İzleme:**
+  - `metrics.enabled` Prometheus'un API ve agent'tan metrik toplamasını açar. `metrics.serviceMonitor.enabled` ile ServiceMonitor oluşturulur, yoksa pod'lara `prometheus.io/scrape` annotation'ları eklenir.
+  - `metrics.prometheusRule.enabled` hazır alarmları kurar:
+    - agent rapor göndermiyor (30 dk),
+    - feed eskidi (48 sa),
+    - feed senkronizasyonu başarısız,
+    - KEV listesinde bir CVE çalışıyor,
+    - kritik bir CVE çalışıyor.
+    
+    Eşikler, severity'ler ve ek kurallar values'tan ayarlanır. Kurallar `promtool check rules` ile doğrulandı.
+  - `dashboard.enabled` chart içindeki `dashboards/cvedetector.json` dosyasını Grafana sidecar'ının yüklediği bir ConfigMap olarak kurar (`grafana_dashboard: "1"` etiketi; namespace ve klasör ayarlanabilir). `metrics.enabled` olmadan açılamaz.
+  - **Dashboard içeriği:** severity kutucukları, KEV sayısı, feed yaşı; severity başına ayrı trend grafikleri (Grafana repeat, §7.4'teki renk körlüğü gerekçesiyle); cluster/namespace tablosu; imaj kapsaması; cluster'ların son rapor zamanı; rapor akışı; feed hataları; agent'ın gördüğü pod ve imaj sayısı; opsiyonel workload tablosu.
+  - Dashboard yerelde Grafana 13.3 + Prometheus ile gerçek metriklere karşı test edildi.
+  - Dashboard'un doğru toplam gösterebilmesi için API'ye cluster bazında tekil sayan `cvedetector_cluster_vulnerabilities{cluster,severity}` ve `cvedetector_cluster_kev_vulnerabilities{cluster}` metrikleri eklendi. Namespace bazlı metrik toplanınca birden fazla namespace'teki aynı CVE'yi iki kez sayıyordu.
 - **Güvenlik:** tüm container'lar non-root çalışır, root dosya sistemi read-only, `drop: ALL`, seccomp `RuntimeDefault`. API ve UI'da service account token mount edilmez.
 
 ## 9. Ölçeklenme

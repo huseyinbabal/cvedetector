@@ -1,4 +1,4 @@
-// Command feedgen builds the CVE feed from feed/products.yaml using NVD and OSV
+// Command feedgen builds the CVE feed from feed/products/*.yaml using NVD and OSV
 // version-range data. It never pulls or scans images.
 package main
 
@@ -19,13 +19,14 @@ import (
 )
 
 func main() {
-	cfgPath := flag.String("config", "feed/products.yaml", "products config")
+	cfgPath := flag.String("config", "feed/products", "directory of product files (<id>.yaml)")
 	out := flag.String("out", "dist/feed", "output directory (feed is written to <out>/v1); an existing feed there is diffed against")
 	changes := flag.String("changes", "", "directory for daily changelogs (<dir>/YYYY/MM/YYYY-MM-DD.json); empty disables")
 	commitMsg := flag.String("commit-message", "", "write a commit message summarizing the changes to this file (only when something changed)")
 	only := flag.String("only", "", "comma-separated product ids to build (default: all)")
 	noEnrich := flag.Bool("no-enrich", false, "skip CISA KEV and EPSS enrichment")
-	validate := flag.Bool("validate", false, "only validate the config and exit")
+	validate := flag.Bool("validate", false, "only validate the product files and exit")
+	probeIDs := flag.String("probe", "", "comma-separated product ids: query their sources and print a Markdown report instead of building the feed")
 	flag.Parse()
 
 	log := slog.New(slog.NewTextHandler(os.Stderr, nil))
@@ -41,6 +42,15 @@ func main() {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
+	if *probeIDs != "" {
+		client := sources.NewClient()
+		nvd := &sources.NVD{Client: client, APIKey: os.Getenv("NVD_API_KEY")}
+		if err := probe(ctx, os.Stdout, cfg, splitIDs(*probeIDs), nvd, &sources.OSV{Client: client}); err != nil {
+			log.Error("probe failed", "err", err)
+			os.Exit(1)
+		}
+		return
+	}
 	if err := run(ctx, log, cfg, *out, *only, !*noEnrich, *changes, *commitMsg); err != nil {
 		log.Error("feed generation failed", "err", err)
 		os.Exit(1)
@@ -56,10 +66,8 @@ func run(ctx context.Context, log *slog.Logger, cfg *config.Config, out, only st
 	}
 
 	want := map[string]bool{}
-	for _, id := range strings.Split(only, ",") {
-		if id = strings.TrimSpace(id); id != "" {
-			want[id] = true
-		}
+	for _, id := range splitIDs(only) {
+		want[id] = true
 	}
 
 	idx := build.NewIndex(time.Now())
@@ -149,4 +157,14 @@ func run(ctx context.Context, log *slog.Logger, cfg *config.Config, out, only st
 		}
 	}
 	return nil
+}
+
+func splitIDs(s string) []string {
+	var out []string
+	for _, id := range strings.Split(s, ",") {
+		if id = strings.TrimSpace(id); id != "" {
+			out = append(out, id)
+		}
+	}
+	return out
 }

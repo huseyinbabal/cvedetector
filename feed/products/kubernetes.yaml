@@ -1,0 +1,13 @@
+id: kubernetes
+name: "Kubernetes control plane"
+images:
+  - registry.k8s.io/kube-apiserver
+  - registry.k8s.io/kube-controller-manager
+  - registry.k8s.io/kube-scheduler
+  - registry.k8s.io/kube-proxy
+nvd:
+  cpes:
+    - cpe:2.3:a:kubernetes:kubernetes
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v1.31.2": "1.31.2"

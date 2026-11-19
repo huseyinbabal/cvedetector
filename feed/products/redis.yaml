@@ -1,0 +1,12 @@
+id: redis
+name: "Redis"
+images:
+  - docker.io/library/redis
+  - docker.io/bitnami/redis
+nvd:
+  cpes:
+    - cpe:2.3:a:redis:redis
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "7.4.1-alpine": "7.4.1"
+  "7.2.4-debian-12-r5": "7.2.4"

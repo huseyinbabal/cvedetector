@@ -13,7 +13,11 @@ spec:
   template:
     metadata:
       labels: {{- include "cvedetector.componentSelector" $c | nindent 8 }}
-      {{- with .Values.api.podAnnotations }}
+      {{- $ann := deepCopy .Values.api.podAnnotations }}
+      {{- if and .Values.metrics.enabled (not .Values.metrics.serviceMonitor.enabled) }}
+      {{- $_ := merge $ann (dict "prometheus.io/scrape" "true" "prometheus.io/port" "8080" "prometheus.io/path" "/metrics") }}
+      {{- end }}
+      {{- with $ann }}
       annotations: {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:

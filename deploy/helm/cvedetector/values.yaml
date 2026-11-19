@@ -134,7 +134,40 @@ externalDatabase:
   sslmode: require # disable | require | verify-ca | verify-full
 
 # ---------------------------------------------------------------- monitoring
-serviceMonitor:
+# The API and the agent always serve /metrics on their http port. These
+# settings make Prometheus scrape them.
+metrics:
   enabled: false
-  interval: 60s
-  labels: {}
+  # Prometheus Operator: a ServiceMonitor for the API and the agent. When
+  # disabled, pods get prometheus.io/scrape annotations instead.
+  serviceMonitor:
+    enabled: false
+    interval: 60s
+    scrapeTimeout: 10s
+    labels: {} # e.g. release: kube-prometheus-stack
+  # Prometheus Operator: alerting rules. Thresholds are in seconds.
+  prometheusRule:
+    enabled: false
+    labels: {}
+    agentNotReportingSeconds: 1800 # agents report at least every 10 minutes
+    feedStaleSeconds: 172800 # the feed is rebuilt daily
+    knownExploited: true # alert while a CISA KEV vulnerability is running
+    critical: true # alert while a critical vulnerability is running
+    severity:
+      agent: warning
+      feed: warning
+      knownExploited: critical
+      critical: warning
+    additionalRules: [] # extra rules, appended as-is
+
+# Grafana dashboard (dashboards/cvedetector.json) as a ConfigMap picked up by
+# the Grafana sidecar (kube-prometheus-stack and the Grafana chart enable it
+# with `sidecar.dashboards.enabled`). Requires metrics.enabled.
+dashboard:
+  enabled: false
+  # Namespace of the ConfigMap; empty = release namespace. Set it to Grafana's
+  # namespace if the sidecar doesn't search all namespaces.
+  namespace: ""
+  labels:
+    grafana_dashboard: "1"
+  annotations: {} # e.g. grafana_folder: Security

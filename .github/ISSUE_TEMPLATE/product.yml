@@ -1,0 +1,25 @@
+name: Track an image
+description: Ask for an image to be mapped to a product in the CVE feed
+title: "Track <image> in the feed"
+labels: [feed]
+body:
+  - type: input
+    id: image
+    attributes:
+      label: Image repository
+      description: Without tag, e.g. docker.io/library/php
+    validations:
+      required: true
+  - type: input
+    id: tags
+    attributes:
+      label: Tags you run
+      description: e.g. 8.3.14-fpm-alpine
+  - type: input
+    id: source
+    attributes:
+      label: CPE or OSV package, if you know it
+      description: e.g. cpe:2.3:a:php:php
+  - type: markdown
+    attributes:
+      value: Faster still: open a pull request with `feed/products/<id>.yaml` (see CONTRIBUTING.md).

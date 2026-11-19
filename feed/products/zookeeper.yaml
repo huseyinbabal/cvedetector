@@ -1,0 +1,11 @@
+id: zookeeper
+name: "Apache ZooKeeper"
+images:
+  - docker.io/library/zookeeper
+  - docker.io/bitnami/zookeeper
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:zookeeper
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.9.3": "3.9.3"

@@ -1,0 +1,42 @@
+# Checks pull requests that add or change product files: the files must be
+# valid, and every CPE / OSV package must actually return vulnerabilities.
+# The report (vulnerability counts, what the test tags would match) lands in
+# the job summary.
+name: products
+
+on:
+  pull_request:
+    paths:
+      - feed/products/**
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: Validate all product files
+        run: go run ./tools/feedgen -validate
+      - name: Changed products
+        id: changed
+        run: |
+          ids=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- feed/products/ \
+                | sed -n 's#^feed/products/\(.*\)\.ya\?ml$#\1#p' | paste -sd, -)
+          echo "ids=$ids" >> "$GITHUB_OUTPUT"
+          echo "Changed products: ${ids:-none}"
+      - name: Query sources
+        if: steps.changed.outputs.ids != ''
+        env:
+          # Not available to pull requests from forks; NVD is just slower then.
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          set -o pipefail
+          go run ./tools/feedgen -probe "${{ steps.changed.outputs.ids }}" | tee -a "$GITHUB_STEP_SUMMARY"

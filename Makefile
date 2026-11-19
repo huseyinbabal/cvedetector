@@ -36,7 +36,7 @@ images:
 
 # Builds the feed into dist/feed/v1. Set NVD_API_KEY for faster NVD queries.
 feed:
-	go run ./tools/feedgen -config feed/products.yaml -out dist/feed
+	go run ./tools/feedgen -config feed/products -out dist/feed
 
 feed-validate:
 	go run ./tools/feedgen -validate

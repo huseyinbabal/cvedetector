@@ -15,7 +15,7 @@ on:
   push:
     branches: [main]
     paths:
-      - feed/products.yaml
+      - feed/products/**
       - tools/feedgen/**
       - pkg/feed/**
 
@@ -53,7 +53,7 @@ jobs:
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-          go run ./tools/feedgen -config feed/products.yaml \
+          go run ./tools/feedgen -config feed/products \
             -out data -changes data/changes -commit-message "$RUNNER_TEMP/commit-message.txt"
 
       - name: Commit and push
