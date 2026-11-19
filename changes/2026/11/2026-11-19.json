@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-19",
+  "added": [],
+  "updated": [
+    {
+      "product": "postgresql",
+      "id": "CVE-2019-9193",
+      "severity": "HIGH",
+      "fields": [
+        "summary"
+      ]
+    }
+  ],
+  "removed": []
+}
