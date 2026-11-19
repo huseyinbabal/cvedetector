@@ -1,7 +1,50 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T16:30:16.039543348Z",
+  "generatedAt": "2026-11-19T22:04:18.936379102Z",
   "products": [
+    {
+      "id": "airflow",
+      "name": "Apache Airflow",
+      "images": [
+        "docker.io/apache/airflow",
+        "docker.io/bitnami/airflow"
+      ],
+      "shard": "products/airflow.json",
+      "sha256": "5b74a05e09c10043b6d7a23741acfaa5b9749c9796a472b46ed8b630f887eb3f",
+      "vulnCount": 158
+    },
+    {
+      "id": "alertmanager",
+      "name": "Alertmanager",
+      "images": [
+        "quay.io/prometheus/alertmanager",
+        "docker.io/prom/alertmanager",
+        "docker.io/bitnami/alertmanager"
+      ],
+      "shard": "products/alertmanager.json",
+      "sha256": "d34629c4b7348dfdae99e29148dfb61cf21e352dd731f15af6f23cc845d2c635",
+      "vulnCount": 1
+    },
+    {
+      "id": "alloy",
+      "name": "Alloy",
+      "images": [
+        "docker.io/grafana/alloy"
+      ],
+      "shard": "products/alloy.json",
+      "sha256": "e666154e74374119f583166e0ebd82f76e6573aa0ea451dc0df2619cc38cf5c7",
+      "vulnCount": 1
+    },
+    {
+      "id": "apisix",
+      "name": "Apisix",
+      "images": [
+        "docker.io/apache/apisix"
+      ],
+      "shard": "products/apisix.json",
+      "sha256": "27f9a112db6f2a2e5db5a9c1e6aae5eb23cff8cf367ca57172ca6246ba593a5b",
+      "vulnCount": 29
+    },
     {
       "id": "argo-cd",
       "name": "Argo CD",
@@ -11,6 +54,105 @@
       "shard": "products/argo-cd.json",
       "sha256": "45d899af8e96a4cca64a758e06ba9bd13cda4f1c8eb0725272072912cda43952",
       "vulnCount": 48
+    },
+    {
+      "id": "argo-workflows",
+      "name": "Argo Workflows",
+      "images": [
+        "quay.io/argoproj/workflow-controller",
+        "quay.io/argoproj/argocli",
+        "quay.io/argoproj/argoexec"
+      ],
+      "shard": "products/argo-workflows.json",
+      "sha256": "717a724e8da737f33a65b8e5e25554137e16d9ad6f98d2f6c25f8bb0839d861e",
+      "vulnCount": 19
+    },
+    {
+      "id": "artifacthub-hub",
+      "name": "Artifacthub Hub",
+      "images": [
+        "docker.io/artifacthub/hub"
+      ],
+      "shard": "products/artifacthub-hub.json",
+      "sha256": "6254804a6121cae779b22dd7a570cf86542dd8961fc20b8c36de04934439205c",
+      "vulnCount": 3
+    },
+    {
+      "id": "atlantis",
+      "name": "Atlantis",
+      "images": [
+        "ghcr.io/runatlantis/atlantis"
+      ],
+      "shard": "products/atlantis.json",
+      "sha256": "35edfa719499ed0e40bd2b561c1f31aadb3d089d150c68621f38e1fde746862f",
+      "vulnCount": 3
+    },
+    {
+      "id": "backstage",
+      "name": "Backstage",
+      "images": [
+        "ghcr.io/backstage/backstage"
+      ],
+      "shard": "products/backstage.json",
+      "sha256": "2ff9d95b3a5b8a82348f006ff749cf758042326dd972bb93dd428853bf3df51d",
+      "vulnCount": 50
+    },
+    {
+      "id": "bitcoin",
+      "name": "Bitcoin",
+      "images": [
+        "docker.io/dobtc/bitcoin"
+      ],
+      "minSegments": 2,
+      "shard": "products/bitcoin.json",
+      "sha256": "d241842680be44f30b861ac8b1e9cc0c7bdf7d90061f7bf5730cd6480d365c2f",
+      "vulnCount": 2
+    },
+    {
+      "id": "busybox",
+      "name": "Busybox",
+      "images": [
+        "docker.io/library/busybox"
+      ],
+      "shard": "products/busybox.json",
+      "sha256": "3548e9271239f822f526321e9205cff580d4a74eb937784acde43caae47ecdb6",
+      "vulnCount": 45
+    },
+    {
+      "id": "caddy",
+      "name": "Caddy",
+      "images": [
+        "docker.io/library/caddy"
+      ],
+      "shard": "products/caddy.json",
+      "sha256": "cfed7d8ac3767585dc5e744d2105762dd2ebe7439a30540fc36f8e4905a7feff",
+      "vulnCount": 19
+    },
+    {
+      "id": "calico",
+      "name": "Calico",
+      "images": [
+        "docker.io/calico/node",
+        "docker.io/calico/cni",
+        "docker.io/calico/kube-controllers",
+        "quay.io/calico/node",
+        "quay.io/calico/cni",
+        "quay.io/calico/kube-controllers"
+      ],
+      "shard": "products/calico.json",
+      "sha256": "376b980db5bc70bc8bc954ac4f12502e66a2ded2135b3afbf074449bf886ca3f",
+      "vulnCount": 6
+    },
+    {
+      "id": "cassandra",
+      "name": "Apache Cassandra",
+      "images": [
+        "docker.io/library/cassandra",
+        "docker.io/bitnami/cassandra"
+      ],
+      "shard": "products/cassandra.json",
+      "sha256": "647bbf698ae6ccf909e2653d13cd360516dabd9a56e932fc38a34aed77fc1cef",
+      "vulnCount": 16
     },
     {
       "id": "cert-manager",
@@ -23,6 +165,59 @@
       "shard": "products/cert-manager.json",
       "sha256": "258d10bd0edc85150d044673ed758d460c0d9d96f6e0900f077b5fbc6f1a96b0",
       "vulnCount": 3
+    },
+    {
+      "id": "chaos-mesh",
+      "name": "Chaos Mesh",
+      "images": [
+        "ghcr.io/chaos-mesh/chaos-mesh"
+      ],
+      "shard": "products/chaos-mesh.json",
+      "sha256": "948d2278a136baf8abdb8a0cebbdc41a30065eeba6c2cb83b5bea5d4f9df9bec",
+      "vulnCount": 5
+    },
+    {
+      "id": "chartmuseum",
+      "name": "Chartmuseum",
+      "images": [
+        "ghcr.io/helm/chartmuseum"
+      ],
+      "shard": "products/chartmuseum.json",
+      "sha256": "b4adbab7681745af16c9b21ffbcd3e050f6ffd87bb6353c859443844d80e1078",
+      "vulnCount": 1
+    },
+    {
+      "id": "cilium",
+      "name": "Cilium",
+      "images": [
+        "quay.io/cilium/cilium",
+        "quay.io/cilium/operator-generic",
+        "quay.io/cilium/hubble-relay"
+      ],
+      "shard": "products/cilium.json",
+      "sha256": "174862ed2974cd8ed9cb538322f432e145b1f71004c5715397822290b4989413",
+      "vulnCount": 39
+    },
+    {
+      "id": "clamav",
+      "name": "Clamav",
+      "images": [
+        "docker.io/clamav/clamav"
+      ],
+      "shard": "products/clamav.json",
+      "sha256": "eece520cf1c7c1c697d3e645ecf51f31562e02010d5bf2e54c7203e765d91807",
+      "vulnCount": 103
+    },
+    {
+      "id": "clickhouse",
+      "name": "ClickHouse",
+      "images": [
+        "docker.io/clickhouse/clickhouse-server",
+        "docker.io/bitnami/clickhouse"
+      ],
+      "shard": "products/clickhouse.json",
+      "sha256": "1b495d7e5bcafb7b5115a565cc2c45eff3138410f16791c5a25386adea84fc75",
+      "vulnCount": 24
     },
     {
       "id": "consul",
@@ -47,6 +242,57 @@
       "vulnCount": 19
     },
     {
+      "id": "couchdb",
+      "name": "Apache CouchDB",
+      "images": [
+        "docker.io/library/couchdb"
+      ],
+      "shard": "products/couchdb.json",
+      "sha256": "d7cd71b7af6cfb3f5202e3ad97d9307e59bf48bd735bed794370df2c4918aa0c",
+      "vulnCount": 19
+    },
+    {
+      "id": "dex",
+      "name": "Dex",
+      "images": [
+        "ghcr.io/dexidp/dex"
+      ],
+      "shard": "products/dex.json",
+      "sha256": "b1edf34aba4e10ac297f1d74827ce53ecf26e46d961e6902483c63be2b18c43b",
+      "vulnCount": 4
+    },
+    {
+      "id": "dotnet",
+      "name": "ASP.NET Core / .NET runtime",
+      "images": [
+        "mcr.microsoft.com/dotnet/aspnet",
+        "mcr.microsoft.com/dotnet/runtime"
+      ],
+      "shard": "products/dotnet.json",
+      "sha256": "a231f3a9ae63da9b31342df26f42fb0da4c5c35519c70e600e81b3395989784b",
+      "vulnCount": 165
+    },
+    {
+      "id": "dragonfly",
+      "name": "Dragonfly",
+      "images": [
+        "docker.dragonflydb.io/dragonflydb/dragonfly"
+      ],
+      "shard": "products/dragonfly.json",
+      "sha256": "8225f94288fa338f55ba1cde0a7b0c14b1b34b191df6fbd54b1f061c8e66f399",
+      "vulnCount": 2
+    },
+    {
+      "id": "drupal",
+      "name": "Drupal",
+      "images": [
+        "docker.io/library/drupal"
+      ],
+      "shard": "products/drupal.json",
+      "sha256": "a5f552c70c22ece8772daee6ecd14715b54807827d5bab35183e28bbbad8cfbf",
+      "vulnCount": 278
+    },
+    {
       "id": "elasticsearch",
       "name": "Elasticsearch",
       "images": [
@@ -57,6 +303,16 @@
       "shard": "products/elasticsearch.json",
       "sha256": "5b4955731334f9128b1dbeb82de604cc834eae6b87f331f8548421b5c5fcb336",
       "vulnCount": 91
+    },
+    {
+      "id": "emqx",
+      "name": "EMQX",
+      "images": [
+        "docker.io/emqx/emqx"
+      ],
+      "shard": "products/emqx.json",
+      "sha256": "7bbcb2a7b496c15b4606277ff59edb010b7713bbb96523ff5bc7552b580ad63b",
+      "vulnCount": 3
     },
     {
       "id": "envoy",
@@ -75,11 +331,89 @@
       "images": [
         "registry.k8s.io/etcd",
         "quay.io/coreos/etcd",
-        "docker.io/bitnami/etcd"
+        "docker.io/bitnami/etcd",
+        "docker.io/bitnamilegacy/etcd",
+        "docker.io/milvusdb/etcd"
       ],
       "shard": "products/etcd.json",
       "sha256": "8d7b1a58c42476e0ca31b3f934a2d1214f2bd1d41518f542cffa4a03fc94ebc2",
       "vulnCount": 11
+    },
+    {
+      "id": "filebeat",
+      "name": "Filebeat",
+      "images": [
+        "docker.elastic.co/beats/filebeat"
+      ],
+      "shard": "products/filebeat.json",
+      "sha256": "8c61c777ea4b7d69b15011590e9b6fe97dd8f94e659a9a9c21606ceb2c33ff0f",
+      "vulnCount": 3
+    },
+    {
+      "id": "flink",
+      "name": "Apache Flink",
+      "images": [
+        "docker.io/library/flink"
+      ],
+      "shard": "products/flink.json",
+      "sha256": "38a3704cd8ff689c0a7dc8cfb52344699d6abe47e02e5db4b12078bc9493ff97",
+      "vulnCount": 4
+    },
+    {
+      "id": "flowise",
+      "name": "Flowise",
+      "images": [
+        "docker.io/flowiseai/flowise"
+      ],
+      "shard": "products/flowise.json",
+      "sha256": "ef99c4b0e4cb5559b0db88d1fe0f77f95239634c20b273f82708b337d641b20d",
+      "vulnCount": 128
+    },
+    {
+      "id": "fluent-bit",
+      "name": "Fluent Bit",
+      "images": [
+        "docker.io/fluent/fluent-bit",
+        "cr.fluentbit.io/fluent/fluent-bit",
+        "docker.io/bitnami/fluent-bit"
+      ],
+      "shard": "products/fluent-bit.json",
+      "sha256": "febb063c3657fce14cdc2ac7f82161cd6f4b84f6a1b4ebb6f0b4cf5dfdb997ee",
+      "vulnCount": 16
+    },
+    {
+      "id": "fluentd",
+      "name": "Fluentd",
+      "images": [
+        "docker.io/library/fluentd",
+        "docker.io/fluent/fluentd",
+        "docker.io/bitnami/fluentd"
+      ],
+      "shard": "products/fluentd.json",
+      "sha256": "8b686fb7839b8dd96a8afe719eafc951e1508b655639d94e3c3725aec3e273f2",
+      "vulnCount": 8
+    },
+    {
+      "id": "ghost",
+      "name": "Ghost",
+      "images": [
+        "docker.io/library/ghost",
+        "docker.io/bitnami/ghost"
+      ],
+      "shard": "products/ghost.json",
+      "sha256": "85ff224c81369ba7606d3567afb5dd609d27114d25d34388c29fd7ee76df3f40",
+      "vulnCount": 30
+    },
+    {
+      "id": "gitea",
+      "name": "Gitea",
+      "images": [
+        "docker.io/gitea/gitea",
+        "docker.gitea.com/gitea"
+      ],
+      "shard": "products/gitea.json",
+      "sha256": "e60e7aa5e19191127b5e9bf85e5f54b5430df67c7ceb34b32b8a8a98cbf853bc",
+      "vulnCount": 161
     },
     {
       "id": "gitlab",
@@ -91,6 +425,17 @@
       "shard": "products/gitlab.json",
       "sha256": "6e3aa1523b812d96d0c07efaff2050a2cb56190bc22fb8ea81e03c0ee6f321cd",
       "vulnCount": 1507
+    },
+    {
+      "id": "golang",
+      "name": "Go",
+      "images": [
+        "docker.io/library/golang",
+        "docker.io/bitnami/golang"
+      ],
+      "shard": "products/golang.json",
+      "sha256": "adde304eecf4cfabff2462412331cfc8150a4b582dc617b05385f0902965e9f4",
+      "vulnCount": 171
     },
     {
       "id": "grafana",
@@ -118,6 +463,39 @@
       "vulnCount": 34
     },
     {
+      "id": "harbor",
+      "name": "Harbor",
+      "images": [
+        "docker.io/goharbor/harbor-core",
+        "docker.io/goharbor/harbor-portal",
+        "docker.io/goharbor/harbor-registryctl",
+        "docker.io/goharbor/harbor-jobservice"
+      ],
+      "shard": "products/harbor.json",
+      "sha256": "c878a341e4d28005dceadf962e3c6d3dfce1bd9ce09779448ebf2550a6421782",
+      "vulnCount": 23
+    },
+    {
+      "id": "helm-controller",
+      "name": "Helm Controller",
+      "images": [
+        "ghcr.io/fluxcd/helm-controller"
+      ],
+      "shard": "products/helm-controller.json",
+      "sha256": "18e4f54efc65c2ea2e507aa70701e47bb3b5814370f0e8668408b213c2640a2b",
+      "vulnCount": 3
+    },
+    {
+      "id": "home-assistant",
+      "name": "Home Assistant",
+      "images": [
+        "ghcr.io/home-assistant/home-assistant"
+      ],
+      "shard": "products/home-assistant.json",
+      "sha256": "4baca65665588e3da6e5ff295ce545bd6a7ab7949ebb09572ba94fd47f33e21e",
+      "vulnCount": 16
+    },
+    {
       "id": "httpd",
       "name": "Apache HTTP Server",
       "images": [
@@ -129,6 +507,37 @@
       "vulnCount": 344
     },
     {
+      "id": "image-automation-controller",
+      "name": "Image Automation Controller",
+      "images": [
+        "ghcr.io/fluxcd/image-automation-controller"
+      ],
+      "shard": "products/image-automation-controller.json",
+      "sha256": "cdb4a26e2b5c10cc698e9eaef7bf1f22f26ec54515b4214bb113d9b99236f2b1",
+      "vulnCount": 1
+    },
+    {
+      "id": "image-reflector-controller",
+      "name": "Image Reflector Controller",
+      "images": [
+        "ghcr.io/fluxcd/image-reflector-controller"
+      ],
+      "shard": "products/image-reflector-controller.json",
+      "sha256": "377264c8cc04c161b57a45aa3b3e7f3cce191ca273282a7c0bea1190143c5ee8",
+      "vulnCount": 1
+    },
+    {
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "images": [
+        "docker.io/library/influxdb",
+        "docker.io/bitnami/influxdb"
+      ],
+      "shard": "products/influxdb.json",
+      "sha256": "a23331f555edb5072b512e20857b7f89fa1f1ce79efcade5ef826a881616f014",
+      "vulnCount": 3
+    },
+    {
       "id": "ingress-nginx",
       "name": "ingress-nginx",
       "images": [
@@ -137,6 +546,32 @@
       "shard": "products/ingress-nginx.json",
       "sha256": "a50d355577064b479d58be506b8de2e67b4d011e7e251621bca9196567b8cef7",
       "vulnCount": 9
+    },
+    {
+      "id": "istio",
+      "name": "Istio",
+      "images": [
+        "docker.io/istio/proxyv2",
+        "docker.io/istio/pilot",
+        "gcr.io/istio-release/proxyv2",
+        "gcr.io/istio-release/pilot"
+      ],
+      "shard": "products/istio.json",
+      "sha256": "61fb65f4b8e2300f614711ac4c1729ecd449af44d931aa8c281877a84655c99a",
+      "vulnCount": 10
+    },
+    {
+      "id": "jaeger",
+      "name": "Jaeger",
+      "images": [
+        "docker.io/jaegertracing/all-in-one",
+        "docker.io/jaegertracing/jaeger",
+        "docker.io/jaegertracing/jaeger-collector",
+        "docker.io/jaegertracing/jaeger-query"
+      ],
+      "shard": "products/jaeger.json",
+      "sha256": "5465a2efc6ccd4a9ef169f4760858b4177486fa3ae2742e0096b394eb73e059f",
+      "vulnCount": 2
     },
     {
       "id": "jenkins",
@@ -160,15 +595,51 @@
       "vulnCount": 17
     },
     {
+      "id": "keda",
+      "name": "KEDA",
+      "images": [
+        "ghcr.io/kedacore/keda",
+        "ghcr.io/kedacore/keda-metrics-apiserver",
+        "ghcr.io/kedacore/keda-admission-webhooks"
+      ],
+      "shard": "products/keda.json",
+      "sha256": "8b5a9c959d70611f2d0c8e3ec363cb3d8a3fa0d403e41bf59a5d124a496266aa",
+      "vulnCount": 3
+    },
+    {
       "id": "keycloak",
       "name": "Keycloak",
       "images": [
         "quay.io/keycloak/keycloak",
-        "docker.io/bitnami/keycloak"
+        "docker.io/bitnami/keycloak",
+        "docker.io/keycloak/keycloak"
       ],
       "shard": "products/keycloak.json",
       "sha256": "9bb1442e036f1580fe1de29a369076d97faa67a9491d06449c3e48543b997c72",
       "vulnCount": 80
+    },
+    {
+      "id": "kibana",
+      "name": "Kibana",
+      "images": [
+        "docker.elastic.co/kibana/kibana",
+        "docker.io/library/kibana",
+        "docker.io/bitnami/kibana"
+      ],
+      "shard": "products/kibana.json",
+      "sha256": "0b5b8af25018644f68eac8cacefcdf2821c1a72ebdc413c6d2139f95de0ec41d",
+      "vulnCount": 188
+    },
+    {
+      "id": "kong",
+      "name": "Kong Gateway",
+      "images": [
+        "docker.io/library/kong",
+        "docker.io/kong/kong-gateway"
+      ],
+      "shard": "products/kong.json",
+      "sha256": "b123e5b5cfb149ed757716a7d1e85a52bd22cfe3f552d00682532c0a7b6b9fb6",
+      "vulnCount": 2
     },
     {
       "id": "kubernetes",
@@ -177,11 +648,66 @@
         "registry.k8s.io/kube-apiserver",
         "registry.k8s.io/kube-controller-manager",
         "registry.k8s.io/kube-scheduler",
-        "registry.k8s.io/kube-proxy"
+        "registry.k8s.io/kube-proxy",
+        "ghcr.io/loft-sh/kubernetes"
       ],
       "shard": "products/kubernetes.json",
       "sha256": "946dfc400b6e68a55dc3d5fc80020ffb16be47240ff9755f9efacd37315cc5b0",
       "vulnCount": 51
+    },
+    {
+      "id": "kustomize-controller",
+      "name": "Kustomize Controller",
+      "images": [
+        "ghcr.io/fluxcd/kustomize-controller"
+      ],
+      "shard": "products/kustomize-controller.json",
+      "sha256": "e997742d6f28ce3db60b0435c28bddda568f90ff7089b2d92ef0faa42705910f",
+      "vulnCount": 5
+    },
+    {
+      "id": "kyverno",
+      "name": "Kyverno",
+      "images": [
+        "ghcr.io/kyverno/kyverno",
+        "ghcr.io/kyverno/background-controller",
+        "ghcr.io/kyverno/reports-controller",
+        "ghcr.io/kyverno/cleanup-controller"
+      ],
+      "shard": "products/kyverno.json",
+      "sha256": "649cf7abf78936ddb5f12ffb305c82aa3c4d474c146a0b322ee0dc21e5286ffb",
+      "vulnCount": 26
+    },
+    {
+      "id": "logstash",
+      "name": "Logstash",
+      "images": [
+        "docker.elastic.co/logstash/logstash",
+        "docker.io/library/logstash"
+      ],
+      "shard": "products/logstash.json",
+      "sha256": "0a7add9553eeabc54192b34e384aafccac2e1b65353bf3b7cb2907c4f57cf4b1",
+      "vulnCount": 13
+    },
+    {
+      "id": "loki",
+      "name": "Grafana Loki",
+      "images": [
+        "docker.io/grafana/loki"
+      ],
+      "shard": "products/loki.json",
+      "sha256": "fb19c0565668df7a934f3efca2c3cd169bde294cd7cdbd0a75ace2e74bced803",
+      "vulnCount": 2
+    },
+    {
+      "id": "mailpit",
+      "name": "Mailpit",
+      "images": [
+        "docker.io/axllent/mailpit"
+      ],
+      "shard": "products/mailpit.json",
+      "sha256": "c63a0d0ce7a7ec58cf7469b0200129203779e9e55d50fb551f8d2c84246238be",
+      "vulnCount": 10
     },
     {
       "id": "mariadb",
@@ -195,6 +721,17 @@
       "vulnCount": 430
     },
     {
+      "id": "mattermost",
+      "name": "Mattermost",
+      "images": [
+        "docker.io/mattermost/mattermost-team-edition",
+        "docker.io/mattermost/mattermost-enterprise-edition"
+      ],
+      "shard": "products/mattermost.json",
+      "sha256": "b5fef8a1573061e2740f47f9e2889cc10dbae15853f961a5de579fc30af9775d",
+      "vulnCount": 506
+    },
+    {
       "id": "memcached",
       "name": "Memcached",
       "images": [
@@ -206,15 +743,46 @@
       "vulnCount": 21
     },
     {
+      "id": "mlflow",
+      "name": "Mlflow",
+      "images": [
+        "docker.io/burakince/mlflow"
+      ],
+      "shard": "products/mlflow.json",
+      "sha256": "20a5fdf0d234c260d7145d02bcaebec1c7912813babbd2308556d32aa604bb3e",
+      "vulnCount": 72
+    },
+    {
+      "id": "mongo-express",
+      "name": "Mongo Express",
+      "images": [
+        "docker.io/library/mongo-express"
+      ],
+      "shard": "products/mongo-express.json",
+      "sha256": "b410c2fe2ab11c483db580c5811333601b126fd2bfa238a5daebb73528b4e0ea",
+      "vulnCount": 5
+    },
+    {
       "id": "mongodb",
       "name": "MongoDB",
       "images": [
         "docker.io/library/mongo",
-        "docker.io/bitnami/mongodb"
+        "docker.io/bitnami/mongodb",
+        "docker.io/bitnamilegacy/mongodb"
       ],
       "shard": "products/mongodb.json",
       "sha256": "9c69904da06f585a57476995eed32334643539cf3b18cdc25051de8c04a6c1f8",
       "vulnCount": 188
+    },
+    {
+      "id": "mosquitto",
+      "name": "Eclipse Mosquitto",
+      "images": [
+        "docker.io/library/eclipse-mosquitto"
+      ],
+      "shard": "products/mosquitto.json",
+      "sha256": "0388497142f43c746142f9670878ab547645a62d7d0b52b2019be2f97ef00b43",
+      "vulnCount": 26
     },
     {
       "id": "mysql",
@@ -224,8 +792,80 @@
         "docker.io/bitnami/mysql"
       ],
       "shard": "products/mysql.json",
-      "sha256": "c4b1c397b228ad32244bcee9956186f2950ee5b071c7ae9d06cc76bc416a93c6",
-      "vulnCount": 1675
+      "sha256": "34dce9366343428740b43f242c9c5a56ab25b3e0a11b81f361513677256def9a",
+      "vulnCount": 1723
+    },
+    {
+      "id": "n8n",
+      "name": "n8n",
+      "images": [
+        "docker.io/n8nio/n8n"
+      ],
+      "shard": "products/n8n.json",
+      "sha256": "8c60b409b45517ac0d97199b3ee6789d41432c4e0e2cc2f09402c7ab71872f56",
+      "vulnCount": 179
+    },
+    {
+      "id": "nats",
+      "name": "NATS Server",
+      "images": [
+        "docker.io/library/nats",
+        "docker.io/bitnami/nats"
+      ],
+      "shard": "products/nats.json",
+      "sha256": "01f39fc6aa044791dabe90a4f28f13911cd8dbeeb07bafaaa14008812f67cda5",
+      "vulnCount": 30
+    },
+    {
+      "id": "neo4j",
+      "name": "Neo4j",
+      "images": [
+        "docker.io/library/neo4j"
+      ],
+      "shard": "products/neo4j.json",
+      "sha256": "014d11b589f77ced8385b2610d97403aa6d7fc17d789cc3841138050d7d5f313",
+      "vulnCount": 9
+    },
+    {
+      "id": "netbox",
+      "name": "Netbox",
+      "images": [
+        "docker.io/netboxcommunity/netbox",
+        "ghcr.io/netbox-community/netbox"
+      ],
+      "shard": "products/netbox.json",
+      "sha256": "9cc19c52bba06e350dd3c1e433075ef041fcecd938b8fef57dee4db09c6d7e10",
+      "vulnCount": 46
+    },
+    {
+      "id": "netdata",
+      "name": "Netdata",
+      "images": [
+        "docker.io/netdata/netdata"
+      ],
+      "shard": "products/netdata.json",
+      "sha256": "ef9b1755eab2dfb144bea399e2b9ccf5963ca2c7bd0f02e6927125e5a08e83e4",
+      "vulnCount": 4
+    },
+    {
+      "id": "nextcloud",
+      "name": "Nextcloud",
+      "images": [
+        "docker.io/library/nextcloud"
+      ],
+      "shard": "products/nextcloud.json",
+      "sha256": "fabc1992355e44cb5166c8baea4f570c6d96dc7a6d9e05e01946862f6c7025c1",
+      "vulnCount": 189
+    },
+    {
+      "id": "nexus",
+      "name": "Sonatype Nexus Repository",
+      "images": [
+        "docker.io/sonatype/nexus3"
+      ],
+      "shard": "products/nexus.json",
+      "sha256": "1f6590199729516dfc407ced0c55f7ec1ecb29e64cbe06556c9fdbecafa5c8d7",
+      "vulnCount": 66
     },
     {
       "id": "nginx",
@@ -251,12 +891,128 @@
       "vulnCount": 187
     },
     {
+      "id": "notification-controller",
+      "name": "Notification Controller",
+      "images": [
+        "ghcr.io/fluxcd/notification-controller"
+      ],
+      "shard": "products/notification-controller.json",
+      "sha256": "9fe05422455be513f733ba37fe4a15dddb9cc2621fcf7d7f5a6b8f8992ba7593",
+      "vulnCount": 1
+    },
+    {
+      "id": "oauth2-proxy",
+      "name": "OAuth2 Proxy",
+      "images": [
+        "quay.io/oauth2-proxy/oauth2-proxy",
+        "docker.io/bitnami/oauth2-proxy"
+      ],
+      "shard": "products/oauth2-proxy.json",
+      "sha256": "c598df35b49f17806d4e3e2602d6fb8caa3550f6ee2163a0df4b86f35238dc66",
+      "vulnCount": 9
+    },
+    {
+      "id": "ollama",
+      "name": "Ollama",
+      "images": [
+        "docker.io/ollama/ollama"
+      ],
+      "shard": "products/ollama.json",
+      "sha256": "b818b619d656fd37c735cc522c694407aa5c2865188baff13c58f4fa95dfadf2",
+      "vulnCount": 25
+    },
+    {
+      "id": "openfga",
+      "name": "Openfga",
+      "images": [
+        "docker.io/openfga/openfga"
+      ],
+      "shard": "products/openfga.json",
+      "sha256": "76d797ee2f0ea17fef12d7eeb406ec13ab5f0f594a2de15f7a48324237a1e6f9",
+      "vulnCount": 26
+    },
+    {
+      "id": "openldap",
+      "name": "OpenLDAP",
+      "images": [
+        "docker.io/bitnami/openldap",
+        "docker.io/jpgouin/openldap"
+      ],
+      "shard": "products/openldap.json",
+      "sha256": "0b0d5f0ead3d142103fcdd0f80af1b7ed40123a7e5598e778b4eaebcbb2737b1",
+      "vulnCount": 59
+    },
+    {
+      "id": "opensearch",
+      "name": "OpenSearch",
+      "images": [
+        "docker.io/opensearchproject/opensearch",
+        "docker.io/bitnami/opensearch"
+      ],
+      "shard": "products/opensearch.json",
+      "sha256": "7bf5b4f9a2cec43955db7c57b2ee8bc38f61a08369c392db999b0b7335f9b1a8",
+      "vulnCount": 11
+    },
+    {
+      "id": "openssl",
+      "name": "Openssl",
+      "images": [
+        "docker.io/alpine/openssl"
+      ],
+      "shard": "products/openssl.json",
+      "sha256": "9baeae623979caefc58409153f64e55ddab9c173028f3d407e0e4e4b4014fadd",
+      "vulnCount": 322
+    },
+    {
+      "id": "outline",
+      "name": "Outline",
+      "images": [
+        "docker.io/outlinewiki/outline"
+      ],
+      "shard": "products/outline.json",
+      "sha256": "daa675c38a08897eab0d1c04e49151c9f0aa8d44ea34ec027fbaed97a0a00613",
+      "vulnCount": 14
+    },
+    {
+      "id": "pgbouncer",
+      "name": "PgBouncer",
+      "images": [
+        "docker.io/bitnami/pgbouncer",
+        "ghcr.io/airflow-helm/pgbouncer"
+      ],
+      "shard": "products/pgbouncer.json",
+      "sha256": "594ad861682ea3d512de62067912dbf4bef64e7828a1f625ea8cd0cdecdaa71a",
+      "vulnCount": 10
+    },
+    {
+      "id": "php",
+      "name": "PHP",
+      "images": [
+        "docker.io/library/php",
+        "docker.io/bitnami/php-fpm"
+      ],
+      "shard": "products/php.json",
+      "sha256": "15adf0c5b361e5af921244c560b690368fed468974c9f25142db00484ebde1fd",
+      "vulnCount": 738
+    },
+    {
+      "id": "podinfo",
+      "name": "Podinfo",
+      "images": [
+        "ghcr.io/stefanprodan/podinfo"
+      ],
+      "shard": "products/podinfo.json",
+      "sha256": "dfb074ce1beacd413737d2c7e6d9d8479cab0727cb4dea9cdb668555485b4059",
+      "vulnCount": 2
+    },
+    {
       "id": "postgresql",
       "name": "PostgreSQL",
       "images": [
         "docker.io/library/postgres",
         "docker.io/bitnami/postgresql",
-        "ghcr.io/cloudnative-pg/postgresql"
+        "ghcr.io/cloudnative-pg/postgresql",
+        "docker.io/bitnamilegacy/postgresql"
       ],
       "minSegments": 2,
       "shard": "products/postgresql.json",
@@ -298,15 +1054,114 @@
       "vulnCount": 17
     },
     {
+      "id": "rancher",
+      "name": "Rancher",
+      "images": [
+        "docker.io/rancher/rancher"
+      ],
+      "minSegments": 2,
+      "shard": "products/rancher.json",
+      "sha256": "0f33b2d80f15b27cbe9328ffa900179ed32bc4a09f1367ca8c5fcb60572eb902",
+      "vulnCount": 5
+    },
+    {
       "id": "redis",
       "name": "Redis",
       "images": [
         "docker.io/library/redis",
-        "docker.io/bitnami/redis"
+        "docker.io/bitnami/redis",
+        "docker.io/bitnamilegacy/redis",
+        "ecr-public.aws.com/docker/library/redis",
+        "public.ecr.aws/docker/library/redis"
       ],
       "shard": "products/redis.json",
       "sha256": "3e85985d20096ffbe7f833f3d8a8dba74d6d553dc456b2da82634175ca391ec6",
       "vulnCount": 44
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "images": [
+        "docker.io/library/ruby",
+        "docker.io/bitnami/ruby"
+      ],
+      "shard": "products/ruby.json",
+      "sha256": "d7877969770c4d5e5fb5e37caf0c06562507345fe2094cebfa266aecd55477b6",
+      "vulnCount": 93
+    },
+    {
+      "id": "seaweedfs",
+      "name": "Seaweedfs",
+      "images": [
+        "docker.io/chrislusf/seaweedfs"
+      ],
+      "minSegments": 2,
+      "shard": "products/seaweedfs.json",
+      "sha256": "8f619827881983e53ec9545efc5032ac98b4193acbcc48c98e16f0c153d0eeeb",
+      "vulnCount": 3
+    },
+    {
+      "id": "solr",
+      "name": "Apache Solr",
+      "images": [
+        "docker.io/library/solr",
+        "docker.io/bitnami/solr"
+      ],
+      "shard": "products/solr.json",
+      "sha256": "24b512e48474b74bb97430a00915b4461bd0fa4a4a0eaca02ae247c10b7b0ceb",
+      "vulnCount": 47
+    },
+    {
+      "id": "sonarqube",
+      "name": "SonarQube",
+      "images": [
+        "docker.io/library/sonarqube"
+      ],
+      "shard": "products/sonarqube.json",
+      "sha256": "5090f7dce4da004b8c536a6bb25dfe161ff1377b46cf87fc64dd7ab2b667b79d",
+      "vulnCount": 6
+    },
+    {
+      "id": "source-controller",
+      "name": "Source Controller",
+      "images": [
+        "ghcr.io/fluxcd/source-controller"
+      ],
+      "shard": "products/source-controller.json",
+      "sha256": "d4fecdd35b6ee01acf7df327c00bb03c72a5806724241a7cf2aec207b239d067",
+      "vulnCount": 1
+    },
+    {
+      "id": "spark",
+      "name": "Apache Spark",
+      "images": [
+        "docker.io/apache/spark",
+        "docker.io/library/spark",
+        "docker.io/bitnami/spark"
+      ],
+      "shard": "products/spark.json",
+      "sha256": "f9a35f50c1d01657d01661d2b9730f046ab388bc50002d897ed8d56c950a2cc5",
+      "vulnCount": 23
+    },
+    {
+      "id": "step-ca",
+      "name": "Step Ca",
+      "images": [
+        "cr.smallstep.com/smallstep/step-ca"
+      ],
+      "shard": "products/step-ca.json",
+      "sha256": "69204dd0a1e8a6b19075baf341ded6c83faf71f346da736bedf758141d37b116",
+      "vulnCount": 2
+    },
+    {
+      "id": "superset",
+      "name": "Apache Superset",
+      "images": [
+        "docker.io/apache/superset"
+      ],
+      "shard": "products/superset.json",
+      "sha256": "da25c61bb6ff66a4c2849ebe2b6b939a88108a65df1f8c025d3755bd624cb715",
+      "vulnCount": 70
     },
     {
       "id": "tomcat",
@@ -331,6 +1186,37 @@
       "vulnCount": 69
     },
     {
+      "id": "trivy",
+      "name": "Trivy",
+      "images": [
+        "docker.io/aquasec/trivy"
+      ],
+      "shard": "products/trivy.json",
+      "sha256": "4adfedf009efdad5f78ce49e217f2c73c88f2c4268e90fcf06061dc9599f57e8",
+      "vulnCount": 3
+    },
+    {
+      "id": "valkey",
+      "name": "Valkey",
+      "images": [
+        "docker.io/valkey/valkey",
+        "docker.io/bitnami/valkey"
+      ],
+      "shard": "products/valkey.json",
+      "sha256": "201cfb41f3d12ffb0d6bf37b1efd984f4891f5863fc99a7977ccc7334637b3dc",
+      "vulnCount": 5
+    },
+    {
+      "id": "varnish",
+      "name": "Varnish Cache",
+      "images": [
+        "docker.io/library/varnish"
+      ],
+      "shard": "products/varnish.json",
+      "sha256": "36696c080c1f62127e12aa6611e8e94ac5597a3df020205091d16ce8dcd4f48c",
+      "vulnCount": 7
+    },
+    {
       "id": "vault",
       "name": "HashiCorp Vault",
       "images": [
@@ -340,6 +1226,27 @@
       "shard": "products/vault.json",
       "sha256": "1b7da01c1cdb56671ea939a9325dd93adf7fe3a9867cf6f3cf6e21534fd7b800",
       "vulnCount": 72
+    },
+    {
+      "id": "velero",
+      "name": "Velero",
+      "images": [
+        "docker.io/velero/velero"
+      ],
+      "shard": "products/velero.json",
+      "sha256": "d3a7b3607127acb1e1b00ba35098f0ff196819c4762688a91199c3b99d28d88a",
+      "vulnCount": 1
+    },
+    {
+      "id": "victoriametrics",
+      "name": "VictoriaMetrics",
+      "images": [
+        "docker.io/victoriametrics/victoria-metrics",
+        "docker.io/victoriametrics/vmagent"
+      ],
+      "shard": "products/victoriametrics.json",
+      "sha256": "608d2917251f2d1878071492a784ac80c58fcd703fafd38bba0db3117629ef11",
+      "vulnCount": 2
     },
     {
       "id": "wordpress",
@@ -366,6 +1273,6 @@
   ],
   "epss": {
     "path": "epss.json",
-    "sha256": "8d01987898a3cf4697b8f7a1f8e41714863f8ef1828dbe1e189340867da6ca6a"
+    "sha256": "0c4571334f75453cdfd0bbb8899a95b11e08204ff5fa64e1b1081a3597b6933d"
   }
 }
