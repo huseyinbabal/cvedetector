@@ -1,0 +1,11 @@
+id: pgbouncer
+name: "PgBouncer"
+images:
+  - docker.io/bitnami/pgbouncer
+  - ghcr.io/airflow-helm/pgbouncer
+nvd:
+  cpes:
+    - cpe:2.3:a:pgbouncer:pgbouncer
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.23.1-debian-12-r5": "1.23.1"

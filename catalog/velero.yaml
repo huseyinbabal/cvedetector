@@ -1,0 +1,11 @@
+# Backup and restore.
+id: velero
+name: "Velero"
+images:
+  - docker.io/velero/velero
+osv:
+  - ecosystem: Go
+    package: github.com/vmware-tanzu/velero
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v1.15.0": "1.15.0"

@@ -1,0 +1,11 @@
+id: wordpress
+name: "WordPress"
+images:
+  - docker.io/library/wordpress
+  - docker.io/bitnami/wordpress
+nvd:
+  cpes:
+    - cpe:2.3:a:wordpress:wordpress
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "6.7.1-php8.3-apache": "6.7.1"

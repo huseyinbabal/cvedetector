@@ -1,0 +1,11 @@
+id: vault
+name: "HashiCorp Vault"
+images:
+  - docker.io/hashicorp/vault
+  - docker.io/library/vault
+nvd:
+  cpes:
+    - cpe:2.3:a:hashicorp:vault
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.18.2": "1.18.2"

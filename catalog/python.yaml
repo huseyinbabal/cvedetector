@@ -1,0 +1,12 @@
+id: python
+name: "Python"
+images:
+  - docker.io/library/python
+  - docker.io/bitnami/python
+nvd:
+  cpes:
+    - cpe:2.3:a:python:python
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.13.1-slim": "3.13.1"
+  "3.12": "3.12"

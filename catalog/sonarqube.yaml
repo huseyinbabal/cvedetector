@@ -1,0 +1,10 @@
+id: sonarqube
+name: "SonarQube"
+images:
+  - docker.io/library/sonarqube
+nvd:
+  cpes:
+    - cpe:2.3:a:sonarsource:sonarqube
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "10.7.0-community": "10.7.0"

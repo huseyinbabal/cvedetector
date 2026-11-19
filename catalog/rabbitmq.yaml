@@ -1,0 +1,12 @@
+id: rabbitmq
+name: "RabbitMQ"
+images:
+  - docker.io/library/rabbitmq
+  - docker.io/bitnami/rabbitmq
+nvd:
+  cpes:
+    - cpe:2.3:a:vmware:rabbitmq
+    - cpe:2.3:a:pivotal_software:rabbitmq
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "4.0.4-management": "4.0.4"

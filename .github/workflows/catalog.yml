@@ -1,0 +1,67 @@
+# The product catalog (catalog/<id>.yaml) lives on this branch; the tools are
+# on main. This workflow has to be here because pull requests take their
+# workflows from the branch they target.
+#
+#   pull request changing catalog/  → validate, query NVD/OSV for the changed
+#                                     products, report in the job summary
+#   merge changing catalog/         → run the `feed` workflow on main
+name: catalog
+
+on:
+  pull_request:
+    branches: [data]
+    paths: [catalog/**]
+  push:
+    branches: [data]
+    paths: [catalog/**]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out the tools (main)
+        uses: actions/checkout@v5
+        with:
+          ref: main
+      - name: Check out the pull request
+        uses: actions/checkout@v5
+        with:
+          path: data
+          fetch-depth: 0
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: Validate all product files
+        run: go run ./tools/feedgen -config data/catalog -validate
+      - name: Changed products
+        id: changed
+        working-directory: data
+        run: |
+          ids=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- catalog/ \
+                | sed -n 's#^catalog/\(.*\)\.ya\?ml$#\1#p' | paste -sd, -)
+          echo "ids=$ids" >> "$GITHUB_OUTPUT"
+          echo "Changed products: ${ids:-none}"
+      - name: Query sources
+        if: steps.changed.outputs.ids != ''
+        env:
+          # Not available to pull requests from forks; NVD is just slower then.
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          set -o pipefail
+          go run ./tools/feedgen -config data/catalog -probe "${{ steps.changed.outputs.ids }}" | tee -a "$GITHUB_STEP_SUMMARY"
+
+  feed:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Rebuild the feed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run feed.yml --repo "$GITHUB_REPOSITORY" --ref main

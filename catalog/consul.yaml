@@ -1,0 +1,11 @@
+id: consul
+name: "HashiCorp Consul"
+images:
+  - docker.io/hashicorp/consul
+  - docker.io/library/consul
+nvd:
+  cpes:
+    - cpe:2.3:a:hashicorp:consul
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.20.1": "1.20.1"

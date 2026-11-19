@@ -1,0 +1,11 @@
+id: tomcat
+name: "Apache Tomcat"
+images:
+  - docker.io/library/tomcat
+  - docker.io/bitnami/tomcat
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:tomcat
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "10.1.33-jdk21": "10.1.33"

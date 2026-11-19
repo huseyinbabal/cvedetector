@@ -1,0 +1,13 @@
+# Event-driven autoscaling.
+id: keda
+name: "KEDA"
+images:
+  - ghcr.io/kedacore/keda
+  - ghcr.io/kedacore/keda-metrics-apiserver
+  - ghcr.io/kedacore/keda-admission-webhooks
+osv:
+  - ecosystem: Go
+    package: github.com/kedacore/keda/v2
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.16.0": "2.16.0"

@@ -1,0 +1,11 @@
+# MQTT broker.
+id: mosquitto
+name: "Eclipse Mosquitto"
+images:
+  - docker.io/library/eclipse-mosquitto
+nvd:
+  cpes:
+    - cpe:2.3:a:eclipse:mosquitto
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.0.20": "2.0.20"

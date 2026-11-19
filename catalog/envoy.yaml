@@ -1,0 +1,13 @@
+id: envoy
+name: "Envoy"
+images:
+  - docker.io/envoyproxy/envoy
+versionPattern: '^(?:distroless-|contrib-)?v?(?P<version>\d+(?:\.\d+){0,3})'
+nvd:
+  cpes:
+    - cpe:2.3:a:envoyproxy:envoy
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "distroless-v1.32.2": "1.32.2"
+  "v1.32.2": "1.32.2"
+  "contrib-v1.32.2": "1.32.2"
