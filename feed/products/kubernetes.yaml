@@ -5,6 +5,7 @@ images:
   - registry.k8s.io/kube-controller-manager
   - registry.k8s.io/kube-scheduler
   - registry.k8s.io/kube-proxy
+  - ghcr.io/loft-sh/kubernetes
 nvd:
   cpes:
     - cpe:2.3:a:kubernetes:kubernetes

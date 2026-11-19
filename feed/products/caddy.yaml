@@ -1,0 +1,11 @@
+id: caddy
+name: "Caddy"
+images:
+  - docker.io/library/caddy
+osv:
+  - ecosystem: Go
+    package: github.com/caddyserver/caddy/v2
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.8.4-alpine": "2.8.4"
+  "2.8": "2.8"

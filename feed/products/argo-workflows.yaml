@@ -1,0 +1,12 @@
+id: argo-workflows
+name: "Argo Workflows"
+images:
+  - quay.io/argoproj/workflow-controller
+  - quay.io/argoproj/argocli
+  - quay.io/argoproj/argoexec
+osv:
+  - ecosystem: Go
+    package: github.com/argoproj/argo-workflows/v3
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v3.6.2": "3.6.2"

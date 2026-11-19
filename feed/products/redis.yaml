@@ -3,6 +3,9 @@ name: "Redis"
 images:
   - docker.io/library/redis
   - docker.io/bitnami/redis
+  - docker.io/bitnamilegacy/redis
+  - ecr-public.aws.com/docker/library/redis
+  - public.ecr.aws/docker/library/redis
 nvd:
   cpes:
     - cpe:2.3:a:redis:redis

@@ -1,0 +1,11 @@
+id: nats
+name: "NATS Server"
+images:
+  - docker.io/library/nats
+  - docker.io/bitnami/nats
+osv:
+  - ecosystem: Go
+    package: github.com/nats-io/nats-server/v2
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.10.22-alpine": "2.10.22"

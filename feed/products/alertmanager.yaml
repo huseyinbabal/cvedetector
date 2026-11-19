@@ -1,0 +1,12 @@
+id: alertmanager
+name: "Alertmanager"
+images:
+  - quay.io/prometheus/alertmanager
+  - docker.io/prom/alertmanager
+  - docker.io/bitnami/alertmanager
+osv:
+  - ecosystem: Go
+    package: github.com/prometheus/alertmanager
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v0.27.0": "0.27.0"

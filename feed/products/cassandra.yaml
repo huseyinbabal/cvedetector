@@ -1,0 +1,11 @@
+id: cassandra
+name: "Apache Cassandra"
+images:
+  - docker.io/library/cassandra
+  - docker.io/bitnami/cassandra
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:cassandra
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "5.0.2": "5.0.2"

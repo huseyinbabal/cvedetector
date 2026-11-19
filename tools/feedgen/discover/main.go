@@ -610,7 +610,7 @@ func run(ctx context.Context, log *slog.Logger, o opts) error {
 		if p == nil {
 			f := strings.Split(cpe, ":")
 			id, name := f[4], prettyName(f[4])
-			if len(f[4]) <= 4 || genericProduct[f[4]] {
+			if len(f[4]) <= 3 || genericProduct[f[4]] {
 				id, name = f[3]+"-"+f[4], prettyName(f[3])+" "+prettyName(f[4])
 			}
 			p = &proposal{ID: strings.NewReplacer("_", "-", ".", "-").Replace(id), Name: name, CPE: cpe, CVEs: counts[cpe], TestTags: t.examples, MinSegments: t.minSeg}

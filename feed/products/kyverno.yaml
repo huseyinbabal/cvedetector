@@ -1,0 +1,14 @@
+# Policy engine.
+id: kyverno
+name: "Kyverno"
+images:
+  - ghcr.io/kyverno/kyverno
+  - ghcr.io/kyverno/background-controller
+  - ghcr.io/kyverno/reports-controller
+  - ghcr.io/kyverno/cleanup-controller
+osv:
+  - ecosystem: Go
+    package: github.com/kyverno/kyverno
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v1.13.2": "1.13.2"

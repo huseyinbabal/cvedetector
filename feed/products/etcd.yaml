@@ -4,6 +4,8 @@ images:
   - registry.k8s.io/etcd
   - quay.io/coreos/etcd
   - docker.io/bitnami/etcd
+  - docker.io/bitnamilegacy/etcd
+  - docker.io/milvusdb/etcd
 nvd:
   cpes:
     - cpe:2.3:a:etcd:etcd

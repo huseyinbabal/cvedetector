@@ -1,0 +1,11 @@
+id: valkey
+name: "Valkey"
+images:
+  - docker.io/valkey/valkey
+  - docker.io/bitnami/valkey
+nvd:
+  cpes:
+    - cpe:2.3:a:lfprojects:valkey
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "8.0.1-alpine": "8.0.1"

@@ -3,6 +3,7 @@ name: "Keycloak"
 images:
   - quay.io/keycloak/keycloak
   - docker.io/bitnami/keycloak
+  - docker.io/keycloak/keycloak
 nvd:
   cpes:
     - cpe:2.3:a:redhat:keycloak

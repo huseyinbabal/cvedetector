@@ -1,0 +1,12 @@
+# OIDC identity provider.
+id: dex
+name: "Dex"
+images:
+  - ghcr.io/dexidp/dex
+osv:
+  - ecosystem: Go
+    package: github.com/dexidp/dex
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v2.41.1": "2.41.1"
+  "v2.41.1-distroless": "2.41.1"

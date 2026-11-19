@@ -1,0 +1,11 @@
+id: solr
+name: "Apache Solr"
+images:
+  - docker.io/library/solr
+  - docker.io/bitnami/solr
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:solr
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "9.7.0-slim": "9.7.0"

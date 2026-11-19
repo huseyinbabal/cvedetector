@@ -1,0 +1,10 @@
+id: drupal
+name: "Drupal"
+images:
+  - docker.io/library/drupal
+nvd:
+  cpes:
+    - cpe:2.3:a:drupal:drupal
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "11.1.0-apache": "11.1.0"

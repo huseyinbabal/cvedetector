@@ -1,0 +1,11 @@
+id: ruby
+name: "Ruby"
+images:
+  - docker.io/library/ruby
+  - docker.io/bitnami/ruby
+nvd:
+  cpes:
+    - cpe:2.3:a:ruby-lang:ruby
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.3.6-slim": "3.3.6"

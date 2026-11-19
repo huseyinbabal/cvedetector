@@ -4,6 +4,7 @@ images:
   - docker.io/library/postgres
   - docker.io/bitnami/postgresql
   - ghcr.io/cloudnative-pg/postgresql
+  - docker.io/bitnamilegacy/postgresql
 minSegments: 2
 nvd:
   cpes:
