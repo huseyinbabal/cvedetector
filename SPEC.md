@@ -1,6 +1,6 @@
 # SPEC: cvedetector
 
-> Durum: v0.7, Helm chart huseyinbabal/charts reposuna taşındı · Tarih: 2026-11-19
+> Durum: v0.7, Helm chart huseyinbabal/charts reposuna, ürün kataloğu `data` branch'ine taşındı · Tarih: 2026-11-19
 
 ## 1. Amaç
 
@@ -27,7 +27,7 @@ Sadece imajın ana yazılımının CVE'leri bulunur. İmajın içindeki işletim
 
 ```
  GitHub ───────────────────────────────────────────────────────────────
-  feed/products/*.yaml ─► Actions feed.yml (günlük) ─► tools/feedgen
+  data:catalog/*.yaml ─► Actions feed.yml (günlük) ─► tools/feedgen
   (PR + discover.yml)
                          NVD + OSV (+ KEV, EPSS) ─► v1/index.json + v1/products/<id>.json
                                                     sadece değişiklikte commit → `data` branch'i
@@ -69,25 +69,25 @@ cvedetector/
 │   ├── inventory/      # agent → API rapor sözleşmesi
 │   ├── version/        # gevşek semver karşılaştırma
 │   └── imageref/       # imaj referansı normalizasyonu
-├── feed/products/      # ürün kataloğu: <id>.yaml, PR ile büyür
 └── .github/workflows/{ci,feed,release}.yml
 ```
 
 - Tek Go modülü.
 - Üç ayrı imaj: `cvedetector-agent`, `cvedetector-api`, `cvedetector-ui`.
-- Feed verisi `main`'e değil, ayrı bir `data` branch'ine commit edilir (§4.2).
+- Ürün kataloğu ve feed verisi `main`'de değil, ayrı bir `data` branch'inde (§4.3). `main`'de sadece kod var.
 
 ## 4. Feed
 
-### 4.1 Ürün kataloğu: `feed/products/<id>.yaml`
+### 4.1 Ürün kataloğu: `catalog/<id>.yaml` (`data` branch'i)
 CVE veritabanları imaja göre değil **ürüne** göre tutulur: NVD'de "`cpe:2.3:a:php:php` sürüm 8.3.0 ile 8.3.14 arası etkilenir" gibi kayıtlar vardır. "`docker.io/library/php` imajı = `php:php` ürünü" eşlemesini hiçbir veritabanı tutmaz. Bütün CVE'leri çekmek tek başına bir işe yaramaz; asıl iş bu eşlemeyi kurmak. Katalog bu eşlemedir ve iki yoldan büyür:
 
-1. **Pull request ile katkı.**
+1. **Pull request ile katkı** (`data` branch'ine).
+   - Katalog, ondan üretilen feed ile birlikte `data` branch'inde durur; `main` kalabalıklaşmaz. Araçlar (`feedgen`) `main`'de olduğu için yerel kontrol `-config <data checkout>/catalog` ile yapılır.
    - Her ürün ayrı bir dosyada olduğu için aynı anda yapılan katkılar çakışmaz.
    - Dosyanın içeriği: `id` (dosya adıyla aynı olmalı), `name`, `images` (registry dahil tam repository adları), `nvd.cpes` ve/veya `osv` paketleri, gerekiyorsa `versionPattern` ve `minSegments`, ve **zorunlu `testTags`**: gerçek tag'ler ve onlardan okunması gereken sürüm.
    - `feedgen -validate` şunları kontrol eder: şema, dosya adı ile id'nin uyuşması, registry'siz ya da tag'li imaj adı, aynı imajın iki ürüne eşlenmesi, test tag'lerinin beklenen sürümü vermesi, CPE formatı.
-   - `products.yml` workflow'u PR'da değişen ürünler için `feedgen -probe` çalıştırır: her kaynak kaç CVE döndürüyor, test tag'lerinin sürümleri kaç CVE'den etkileniyor. Rapor job özetine yazılır. Hiç kayıt döndürmeyen bir kaynak (genelde yanlış CPE ya da paket adı) kontrolü başarısız yapar.
-   - UI'daki Coverage gaps sayfasında, cluster'da çalışan tag'lerle önceden doldurulmuş bir dosyayla GitHub'ın yeni dosya sayfası açılır. Yazma yetkisi olmayan biri için GitHub otomatik olarak fork açar ve PR'a yönlendirir.
+   - `data` branch'indeki `.github/workflows/catalog.yml` PR'da `main`'den araçları alıp değişen ürünler için `feedgen -probe` çalıştırır: her kaynak kaç CVE döndürüyor, test tag'lerinin sürümleri kaç CVE'den etkileniyor. Rapor job özetine yazılır. Hiç kayıt döndürmeyen bir kaynak (genelde yanlış CPE ya da paket adı) kontrolü başarısız yapar. Bu workflow `data` branch'inde olmak zorunda: GitHub PR workflow'larını hedef branch'ten okur. Merge sonrası aynı workflow `main`'deki `feed.yml`'ı tetikler.
+   - UI'daki Coverage gaps sayfasında, cluster'da çalışan tag'lerle önceden doldurulmuş bir dosyayla GitHub'ın yeni dosya sayfası `data` branch'inde açılır. Yazma yetkisi olmayan biri için GitHub otomatik olarak fork açar ve PR'a yönlendirir.
    - `CONTRIBUTING.md`, PR şablonu ve "Track an image" issue formu da bu akışı destekler.
 2. **Otomatik keşif** (`tools/feedgen/discover`, `discover.yml`, her pazartesi):
    - **Adaylar** gerçekten çalıştırılan imajlardan toplanır: Artifact Hub'ın en çok yıldız alan 300 Helm chart'ının kullandığı imajlar (`containers_images`), Docker Official Images (`docker-library/official-images`) ve Bitnami imajları (`bitnami/containers`). Kaç chart'ta geçtiklerine göre sıralanır.
@@ -96,7 +96,7 @@ CVE veritabanları imaja göre değil **ürüne** göre tutulur: NVD'de "`cpe:2.
    - **Sürüm tutarlılığı kontrolü:** imajın en yeni sürümünün major numarası, ürünün CVE aralıklarında geçmiyorsa eşleşme reddedilir.
    - **Birden fazla üretici** varsa üretici adı ürün adına ya da imajın namespace'ine eşitse o seçilir; değilse imaj raporda "elle incelenmeli" olarak listelenir.
    - Mevcut bir ürünün CPE'sine düşen imaj, o ürünün `images` listesine eklenir (örneğin `docker.gitea.com/gitea` → `gitea`).
-   - Sonuçlar **asla doğrudan `main`'e yazılmaz**; rapor gövdesiyle birlikte bir PR açılır. NVD yanıtları cache'lenir, böylece sonraki haftalarda sadece yeni adaylar sorgulanır.
+   - Sonuçlar **asla doğrudan yazılmaz**; rapor gövdesiyle birlikte `data` branch'ine bir PR açılır. NVD yanıtları cache'lenir, böylece sonraki haftalarda sadece yeni adaylar sorgulanır.
 
 ### 4.2 Üretim
 `tools/feedgen` NVD'den (CPE ile) ve OSV'den CVE'leri ve etkilenen sürüm aralıklarını çeker ve birleştirir, CISA KEV ile zenginleştirir, EPSS skorlarını ayrı bir dosyaya yazar.
@@ -107,9 +107,11 @@ Bilinen tuzaklar:
 - Probe'da external-dns, kube-state-metrics, metrics-server, node-exporter, thanos, rook ve longhorn için OSV hiç kayıt döndürmedi; katalogda yoklar.
 
 ### 4.3 Saklama: `data` branch'i
-Feed, kodla aynı repoda ama ayrı bir **`data` branch'inde** (geçmişiyle birlikte) tutulur. `main` bot commit'leriyle kirlenmez, klonlaması hafif kalır.
+Katalog ve feed, kodla aynı repoda ama ayrı bir **`data` branch'inde** (geçmişiyle birlikte) tutulur. `main` bot commit'leriyle ve katalog dosyalarıyla kalabalıklaşmaz, klonlaması hafif kalır.
 
 ```
+catalog/<id>.yaml         ürün kataloğu (girdi; PR ile değişir)
+.github/workflows/catalog.yml   katalog PR kontrolü ve merge sonrası feed tetikleme
 v1/index.json             ürünler, imaj eşlemesi, tüm dosyaların sha256'sı
 v1/products/<id>.json     ürünün güncel CVE'leri ve affected aralıkları
 v1/epss.json              EPSS skorları (her gün değişir; ayrı tutulur)
@@ -135,8 +137,8 @@ Bunun yerine `v1/` altında **ürün başına güncel durum** tutuluyor; tarihç
 **İlk gerçek veriyle ölçülen:** 3 ürünle iki ardışık çalıştırmada ilki "initial import" commit'i üretti, ikincisi "unchanged" dedi ve hiçbir dosyaya dokunmadı.
 
 ### 4.4 Workflow (`feed.yml`)
-- Her gün 03:17 UTC'de çalışır; ayrıca elle ve `main`'de `feed/products/` ya da `tools/feedgen` değişince tetiklenir.
-- Adımlar: testler → `data` branch'i bir worktree'ye alınır (yoksa orphan olarak oluşturulur) → `feedgen -out data -changes data/changes -commit-message …` → değişiklik varsa `github-actions[bot]` adına commit ve push. Özet, job'ın Summary sayfasına yazılır.
+- Her gün 03:17 UTC'de çalışır; ayrıca elle, `main`'de `tools/feedgen` değişince ve `data`'da katalog değişikliği merge edilince (`catalog.yml` üzerinden) tetiklenir.
+- Adımlar: testler → `data` branch'i bir worktree'ye alınır → `feedgen -config data/catalog -out data -changes data/changes -commit-message …` → değişiklik varsa `github-actions[bot]` adına commit ve push. Özet, job'ın Summary sayfasına yazılır.
 - `NVD_API_KEY` secret'ı opsiyonel. Anahtarsız bir çalışma yaklaşık 5 dakika, anahtarla yaklaşık 1 dakika sürer. Private repoda Actions dakikaları aylık kotadan düşer.
 - Cosign imzası kaldırıldı: keyless imza herkese açık transparency log'a (Rekor) private reponun adını yazardı. Repo public olunca geri eklenebilir.
 

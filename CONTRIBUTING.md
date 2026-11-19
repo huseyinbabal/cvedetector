@@ -4,7 +4,9 @@
 
 cvedetector doesn't scan images. It knows that `docker.io/library/php:8.3.14-fpm` is PHP 8.3.14 because a product file says so, and it gets PHP's CVEs from NVD or OSV. If an image you run shows up under **Coverage gaps** in the UI, add a product file for it.
 
-1. Create `feed/products/<id>.yaml` (the file name must equal `id`). The UI's **Add to feed** button opens this file pre-filled on GitHub.
+The catalog lives on the **`data` branch** under `catalog/`, next to the feed built from it. `main` holds only the code.
+
+1. Create `catalog/<id>.yaml` on the `data` branch (the file name must equal `id`) and open the pull request against `data`. The UI's **Add to feed** button opens this file pre-filled on GitHub.
 
    ```yaml
    # PHP runtime (official php images and Bitnami php-fpm).
@@ -35,21 +37,24 @@ cvedetector doesn't scan images. It knows that `docker.io/library/php:8.3.14-fpm
 
    Products whose full versions have two parts (PostgreSQL's `16.4`) set `minSegments: 2`. Otherwise a tag like `nginx:1.27` is treated as a floating tag.
 
-4. Check locally, then open a pull request:
+4. Check locally, then open a pull request against `data`. The tools are on `main`, so check out the catalog next to it:
 
    ```sh
-   go run ./tools/feedgen -validate        # schema, test tags, duplicate images
-   go run ./tools/feedgen -probe php       # queries NVD/OSV, prints what matches
+   git worktree add ../cvedetector-data data          # from a clone of main
+   # edit ../cvedetector-data/catalog/php.yaml
+   go run ./tools/feedgen -config ../cvedetector-data/catalog -validate     # schema, test tags, duplicate images
+   go run ./tools/feedgen -config ../cvedetector-data/catalog -probe php    # queries NVD/OSV, prints what matches
    ```
 
-The `products` check runs the same on your pull request and posts the report in the job summary. A source returning no vulnerabilities fails the check: it almost always means a wrong CPE or package name.
+The `catalog` check runs the same on your pull request and posts the report in the job summary. A source returning no vulnerabilities fails the check: it almost always means a wrong CPE or package name.
 
 ## Automatic discovery
 
-The `discover` workflow runs every week. It looks at the images used by the most-starred Helm charts on Artifact Hub, Docker Official Images and Bitnami images, and matches the ones not yet mapped to NVD products by name. It opens a pull request with its proposals; a person reviews and merges it. You can run it locally:
+The `discover` workflow runs every week. It looks at the images used by the most-starred Helm charts on Artifact Hub, Docker Official Images and Bitnami images, and matches the ones not yet mapped to NVD products by name. It opens a pull request against `data` with its proposals; a person reviews and merges it. A merge rebuilds the feed. You can run it locally:
 
 ```sh
-go run ./tools/feedgen/discover -dry-run -report /tmp/report.md
+make catalog
+go run ./tools/feedgen/discover -products .catalog -dry-run -report /tmp/report.md
 ```
 
 ## Code

@@ -1,5 +1,5 @@
 // Package config loads the product catalog: one YAML file per product in
-// feed/products/<id>.yaml (so contributions don't conflict).
+// catalog/<id>.yaml on the data branch (so contributions don't conflict).
 package config
 
 import (

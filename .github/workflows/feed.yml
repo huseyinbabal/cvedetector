@@ -1,8 +1,12 @@
 # Builds the CVE feed from NVD + OSV version-range data (no image scanning)
 # and commits it to the `data` branch, only when something changed.
 #
+#   data/catalog/<id>.yaml                                    product catalog (input, edited via PRs)
 #   data/v1/index.json, v1/products/<id>.json, v1/epss.json   current state
 #   data/changes/YYYY/MM/YYYY-MM-DD.json                      daily changelog
+#
+# Runs daily, when the tools change on main, and after a catalog merge on the
+# data branch (its `catalog` workflow dispatches this one).
 #
 # Optional secret NVD_API_KEY (https://nvd.nist.gov/developers/request-an-api-key):
 # without it NVD allows 5 requests / 30s and a run takes ~5 minutes instead of ~1.
@@ -15,7 +19,6 @@ on:
   push:
     branches: [main]
     paths:
-      - feed/products/**
       - tools/feedgen/**
       - pkg/feed/**
 
@@ -41,19 +44,14 @@ jobs:
 
       - name: Check out the data branch
         run: |
-          if git fetch --depth=1 origin data 2>/dev/null; then
-            git worktree add -B data data FETCH_HEAD
-          else
-            echo "No data branch yet: creating it."
-            git worktree add --orphan -b data data
-            cp tools/feedgen/data-README.md data/README.md
-          fi
+          git fetch --depth=1 origin data
+          git worktree add -B data data FETCH_HEAD
 
       - name: Generate feed
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
         run: |
-          go run ./tools/feedgen -config feed/products \
+          go run ./tools/feedgen -config data/catalog \
             -out data -changes data/changes -commit-message "$RUNNER_TEMP/commit-message.txt"
 
       - name: Commit and push

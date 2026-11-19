@@ -1,4 +1,4 @@
-.PHONY: test test-db lint ui build images feed feed-validate dev-db dev-api dev-agent dev-ui
+.PHONY: test test-db lint ui build images catalog feed feed-validate dev-db dev-api dev-agent dev-ui
 
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 REGISTRY ?= ghcr.io/huseyinbabal
@@ -34,12 +34,22 @@ images:
 	docker build -f apps/api/Dockerfile --build-arg VERSION=$(VERSION) -t $(REGISTRY)/cvedetector-api:$(VERSION) .
 	docker build -t $(REGISTRY)/cvedetector-ui:$(VERSION) apps/ui
 
-# Builds the feed into dist/feed/v1. Set NVD_API_KEY for faster NVD queries.
-feed:
-	go run ./tools/feedgen -config feed/products -out dist/feed
+# The catalog lives on the data branch. `make catalog` puts a read-only copy in
+# .catalog/. To edit it: git worktree add ../cvedetector-data data, then pass
+# CATALOG=../cvedetector-data/catalog.
+CATALOG ?= .catalog
 
-feed-validate:
-	go run ./tools/feedgen -validate
+catalog:
+	git fetch -q origin data
+	rm -rf .catalog && mkdir -p .catalog
+	git archive FETCH_HEAD catalog | tar -x --strip-components=1 -C .catalog
+
+# Builds the feed into dist/feed/v1. Set NVD_API_KEY for faster NVD queries.
+feed: $(if $(filter .catalog,$(CATALOG)),catalog)
+	go run ./tools/feedgen -config $(CATALOG) -out dist/feed
+
+feed-validate: $(if $(filter .catalog,$(CATALOG)),catalog)
+	go run ./tools/feedgen -config $(CATALOG) -validate
 
 # ---- local stack: make dev-db, then dev-api, dev-agent and dev-ui in separate terminals
 dev-db:

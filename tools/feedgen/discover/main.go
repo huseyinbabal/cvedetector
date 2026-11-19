@@ -49,7 +49,7 @@ type opts struct {
 
 func main() {
 	var o opts
-	flag.StringVar(&o.products, "products", "feed/products", "product files directory (new files are written here)")
+	flag.StringVar(&o.products, "products", "catalog", "product files directory, catalog/ on the data branch (new files are written here)")
 	flag.StringVar(&o.report, "report", "", "write a Markdown report to this file")
 	flag.StringVar(&o.cache, "cache", ".discover-cache.json", "NVD lookup cache (resumable runs)")
 	flag.IntVar(&o.charts, "charts", 300, "how many top Artifact Hub charts to inspect")

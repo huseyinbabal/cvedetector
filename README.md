@@ -42,7 +42,7 @@ helm install cvedetector huseyinbabal/cvedetector -n cvedetector \
 
 ## Add an image to the feed
 
-The feed knows which product an image is from `feed/products/<id>.yaml`. Missing one? Open a pull request (the UI's **Coverage gaps** page pre-fills it); a check queries NVD/OSV and reports what would match. A weekly `discover` workflow also proposes new products from popular Helm charts and Docker Official/Bitnami images. See [CONTRIBUTING.md](CONTRIBUTING.md).
+The feed knows which product an image is from `catalog/<id>.yaml` on the [`data` branch](../../tree/data/catalog). Missing one? Open a pull request against `data` (the UI's **Coverage gaps** page pre-fills it); a check queries NVD/OSV and reports what would match. A weekly `discover` workflow also proposes new products from popular Helm charts and Docker Official/Bitnami images. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Develop
 
@@ -67,5 +67,4 @@ The UI uses React, Tailwind CSS v4, [shadcn/ui](https://ui.shadcn.com) and [Luci
 | `apps/ui` | UI (React + TypeScript), served by nginx |
 | `tools/feedgen` | Feed generator (NVD, OSV, CISA KEV, EPSS); `discover/` proposes new products |
 | `pkg/feed`, `pkg/inventory` | Contracts: feed format, agent → API report |
-| `feed/products/` | Product catalog: which images are which product (one file per product) |
-| `data` branch | Generated feed and daily changelogs |
+| `data` branch | Product catalog (`catalog/`, edited via pull requests), generated feed and daily changelogs |

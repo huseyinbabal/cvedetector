@@ -35,7 +35,7 @@ export function Unknown({ cluster }: { cluster: string }) {
           {repos.size ? (
             <>
               <p className="mb-3 text-[13px] text-muted-foreground">
-                Add a product file under <code>feed/products/</code> with a pull request to start tracking a repository. Your own application images usually land here
+                Add a product file under <code>catalog/</code> on the <code>data</code> branch with a pull request to start tracking a repository. Your own application images usually land here
                 and can't be tracked this way.
                 {truncated && " Showing the first 500 images."}
               </p>
@@ -112,7 +112,7 @@ nvd:
 testTags:
 ${testTags}
 `;
-  const newFile = `${REPO_URL}/new/main?${new URLSearchParams({ filename: `feed/products/${id}.yaml`, value: snippet })}`;
+  const newFile = `${REPO_URL}/new/data?${new URLSearchParams({ filename: `catalog/${id}.yaml`, value: snippet })}`;
   const issue = `${REPO_URL}/issues/new?${new URLSearchParams({ template: "product.yml", title: `Track ${repo} in the feed` })}`;
   return (
     <Popover>
@@ -123,7 +123,7 @@ ${testTags}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-96">
         <p className="mb-2 text-xs text-muted-foreground">
-          New file <code>feed/products/{id}.yaml</code>. Fill in the CPE (or an OSV package) and the versions, then open a pull request. A
+          New file <code>catalog/{id}.yaml</code> on the <code>data</code> branch. Fill in the CPE (or an OSV package) and the versions, then open a pull request. A
           check queries the source and reports what would match.
         </p>
         <pre className="mb-3 max-h-56 overflow-auto rounded-md bg-muted p-2.5 font-mono text-xs leading-relaxed">{snippet}</pre>

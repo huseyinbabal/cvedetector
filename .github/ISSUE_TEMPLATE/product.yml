@@ -22,4 +22,4 @@ body:
       description: e.g. cpe:2.3:a:php:php
   - type: markdown
     attributes:
-      value: Faster still: open a pull request with `feed/products/<id>.yaml` (see CONTRIBUTING.md).
+      value: Faster still: open a pull request against the `data` branch with `catalog/<id>.yaml` (see CONTRIBUTING.md).

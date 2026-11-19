@@ -1,4 +1,4 @@
-// Command feedgen builds the CVE feed from feed/products/*.yaml using NVD and OSV
+// Command feedgen builds the CVE feed from catalog/*.yaml (data branch) using NVD and OSV
 // version-range data. It never pulls or scans images.
 package main
 
@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	cfgPath := flag.String("config", "feed/products", "directory of product files (<id>.yaml)")
+	cfgPath := flag.String("config", "catalog", "directory of product files (<id>.yaml): catalog/ on the data branch")
 	out := flag.String("out", "dist/feed", "output directory (feed is written to <out>/v1); an existing feed there is diffed against")
 	changes := flag.String("changes", "", "directory for daily changelogs (<dir>/YYYY/MM/YYYY-MM-DD.json); empty disables")
 	commitMsg := flag.String("commit-message", "", "write a commit message summarizing the changes to this file (only when something changed)")

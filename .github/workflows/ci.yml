@@ -34,8 +34,11 @@ jobs:
       - run: go vet ./...
       # -p 1: the database-backed packages share TEST_DATABASE_URL.
       - run: go test -race -p 1 ./...
-      - name: Validate product files
-        run: go run ./tools/feedgen -validate
+      - name: Validate the catalog (data branch)
+        run: |
+          git fetch --depth=1 origin data
+          git worktree add data FETCH_HEAD
+          go run ./tools/feedgen -config data/catalog -validate
 
   ui:
     runs-on: ubuntu-latest
