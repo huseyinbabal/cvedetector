@@ -22490,6 +22490,15 @@
   ],
   "updated": [
     {
+      "product": "mlflow",
+      "id": "CVE-2026-64849",
+      "severity": "CRITICAL",
+      "kev": true,
+      "fields": [
+        "summary"
+      ]
+    },
+    {
       "product": "postgresql",
       "id": "CVE-2019-9193",
       "severity": "HIGH",

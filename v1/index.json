@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-19T22:04:18.936379102Z",
+  "generatedAt": "2026-11-19T22:33:27.432391169Z",
   "products": [
     {
       "id": "airflow",
@@ -749,7 +749,7 @@
         "docker.io/burakince/mlflow"
       ],
       "shard": "products/mlflow.json",
-      "sha256": "20a5fdf0d234c260d7145d02bcaebec1c7912813babbd2308556d32aa604bb3e",
+      "sha256": "95f5da29c0a59b47296a93321f7cad5a73f7325d9231f91ccddbecb7592f2d4c",
       "vulnCount": 72
     },
     {
