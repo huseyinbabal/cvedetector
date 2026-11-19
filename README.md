@@ -11,6 +11,8 @@ No image is pulled, no SBOM is generated, no registry credentials are needed. Th
 
 ## Install
 
+This repository builds the images (`ghcr.io/huseyinbabal/cvedetector-{agent,api,ui}`); the Helm chart lives in [huseyinbabal/charts](https://github.com/huseyinbabal/charts/tree/main/stable/cvedetector).
+
 ```sh
 helm repo add huseyinbabal https://huseyinbabal.github.io/charts
 helm install cvedetector huseyinbabal/cvedetector -n cvedetector --create-namespace
@@ -18,7 +20,7 @@ kubectl -n cvedetector port-forward svc/cvedetector-ui 8080
 open http://localhost:8080
 ```
 
-While this repository is private the API needs a GitHub token to read the feed: see the [chart README](deploy/helm/cvedetector/README.md#private-feed).
+While this repository is private the API needs a GitHub token to read the feed: see the [chart README](https://github.com/huseyinbabal/charts/tree/main/stable/cvedetector#private-feed).
 
 This deploys the agent, API, UI and a bundled PostgreSQL. With your own database:
 
@@ -66,5 +68,4 @@ The UI uses React, Tailwind CSS v4, [shadcn/ui](https://ui.shadcn.com) and [Luci
 | `tools/feedgen` | Feed generator (NVD, OSV, CISA KEV, EPSS); `discover/` proposes new products |
 | `pkg/feed`, `pkg/inventory` | Contracts: feed format, agent → API report |
 | `feed/products/` | Product catalog: which images are which product (one file per product) |
-| `deploy/helm/cvedetector` | Helm chart (published from [huseyinbabal/charts](https://github.com/huseyinbabal/charts) on release) |
 | `data` branch | Generated feed and daily changelogs |

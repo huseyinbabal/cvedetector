@@ -1,6 +1,6 @@
 # SPEC: cvedetector
 
-> Durum: v0.6, ürün kataloğu PR ile büyüyor, otomatik keşif eklendi · Tarih: 2026-11-19
+> Durum: v0.7, Helm chart huseyinbabal/charts reposuna taşındı · Tarih: 2026-11-19
 
 ## 1. Amaç
 
@@ -70,7 +70,6 @@ cvedetector/
 │   ├── version/        # gevşek semver karşılaştırma
 │   └── imageref/       # imaj referansı normalizasyonu
 ├── feed/products/      # ürün kataloğu: <id>.yaml, PR ile büyür
-├── deploy/helm/cvedetector/
 └── .github/workflows/{ci,feed,release}.yml
 ```
 
@@ -296,6 +295,8 @@ Bu yüzden 4 çizgi tek grafikte değil, **severity başına ayrı küçük graf
 
 ## 8. Helm chart
 
+Chart bu repoda değil, **`huseyinbabal/charts`** reposunda (`stable/cvedetector`). Bu repo sadece imajları üretir. Chart'ın `appVersion`'ı imaj tag'idir.
+
 Tek chart, bileşenler ayrı ayrı açılıp kapatılabiliyor:
 
 | Mod | Ayarlar |
@@ -317,7 +318,7 @@ Tek chart, bileşenler ayrı ayrı açılıp kapatılabiliyor:
   - Varsayılan 8 Gi PVC; NFS değil blok depolama önerilir.
   - Bitnami chart'ı, lisans ve imaj dağıtımı değişikliği yüzünden kullanılmıyor.
   - HA gerekiyorsa managed bir veritabanı ya da CloudNativePG gibi bir operator'ı external olarak bağlamak gerekir.
-- **Yayın:** chart'ın kaynağı bu repoda (`deploy/helm/cvedetector`); CI'da kodla birlikte test edilir. `v*` tag'inde `release.yml` chart'ı tag sürümüyle **`huseyinbabal/charts`** reposunun `stable/cvedetector` klasörüne kopyalar. Oradaki chart-releaser `https://huseyinbabal.github.io/charts` adresine yayınlar; repo Artifact Hub'a bağlı. Bu adım `CHARTS_REPO_TOKEN` secret'ını gerektirir: `huseyinbabal/charts` üzerinde "Contents: read and write" yetkisi olan bir fine-grained token. Kurulum: `helm repo add huseyinbabal https://huseyinbabal.github.io/charts`.
+- **Yayın:** `v*` tag'inde bu repodaki `release.yml` imajları GHCR'a basar ve imzalar. Chart `huseyinbabal/charts`'ta elle güncellenir (`version` ve `appVersion` yeni tag'e çekilir). Oradaki chart-releaser `main`'e merge'de `https://huseyinbabal.github.io/charts` adresine yayınlar; repo Artifact Hub'a bağlı. Chart, imajlar GHCR'da yokken yayınlanmamalı. Kurulum: `helm repo add huseyinbabal https://huseyinbabal.github.io/charts`.
 - **Secret'lar:**
   - Ingest token ve PostgreSQL şifresi ilk kurulumda üretilir. `lookup` ile upgrade'lerde korunur ve `helm.sh/resource-policy: keep` ile uninstall'da silinmez; şifre kaybolursa API veri volume'una erişemez.
   - Ek token'lar `api.extraTokensSecret` ile verilir.
@@ -371,4 +372,4 @@ Tek chart, bileşenler ayrı ayrı açılıp kapatılabiliyor:
 - **Elle uçtan uca (yapıldı):**
   - Yerel: dev PostgreSQL + API + agent (`kind-backend`) + Vite UI.
   - Geçici bir kind cluster'ında `helm install` (bundled PG): API'nin veritabanını beklemesi, migration, host'tan feed sync, agent'ın tekrar deneyip rapor göndermesi, UI proxy'sinin POST'u 403 ile reddetmesi, `helm upgrade` sonrasında secret'ların korunması.
-- **Helm:** CI'da lint, üç kurulum modunun render edilmesi ve geçersiz ayarların reddedilmesi kontrol ediliyor.
+- **Helm:** chart `huseyinbabal/charts`'a taşınırken lint, dört kurulum modunun render edilmesi ve geçersiz ayarların reddedilmesi yerelde kontrol edildi.

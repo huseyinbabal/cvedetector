@@ -1,4 +1,6 @@
-# On a v* tag: multi-arch images (agent, api, ui) to GHCR, signed; chart to huseyinbabal/charts.
+# On a v* tag: multi-arch images (agent, api, ui) to GHCR, signed.
+# The Helm chart lives in huseyinbabal/charts (stable/cvedetector); its
+# appVersion is the image tag.
 name: release
 
 on:
@@ -52,33 +54,3 @@ jobs:
       - name: Sign image
         run: cosign sign --yes "${{ steps.v.outputs.image }}@${{ steps.build.outputs.digest }}"
 
-  # The chart is published from huseyinbabal/charts (stable/<name>, released by
-  # chart-releaser to https://huseyinbabal.github.io/charts). This job copies
-  # the chart there with the tag's version.
-  # Needs secret CHARTS_REPO_TOKEN: a fine-grained token with "Contents: read
-  # and write" on huseyinbabal/charts.
-  chart:
-    needs: images
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: actions/checkout@v5
-        with:
-          repository: huseyinbabal/charts
-          token: ${{ secrets.CHARTS_REPO_TOKEN }}
-          path: charts
-      - uses: azure/setup-helm@v4
-      - name: Sync chart
-        run: |
-          v="${GITHUB_REF_NAME#v}"
-          rm -rf charts/stable/cvedetector
-          cp -r deploy/helm/cvedetector charts/stable/cvedetector
-          sed -i -e "s/^version:.*/version: $v/" -e "s/^appVersion:.*/appVersion: \"$v\"/" charts/stable/cvedetector/Chart.yaml
-          helm lint charts/stable/cvedetector
-          cd charts
-          git add -A stable/cvedetector
-          if git diff --cached --quiet; then echo "Chart unchanged."; exit 0; fi
-          git -c user.name="github-actions[bot]" \
-              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -q -m "cvedetector: $v"
-          git push

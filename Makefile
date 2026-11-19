@@ -1,4 +1,4 @@
-.PHONY: test test-db lint ui build images feed feed-validate dev-db dev-api dev-agent dev-ui helm-lint
+.PHONY: test test-db lint ui build images feed feed-validate dev-db dev-api dev-agent dev-ui
 
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 REGISTRY ?= ghcr.io/huseyinbabal
@@ -58,6 +58,3 @@ dev-agent: build
 
 dev-ui:
 	cd apps/ui && API_URL=http://127.0.0.1:8090 npm run dev
-
-helm-lint:
-	helm lint deploy/helm/cvedetector
