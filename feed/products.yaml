@@ -1,0 +1,238 @@
+# Products tracked by the feed.
+#
+# Each product maps container image repositories to a piece of software and to
+# the vulnerability databases that describe it. No image is ever pulled or
+# scanned: the agent reads the version from the image tag and compares it with
+# the affected version ranges published by NVD / OSV.
+#
+#   id              unique, lowercase, used as the shard file name
+#   images          normalized repositories (docker.io/library/nginx); globs allowed
+#   versionPattern  optional regexp with a named group "version" applied to the tag
+#                   (default: ^v?(?P<version>\d+(?:\.\d+){0,3}))
+#   minSegments     numeric segments of a full version (default 3). Shorter tags
+#                   such as "nginx:1.27" are floating and reported as approximate.
+#   nvd.cpes        CPE prefixes cpe:2.3:a:<vendor>:<product>
+#   osv             packages in OSV ecosystems (Go, npm, PyPI, Maven, ...)
+#
+# To add a product, open a PR. Run `go run ./tools/feedgen -validate` first.
+
+products:
+  # --- Web servers / proxies -------------------------------------------------
+  - id: nginx
+    name: NGINX
+    images:
+      - docker.io/library/nginx
+      - docker.io/nginxinc/nginx-unprivileged
+      - docker.io/bitnami/nginx
+    nvd:
+      cpes: [cpe:2.3:a:f5:nginx, cpe:2.3:a:nginx:nginx]
+
+  - id: httpd
+    name: Apache HTTP Server
+    images: [docker.io/library/httpd, docker.io/bitnami/apache]
+    nvd:
+      cpes: [cpe:2.3:a:apache:http_server]
+
+  - id: haproxy
+    name: HAProxy
+    images: [docker.io/library/haproxy, docker.io/haproxytech/haproxy-alpine, docker.io/haproxytech/haproxy-debian]
+    nvd:
+      cpes: [cpe:2.3:a:haproxy:haproxy]
+
+  - id: traefik
+    name: Traefik
+    images: [docker.io/library/traefik, docker.io/traefik/traefik]
+    osv:
+      - {ecosystem: Go, package: github.com/traefik/traefik/v2}
+      - {ecosystem: Go, package: github.com/traefik/traefik/v3}
+
+  - id: envoy
+    name: Envoy
+    images: [docker.io/envoyproxy/envoy]
+    versionPattern: '^(?:distroless-|contrib-)?v?(?P<version>\d+(?:\.\d+){0,3})'
+    nvd:
+      cpes: [cpe:2.3:a:envoyproxy:envoy]
+
+  - id: tomcat
+    name: Apache Tomcat
+    images: [docker.io/library/tomcat, docker.io/bitnami/tomcat]
+    nvd:
+      cpes: [cpe:2.3:a:apache:tomcat]
+
+  # --- Databases / caches / queues ------------------------------------------
+  - id: redis
+    name: Redis
+    images: [docker.io/library/redis, docker.io/bitnami/redis]
+    nvd:
+      cpes: [cpe:2.3:a:redis:redis]
+
+  - id: postgresql
+    name: PostgreSQL
+    images: [docker.io/library/postgres, docker.io/bitnami/postgresql, ghcr.io/cloudnative-pg/postgresql]
+    minSegments: 2
+    nvd:
+      cpes: [cpe:2.3:a:postgresql:postgresql]
+
+  - id: mysql
+    name: MySQL
+    images: [docker.io/library/mysql, docker.io/bitnami/mysql]
+    nvd:
+      cpes: [cpe:2.3:a:oracle:mysql, cpe:2.3:a:oracle:mysql_server]
+
+  - id: mariadb
+    name: MariaDB
+    images: [docker.io/library/mariadb, docker.io/bitnami/mariadb]
+    nvd:
+      cpes: [cpe:2.3:a:mariadb:mariadb]
+
+  - id: mongodb
+    name: MongoDB
+    images: [docker.io/library/mongo, docker.io/bitnami/mongodb]
+    nvd:
+      cpes: [cpe:2.3:a:mongodb:mongodb]
+
+  - id: memcached
+    name: Memcached
+    images: [docker.io/library/memcached, docker.io/bitnami/memcached]
+    nvd:
+      cpes: [cpe:2.3:a:memcached:memcached]
+
+  - id: rabbitmq
+    name: RabbitMQ
+    images: [docker.io/library/rabbitmq, docker.io/bitnami/rabbitmq]
+    nvd:
+      cpes: [cpe:2.3:a:vmware:rabbitmq, cpe:2.3:a:pivotal_software:rabbitmq]
+
+  - id: kafka
+    name: Apache Kafka
+    images: [docker.io/apache/kafka, docker.io/bitnami/kafka]
+    nvd:
+      cpes: [cpe:2.3:a:apache:kafka]
+
+  - id: zookeeper
+    name: Apache ZooKeeper
+    images: [docker.io/library/zookeeper, docker.io/bitnami/zookeeper]
+    nvd:
+      cpes: [cpe:2.3:a:apache:zookeeper]
+
+  - id: elasticsearch
+    name: Elasticsearch
+    images:
+      - docker.elastic.co/elasticsearch/elasticsearch
+      - docker.io/library/elasticsearch
+      - docker.io/bitnami/elasticsearch
+    nvd:
+      cpes: [cpe:2.3:a:elastic:elasticsearch]
+
+  # --- Kubernetes platform ---------------------------------------------------
+  - id: kubernetes
+    name: Kubernetes control plane
+    images:
+      - registry.k8s.io/kube-apiserver
+      - registry.k8s.io/kube-controller-manager
+      - registry.k8s.io/kube-scheduler
+      - registry.k8s.io/kube-proxy
+    nvd:
+      cpes: [cpe:2.3:a:kubernetes:kubernetes]
+
+  - id: etcd
+    name: etcd
+    images: [registry.k8s.io/etcd, quay.io/coreos/etcd, docker.io/bitnami/etcd]
+    nvd:
+      cpes: [cpe:2.3:a:etcd:etcd]
+
+  - id: coredns
+    name: CoreDNS
+    images: [registry.k8s.io/coredns/coredns, docker.io/coredns/coredns]
+    osv:
+      - {ecosystem: Go, package: github.com/coredns/coredns}
+
+  - id: ingress-nginx
+    name: ingress-nginx
+    images: [registry.k8s.io/ingress-nginx/controller]
+    nvd:
+      cpes: [cpe:2.3:a:kubernetes:ingress-nginx]
+
+  - id: argo-cd
+    name: Argo CD
+    images: [quay.io/argoproj/argocd]
+    osv:
+      - {ecosystem: Go, package: github.com/argoproj/argo-cd/v2}
+      - {ecosystem: Go, package: github.com/argoproj/argo-cd/v3}
+
+  - id: cert-manager
+    name: cert-manager
+    images:
+      - quay.io/jetstack/cert-manager-controller
+      - quay.io/jetstack/cert-manager-webhook
+      - quay.io/jetstack/cert-manager-cainjector
+    osv:
+      - {ecosystem: Go, package: github.com/cert-manager/cert-manager}
+
+  # --- Observability -----------------------------------------------------------
+  - id: prometheus
+    name: Prometheus
+    images: [quay.io/prometheus/prometheus, docker.io/prom/prometheus, docker.io/bitnami/prometheus]
+    nvd:
+      cpes: [cpe:2.3:a:prometheus:prometheus]
+
+  - id: grafana
+    name: Grafana
+    images:
+      - docker.io/grafana/grafana
+      - docker.io/grafana/grafana-oss
+      - docker.io/grafana/grafana-enterprise
+      - docker.io/bitnami/grafana
+    nvd:
+      cpes: [cpe:2.3:a:grafana:grafana]
+
+  # --- Security / identity -----------------------------------------------------
+  - id: vault
+    name: HashiCorp Vault
+    images: [docker.io/hashicorp/vault, docker.io/library/vault]
+    nvd:
+      cpes: [cpe:2.3:a:hashicorp:vault]
+
+  - id: consul
+    name: HashiCorp Consul
+    images: [docker.io/hashicorp/consul, docker.io/library/consul]
+    nvd:
+      cpes: [cpe:2.3:a:hashicorp:consul]
+
+  - id: keycloak
+    name: Keycloak
+    images: [quay.io/keycloak/keycloak, docker.io/bitnami/keycloak]
+    nvd:
+      cpes: [cpe:2.3:a:redhat:keycloak]
+
+  # --- CI / apps ---------------------------------------------------------------
+  - id: jenkins
+    name: Jenkins
+    images: [docker.io/jenkins/jenkins]
+    nvd:
+      cpes: [cpe:2.3:a:jenkins:jenkins]
+
+  - id: gitlab
+    name: GitLab
+    images: [docker.io/gitlab/gitlab-ce, docker.io/gitlab/gitlab-ee]
+    nvd:
+      cpes: [cpe:2.3:a:gitlab:gitlab]
+
+  - id: wordpress
+    name: WordPress
+    images: [docker.io/library/wordpress, docker.io/bitnami/wordpress]
+    nvd:
+      cpes: [cpe:2.3:a:wordpress:wordpress]
+
+  # --- Language runtimes (when the runtime image itself runs) ---------------
+  - id: nodejs
+    name: Node.js
+    images: [docker.io/library/node]
+    nvd:
+      cpes: [cpe:2.3:a:nodejs:node.js]
+
+  - id: python
+    name: Python
+    images: [docker.io/library/python]
+    nvd:
+      cpes: [cpe:2.3:a:python:python]

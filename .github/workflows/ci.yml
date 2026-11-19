@@ -1,0 +1,88 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18.6-alpine
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U test" --health-interval 5s --health-timeout 5s --health-retries 12
+    env:
+      # Integration tests drop and recreate the public schema of this database.
+      TEST_DATABASE_URL: postgres://test:test@localhost:5432/test?sslmode=disable
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || (gofmt -l . && exit 1)
+      - run: go vet ./...
+      # -p 1: the database-backed packages share TEST_DATABASE_URL.
+      - run: go test -race -p 1 ./...
+      - name: Validate products.yaml
+        run: go run ./tools/feedgen -validate
+
+  ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/ui
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: apps/ui/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: azure/setup-helm@v4
+      - run: helm lint deploy/helm/cvedetector
+      - name: Render install modes
+        run: |
+          C=deploy/helm/cvedetector
+          helm template t $C > /dev/null
+          helm template t $C --set postgresql.enabled=false,externalDatabase.host=db,externalDatabase.existingSecret=db > /dev/null
+          helm template t $C --set api.enabled=false,ui.enabled=false,postgresql.enabled=false,agent.apiUrl=https://x,agent.existingTokenSecret=t > /dev/null
+          # Invalid combinations must fail. (`! cmd` would not fail the step under bash -e.)
+          if helm template t $C --set postgresql.enabled=false >/dev/null 2>&1; then echo "missing database was accepted"; exit 1; fi
+          if helm template t $C --set agent.clusterName=Bad_Name >/dev/null 2>&1; then echo "invalid cluster name was accepted"; exit 1; fi
+
+  image:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - { component: agent, context: ., file: apps/agent/Dockerfile }
+          - { component: api, context: ., file: apps/api/Dockerfile }
+          - { component: ui, context: apps/ui, file: apps/ui/Dockerfile }
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: false
+          cache-from: type=gha,scope=${{ matrix.component }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.component }}

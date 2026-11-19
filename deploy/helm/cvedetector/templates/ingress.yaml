@@ -1,0 +1,55 @@
+{{- if and .Values.ingress.enabled .Values.api.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "cvedetector.fullname" . }}
+  labels: {{- include "cvedetector.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations: {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls: {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          # /api goes straight to the API so remote agents can ingest.
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "cvedetector.apiName" . }}
+                port: { name: http }
+          {{- if .Values.ui.enabled }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "cvedetector.fullname" . }}-ui
+                port: { name: http }
+          {{- end }}
+{{- end }}
+{{- if .Values.serviceMonitor.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "cvedetector.fullname" . }}
+  labels:
+    {{- include "cvedetector.labels" . | nindent 4 }}
+    {{- with .Values.serviceMonitor.labels }}{{ toYaml . | nindent 4 }}{{ end }}
+spec:
+  selector:
+    matchExpressions:
+      - { key: app.kubernetes.io/instance, operator: In, values: [{{ .Release.Name | quote }}] }
+      - { key: app.kubernetes.io/component, operator: In, values: [api, agent] }
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: {{ .Values.serviceMonitor.interval }}
+{{- end }}

@@ -1,0 +1,84 @@
+# On a v* tag: multi-arch images (agent, api, ui) to GHCR, signed; chart to huseyinbabal/charts.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+    strategy:
+      matrix:
+        include:
+          - { component: agent, context: ., file: apps/agent/Dockerfile }
+          - { component: api, context: ., file: apps/api/Dockerfile }
+          - { component: ui, context: apps/ui, file: apps/ui/Dockerfile }
+    steps:
+      - uses: actions/checkout@v5
+      - name: Version
+        id: v
+        run: |
+          echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/cvedetector-${{ matrix.component }}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-qemu-action@v3
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: VERSION=${{ steps.v.outputs.version }}
+          tags: |
+            ${{ steps.v.outputs.image }}:${{ steps.v.outputs.version }}
+            ${{ steps.v.outputs.image }}:latest
+          sbom: true
+          provenance: mode=max
+      - uses: sigstore/cosign-installer@v3
+      - name: Sign image
+        run: cosign sign --yes "${{ steps.v.outputs.image }}@${{ steps.build.outputs.digest }}"
+
+  # The chart is published from huseyinbabal/charts (stable/<name>, released by
+  # chart-releaser to https://huseyinbabal.github.io/charts). This job copies
+  # the chart there with the tag's version.
+  # Needs secret CHARTS_REPO_TOKEN: a fine-grained token with "Contents: read
+  # and write" on huseyinbabal/charts.
+  chart:
+    needs: images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: huseyinbabal/charts
+          token: ${{ secrets.CHARTS_REPO_TOKEN }}
+          path: charts
+      - uses: azure/setup-helm@v4
+      - name: Sync chart
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          rm -rf charts/stable/cvedetector
+          cp -r deploy/helm/cvedetector charts/stable/cvedetector
+          sed -i -e "s/^version:.*/version: $v/" -e "s/^appVersion:.*/appVersion: \"$v\"/" charts/stable/cvedetector/Chart.yaml
+          helm lint charts/stable/cvedetector
+          cd charts
+          git add -A stable/cvedetector
+          if git diff --cached --quiet; then echo "Chart unchanged."; exit 0; fi
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "cvedetector: $v"
+          git push

@@ -1,0 +1,73 @@
+# Builds the CVE feed from NVD + OSV version-range data (no image scanning)
+# and commits it to the `data` branch, only when something changed.
+#
+#   data/v1/index.json, v1/products/<id>.json, v1/epss.json   current state
+#   data/changes/YYYY/MM/YYYY-MM-DD.json                      daily changelog
+#
+# Optional secret NVD_API_KEY (https://nvd.nist.gov/developers/request-an-api-key):
+# without it NVD allows 5 requests / 30s and a run takes ~5 minutes instead of ~1.
+name: feed
+
+on:
+  schedule:
+    - cron: "17 3 * * *" # daily, 03:17 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - feed/products.yaml
+      - tools/feedgen/**
+      - pkg/feed/**
+
+permissions:
+  contents: write
+
+concurrency:
+  group: feed
+  cancel-in-progress: false
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+
+      - name: Test feed generator
+        run: go test ./pkg/feed/... ./tools/feedgen/...
+
+      - name: Check out the data branch
+        run: |
+          if git fetch --depth=1 origin data 2>/dev/null; then
+            git worktree add -B data data FETCH_HEAD
+          else
+            echo "No data branch yet: creating it."
+            git worktree add --orphan -b data data
+            cp tools/feedgen/data-README.md data/README.md
+          fi
+
+      - name: Generate feed
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: |
+          go run ./tools/feedgen -config feed/products.yaml \
+            -out data -changes data/changes -commit-message "$RUNNER_TEMP/commit-message.txt"
+
+      - name: Commit and push
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Feed unchanged; nothing to commit." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          msg="$RUNNER_TEMP/commit-message.txt"
+          [ -s "$msg" ] || echo "feed $(date -u +%F): update" > "$msg"
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -F "$msg"
+          git push origin data
+          { echo '### Feed committed'; echo '```'; cat "$msg"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"

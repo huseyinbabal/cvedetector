@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Dark mode follows a .dark class on <html>, set by src/lib/theme.ts. */
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+
+  /* warm neutral surfaces */
+  --background: #f6f6f4;
+  --foreground: #1c1b19;
+  --card: #ffffff;
+  --card-foreground: #1c1b19;
+  --popover: #ffffff;
+  --popover-foreground: #1c1b19;
+  --primary: #c2410c;
+  --primary-foreground: #ffffff;
+  --secondary: #efeeea;
+  --secondary-foreground: #1c1b19;
+  --muted: #efeeea;
+  --muted-foreground: #6b6862;
+  --accent: #efeeea;
+  --accent-foreground: #1c1b19;
+  --destructive: #b91c1c;
+  --border: #e2e0db;
+  --input: #dcdad4;
+  --ring: #ea580c;
+  --link: #9a3412;
+
+  /* severity scale */
+  --sev-critical: #b91c1c;
+  --sev-critical-bg: #fde8e8;
+  --sev-high: #c2410c;
+  --sev-high-bg: #fdebdc;
+  --sev-medium: #a16207;
+  --sev-medium-bg: #fbf1d3;
+  --sev-low: #3f6280;
+  --sev-low-bg: #e3ecf4;
+  --sev-unknown: #6b6862;
+  --sev-unknown-bg: #ebeae6;
+  --kev: #7f1d1d;
+  --kev-foreground: #ffffff;
+  --ok: #3f7d4f;
+}
+
+.dark {
+  --background: #141412;
+  --foreground: #ecebe7;
+  --card: #1c1b19;
+  --card-foreground: #ecebe7;
+  --popover: #1f1e1c;
+  --popover-foreground: #ecebe7;
+  --primary: #fb923c;
+  --primary-foreground: #1c1b19;
+  --secondary: #2a2926;
+  --secondary-foreground: #ecebe7;
+  --muted: #252421;
+  --muted-foreground: #a09d96;
+  --accent: #2a2926;
+  --accent-foreground: #ecebe7;
+  --destructive: #f87171;
+  --border: #34322e;
+  --input: #3d3b36;
+  --ring: #fb923c;
+  --link: #fdba74;
+
+  --sev-critical: #f87171;
+  --sev-critical-bg: #3b1616;
+  --sev-high: #fb923c;
+  --sev-high-bg: #3a2113;
+  --sev-medium: #facc15;
+  --sev-medium-bg: #352c10;
+  --sev-low: #93b4d1;
+  --sev-low-bg: #1d2a36;
+  --sev-unknown: #a09d96;
+  --sev-unknown-bg: #2a2926;
+  --kev: #fecaca;
+  --kev-foreground: #3b1616;
+  --ok: #86c49a;
+}
+
+@theme inline {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-link: var(--link);
+
+  --color-sev-critical: var(--sev-critical);
+  --color-sev-critical-bg: var(--sev-critical-bg);
+  --color-sev-high: var(--sev-high);
+  --color-sev-high-bg: var(--sev-high-bg);
+  --color-sev-medium: var(--sev-medium);
+  --color-sev-medium-bg: var(--sev-medium-bg);
+  --color-sev-low: var(--sev-low);
+  --color-sev-low-bg: var(--sev-low-bg);
+  --color-sev-unknown: var(--sev-unknown);
+  --color-sev-unknown-bg: var(--sev-unknown-bg);
+  --color-kev: var(--kev);
+  --color-kev-foreground: var(--kev-foreground);
+  --color-ok: var(--ok);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-size: 14px;
+  }
+  a {
+    @apply text-link underline-offset-4 hover:underline;
+  }
+  code {
+    @apply rounded bg-muted px-1 font-mono text-[0.92em];
+  }
+}
