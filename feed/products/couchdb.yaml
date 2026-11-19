@@ -1,0 +1,10 @@
+id: couchdb
+name: "Apache CouchDB"
+images:
+  - docker.io/library/couchdb
+nvd:
+  cpes:
+    - cpe:2.3:a:apache:couchdb
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.4.2": "3.4.2"

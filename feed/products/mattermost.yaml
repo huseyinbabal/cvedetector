@@ -1,0 +1,11 @@
+id: mattermost
+name: "Mattermost"
+images:
+  - docker.io/mattermost/mattermost-team-edition
+  - docker.io/mattermost/mattermost-enterprise-edition
+nvd:
+  cpes:
+    - cpe:2.3:a:mattermost:mattermost_server
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "10.3.1": "10.3.1"

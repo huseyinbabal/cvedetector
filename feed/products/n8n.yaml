@@ -1,0 +1,11 @@
+# Workflow automation.
+id: n8n
+name: "n8n"
+images:
+  - docker.io/n8nio/n8n
+nvd:
+  cpes:
+    - cpe:2.3:a:n8n:n8n
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.70.3": "1.70.3"

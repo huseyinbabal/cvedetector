@@ -1,0 +1,12 @@
+id: kong
+name: "Kong Gateway"
+images:
+  - docker.io/library/kong
+  - docker.io/kong/kong-gateway
+nvd:
+  cpes:
+    - cpe:2.3:a:konghq:kong_gateway
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "3.8.0": "3.8.0"
+  "3.8.0.0-ubuntu": "3.8.0.0"

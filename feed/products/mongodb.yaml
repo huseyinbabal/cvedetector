@@ -3,6 +3,7 @@ name: "MongoDB"
 images:
   - docker.io/library/mongo
   - docker.io/bitnami/mongodb
+  - docker.io/bitnamilegacy/mongodb
 nvd:
   cpes:
     - cpe:2.3:a:mongodb:mongodb

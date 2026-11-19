@@ -1,0 +1,13 @@
+# CNI and network policy.
+id: cilium
+name: "Cilium"
+images:
+  - quay.io/cilium/cilium
+  - quay.io/cilium/operator-generic
+  - quay.io/cilium/hubble-relay
+osv:
+  - ecosystem: Go
+    package: github.com/cilium/cilium
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "v1.16.4": "1.16.4"

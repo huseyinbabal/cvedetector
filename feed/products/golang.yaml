@@ -1,0 +1,12 @@
+# Go toolchain image.
+id: golang
+name: "Go"
+images:
+  - docker.io/library/golang
+  - docker.io/bitnami/golang
+nvd:
+  cpes:
+    - cpe:2.3:a:golang:go
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "1.23.4-alpine": "1.23.4"

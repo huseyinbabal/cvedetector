@@ -1,0 +1,11 @@
+id: opensearch
+name: "OpenSearch"
+images:
+  - docker.io/opensearchproject/opensearch
+  - docker.io/bitnami/opensearch
+nvd:
+  cpes:
+    - cpe:2.3:a:amazon:opensearch
+# Example tags and the version that must be read from them ("" = none).
+testTags:
+  "2.18.0": "2.18.0"
