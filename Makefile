@@ -61,9 +61,12 @@ feed-validate: $(if $(filter .catalog,$(CATALOG)),catalog)
 
 # ---- local stack: make dev-db, then dev-api, dev-agent and dev-ui in separate terminals
 dev-db:
-	docker start cvedetector-pg-dev 2>/dev/null || docker run -d --name cvedetector-pg-dev -e POSTGRES_USER=cvedetector -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=cvedetector \
-		-p 127.0.0.1:$(DEV_DB_PORT):5432 postgres:18.6-alpine
-	@sleep 3; docker exec cvedetector-pg-dev psql -U cvedetector -qc 'CREATE DATABASE cvedetector_test' || true
+	@docker start cvedetector-pg-dev >/dev/null 2>&1 || docker run -d --name cvedetector-pg-dev -e POSTGRES_USER=cvedetector -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=cvedetector \
+		-p 127.0.0.1:$(DEV_DB_PORT):5432 postgres:18.6-alpine >/dev/null
+	@for i in $$(seq 1 30); do docker exec cvedetector-pg-dev pg_isready -q -h 127.0.0.1 -U cvedetector -d cvedetector && break; sleep 1; done
+	@docker exec cvedetector-pg-dev psql -U cvedetector -tAc "SELECT 1 FROM pg_database WHERE datname = 'cvedetector_test'" | grep -q 1 \
+		|| docker exec cvedetector-pg-dev psql -U cvedetector -qc 'CREATE DATABASE cvedetector_test'
+	@echo "PostgreSQL ready on 127.0.0.1:$(DEV_DB_PORT)"
 
 dev-api: build
 	DATABASE_URL='$(DEV_DB_URL)' INGEST_TOKEN=dev-token FEED_URL='$(FEED_URL)' \
