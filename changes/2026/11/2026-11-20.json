@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-20",
+  "added": [
+    {
+      "product": "nats",
+      "id": "CVE-2026-58208",
+      "severity": "MEDIUM"
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58209",
+      "severity": "MEDIUM"
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58210",
+      "severity": "HIGH"
+    }
+  ],
+  "updated": [
+    {
+      "product": "mattermost",
+      "id": "CVE-2026-10600",
+      "severity": "MEDIUM",
+      "fields": [
+        "summary"
+      ]
+    },
+    {
+      "product": "postgresql",
+      "id": "CVE-2019-9193",
+      "severity": "HIGH",
+      "fields": [
+        "summary"
+      ]
+    }
+  ],
+  "removed": []
+}
