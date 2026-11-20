@@ -7,6 +7,14 @@ REGISTRY ?= ghcr.io/huseyinbabal
 DEV_DB_PORT ?= 55499
 DEV_DB_URL  ?= postgres://cvedetector:dev@127.0.0.1:$(DEV_DB_PORT)/cvedetector?sslmode=disable
 TEST_DB_URL ?= postgres://cvedetector:dev@127.0.0.1:$(DEV_DB_PORT)/cvedetector_test?sslmode=disable
+DEV_API_PORT   ?= 28090
+DEV_AGENT_PORT ?= 28091
+DEV_UI_PORT    ?= 5180
+# Published feed (data branch). Private repo: the token comes from `gh auth token`.
+# FEED_URL=file://$(CURDIR)/dist/feed/ uses the one `make feed` builds.
+FEED_URL       ?= https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/
+# Required by dev-agent: the agent reads this context, never the current one.
+KUBE_CONTEXT   ?=
 
 # Unit tests; database tests are skipped.
 test:
@@ -53,18 +61,20 @@ feed-validate: $(if $(filter .catalog,$(CATALOG)),catalog)
 
 # ---- local stack: make dev-db, then dev-api, dev-agent and dev-ui in separate terminals
 dev-db:
-	docker run -d --name cvedetector-pg-dev -e POSTGRES_USER=cvedetector -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=cvedetector \
+	docker start cvedetector-pg-dev 2>/dev/null || docker run -d --name cvedetector-pg-dev -e POSTGRES_USER=cvedetector -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=cvedetector \
 		-p 127.0.0.1:$(DEV_DB_PORT):5432 postgres:18.6-alpine
 	@sleep 3; docker exec cvedetector-pg-dev psql -U cvedetector -qc 'CREATE DATABASE cvedetector_test' || true
 
 dev-api: build
-	DATABASE_URL='$(DEV_DB_URL)' INGEST_TOKEN=dev-token FEED_URL=file://$(CURDIR)/dist/feed/ \
-		LISTEN_ADDR=127.0.0.1:8090 LOG_FORMAT=text ./dist/api
+	DATABASE_URL='$(DEV_DB_URL)' INGEST_TOKEN=dev-token FEED_URL='$(FEED_URL)' \
+		FEED_TOKEN="$${FEED_TOKEN:-$$(gh auth token 2>/dev/null)}" \
+		LISTEN_ADDR=127.0.0.1:$(DEV_API_PORT) LOG_FORMAT=text ./dist/api
 
-# Reports the current kubeconfig context (read-only) to the local API.
+# Reports one kubeconfig context (read-only: lists pods, replicasets, jobs) to the local API.
 dev-agent: build
-	CLUSTER_NAME=local API_URL=http://127.0.0.1:8090 INGEST_TOKEN=dev-token \
-		LISTEN_ADDR=127.0.0.1:8091 LOG_FORMAT=text ./dist/agent
+	@test -n "$(KUBE_CONTEXT)" || { echo "Set KUBE_CONTEXT, e.g. make dev-agent KUBE_CONTEXT=kind-dev"; exit 1; }
+	CLUSTER_NAME=local KUBE_CONTEXT='$(KUBE_CONTEXT)' API_URL=http://127.0.0.1:$(DEV_API_PORT) INGEST_TOKEN=dev-token \
+		LISTEN_ADDR=127.0.0.1:$(DEV_AGENT_PORT) LOG_FORMAT=text ./dist/agent
 
 dev-ui:
-	cd apps/ui && API_URL=http://127.0.0.1:8090 npm run dev
+	cd apps/ui && API_URL=http://127.0.0.1:$(DEV_API_PORT) npx vite --host 127.0.0.1 --port $(DEV_UI_PORT) --strictPort

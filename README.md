@@ -47,11 +47,11 @@ The feed knows which product an image is from `catalog/<id>.yaml` on the [`data`
 ## Develop
 
 ```sh
-make feed          # build the feed into dist/feed (set NVD_API_KEY to speed it up)
-make dev-db        # PostgreSQL in docker on 127.0.0.1:55499
-make dev-api       # API on :8090 with the local feed
-make dev-agent     # agent reporting your current kubeconfig context (read-only)
-make dev-ui        # UI with hot reload on :5173, proxied to the API
+make dev-db                          # PostgreSQL in docker on 127.0.0.1:55499
+make dev-api                         # API on 127.0.0.1:28090, published feed (token from `gh auth token`)
+make dev-agent KUBE_CONTEXT=<ctx>    # agent reporting that kubeconfig context (read-only)
+make dev-ui                          # UI with hot reload on http://127.0.0.1:5180
+make feed                            # optional: build the feed locally, then dev-api FEED_URL=file://$PWD/dist/feed/
 make test          # unit tests
 make test-db       # + PostgreSQL integration tests
 ```
