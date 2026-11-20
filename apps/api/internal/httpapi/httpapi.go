@@ -41,6 +41,7 @@ func (s *Server) Handler() http.Handler {
 
 	mux.HandleFunc("GET /api/v1/clusters", s.get(func(r *http.Request) (any, error) { return s.Store.Clusters(r.Context()) }))
 	mux.HandleFunc("GET /api/v1/feed", s.get(func(r *http.Request) (any, error) { return s.Store.GetFeedState(r.Context()) }))
+	mux.HandleFunc("GET /api/v1/products", s.get(func(r *http.Request) (any, error) { return s.Store.Products(r.Context()) }))
 	mux.HandleFunc("GET /api/v1/summary", s.get(func(r *http.Request) (any, error) {
 		return s.Store.Summary(r.Context(), r.URL.Query().Get("cluster"))
 	}))

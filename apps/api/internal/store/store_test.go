@@ -135,6 +135,11 @@ func TestIngestReconcileAndRead(t *testing.T) {
 		t.Fatalf("clusters: %+v %v", clusters, err)
 	}
 
+	products, err := st.Products(ctx)
+	if err != nil || len(products) == 0 || products[0].ID == "" || len(products[0].Images) == 0 {
+		t.Fatalf("products: %+v %v", products, err)
+	}
+
 	sum, err := st.Summary(ctx, "prod")
 	if err != nil {
 		t.Fatal(err)

@@ -6,7 +6,7 @@ cvedetector doesn't scan images. It knows that `docker.io/library/php:8.3.14-fpm
 
 The catalog lives on the **`data` branch** under `catalog/`, next to the feed built from it. `main` holds only the code.
 
-1. Create `catalog/<id>.yaml` on the `data` branch (the file name must equal `id`) and open the pull request against `data`. The UI's **Add to feed** button opens this file pre-filled on GitHub.
+1. Create `catalog/<id>.yaml` on the `data` branch (the file name must equal `id`) and open the pull request against `data`. The UI's **Add to feed** button opens this file pre-filled on GitHub, with the versions the tags yield. To add many at once, select them on **Coverage gaps** and use **Actions → Add to feed**: download the files as a zip and drop them on GitHub's upload page for `catalog/`, or copy a script that writes them.
 
    ```yaml
    # PHP runtime (official php images and Bitnami php-fpm).

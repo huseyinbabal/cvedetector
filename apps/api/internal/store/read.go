@@ -234,6 +234,26 @@ func (s *Store) Clusters(ctx context.Context) ([]Cluster, error) {
 	})
 }
 
+// Product is one catalog entry of the current feed.
+type Product struct {
+	ID     string   `json:"id"`
+	Name   string   `json:"name"`
+	Images []string `json:"images"`
+	Vulns  int      `json:"vulns"`
+}
+
+// Products lists the feed's products by id.
+func (s *Store) Products(ctx context.Context) ([]Product, error) {
+	rows, err := s.pool.Query(ctx, `SELECT id, name, images, vuln_count FROM products ORDER BY id`)
+	if err != nil {
+		return nil, err
+	}
+	return pgx.CollectRows(rows, func(r pgx.CollectableRow) (Product, error) {
+		var p Product
+		return p, r.Scan(&p.ID, &p.Name, &p.Images, &p.Vulns)
+	})
+}
+
 // Namespaces lists namespaces with workloads (optionally in one cluster).
 func (s *Store) Namespaces(ctx context.Context, cluster string) ([]string, error) {
 	rows, err := s.pool.Query(ctx, `SELECT DISTINCT namespace FROM workloads WHERE ($1 = '' OR cluster = $1) ORDER BY 1`, cluster)

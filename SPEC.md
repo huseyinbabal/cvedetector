@@ -87,7 +87,9 @@ CVE veritabanları imaja göre değil **ürüne** göre tutulur: NVD'de "`cpe:2.
    - Dosyanın içeriği: `id` (dosya adıyla aynı olmalı), `name`, `images` (registry dahil tam repository adları), `nvd.cpes` ve/veya `osv` paketleri, gerekiyorsa `versionPattern` ve `minSegments`, ve **zorunlu `testTags`**: gerçek tag'ler ve onlardan okunması gereken sürüm.
    - `feedgen -validate` şunları kontrol eder: şema, dosya adı ile id'nin uyuşması, registry'siz ya da tag'li imaj adı, aynı imajın iki ürüne eşlenmesi, test tag'lerinin beklenen sürümü vermesi, CPE formatı.
    - `data` branch'indeki `.github/workflows/catalog.yml` PR'da `main`'den araçları alıp değişen ürünler için `feedgen -probe` çalıştırır: her kaynak kaç CVE döndürüyor, test tag'lerinin sürümleri kaç CVE'den etkileniyor. Rapor job özetine yazılır. Hiç kayıt döndürmeyen bir kaynak (genelde yanlış CPE ya da paket adı) kontrolü başarısız yapar. Bu workflow `data` branch'inde olmak zorunda: GitHub PR workflow'larını hedef branch'ten okur. Merge sonrası aynı workflow `main`'deki `feed.yml`'ı tetikler.
-   - UI'daki Coverage gaps sayfasında, cluster'da çalışan tag'lerle önceden doldurulmuş bir dosyayla GitHub'ın yeni dosya sayfası `data` branch'inde açılır. Yazma yetkisi olmayan biri için GitHub otomatik olarak fork açar ve PR'a yönlendirir.
+   - UI'daki Coverage gaps sayfasında, cluster'da çalışan tag'lerle ve bu tag'lerden varsayılan kuralla okunan sürümlerle önceden doldurulmuş bir dosyayla GitHub'ın yeni dosya sayfası `data` branch'inde açılır.
+   - **Toplu ekleme:** satırlar checkbox ile (tümünü seç dahil) seçilir, Actions → Add to feed. GitHub tek seferde birden fazla dosyayı önceden dolduramadığı için dosyalar zip olarak indirilir ve GitHub'ın `catalog/` yükleme sayfasına bırakılır ("Create a new branch and start a pull request"); alternatif olarak dosyaları yazan bir shell script kopyalanır ya da hepsi için tek bir issue açılır.
+   - Id'ler seçim içinde ve feed'deki ürünlerle (`GET /api/v1/products`) çakışmayacak şekilde üretilir; yükleme sayfası aynı adlı dosyanın üzerine yazacağı için bu gerekli. Çakışma varsa (ör. `ghcr.io/fluent/fluent-bit` ↔ `fluent-bit`) id namespace ile önek alır ve UI imajı yeni ürün yerine mevcut dosyanın `images` listesine eklemeyi önerir. Yazma yetkisi olmayan biri için GitHub otomatik olarak fork açar ve PR'a yönlendirir.
    - `CONTRIBUTING.md`, PR şablonu ve "Track an image" issue formu da bu akışı destekler.
 2. **Otomatik keşif** (`tools/feedgen/discover`, `discover.yml`, her pazartesi):
    - **Adaylar** gerçekten çalıştırılan imajlardan toplanır: Artifact Hub'ın en çok yıldız alan 300 Helm chart'ının kullandığı imajlar (`containers_images`), Docker Official Images (`docker-library/official-images`) ve Bitnami imajları (`bitnami/containers`). Kaç chart'ta geçtiklerine göre sıralanır.
@@ -225,6 +227,7 @@ Envanter fingerprint'i değişmediyse sadece `last_report` güncellenir; tablola
 | `GET /api/v1/workloads/{cluster}/{ns}/{kind}/{name}` | Workload + imajları |
 | `GET /api/v1/cves/{id}?cluster=` | CVE + etkilenen imajlar (`firstSeen`) + kapanmış olanlar + workload'lar |
 | `GET /api/v1/feed`, `/namespaces` | Feed durumu, namespace listesi |
+| `GET /api/v1/products` | Feed'deki ürünler (id, ad, imajlar, CVE sayısı) |
 | `GET /healthz`, `/readyz` (DB ping), `/metrics` | |
 
 **Liste parametreleri:**
