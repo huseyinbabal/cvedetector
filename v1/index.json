@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-20T11:59:24.223130275Z",
+  "generatedAt": "2026-11-21T11:27:33.768047968Z",
   "products": [
     {
       "id": "airflow",
@@ -52,7 +52,7 @@
         "quay.io/argoproj/argocd"
       ],
       "shard": "products/argo-cd.json",
-      "sha256": "45d899af8e96a4cca64a758e06ba9bd13cda4f1c8eb0725272072912cda43952",
+      "sha256": "0afc36c319860a5967d89a8290aa59caa94ee60401b19a0cf5e7b6d5960a2d1e",
       "vulnCount": 48
     },
     {
@@ -366,7 +366,7 @@
         "docker.io/flowiseai/flowise"
       ],
       "shard": "products/flowise.json",
-      "sha256": "ef99c4b0e4cb5559b0db88d1fe0f77f95239634c20b273f82708b337d641b20d",
+      "sha256": "5f95bee874fda1077c0efec197b4b130e8ec76a843f871482273a86eb3d12b27",
       "vulnCount": 128
     },
     {
@@ -813,8 +813,8 @@
         "docker.io/bitnami/nats"
       ],
       "shard": "products/nats.json",
-      "sha256": "99801ecd596c8ccbc04427bd08f2b62f206dba46ef6caad4626a75e42c398bc8",
-      "vulnCount": 33
+      "sha256": "11e584c078df03ccf4a7a3cd6e58dd59bd80630e99c7f8497b0e1ee84750754c",
+      "vulnCount": 34
     },
     {
       "id": "neo4j",
@@ -1273,6 +1273,6 @@
   ],
   "epss": {
     "path": "epss.json",
-    "sha256": "8302122d6662241b80a57246e9f2c9c0c3165b727e9ca8d5b60f33a976e84d7c"
+    "sha256": "6b129ac2af2345b6c2d1d50387fcba3bd7bcec699a72195d4d8e2d1b20417481"
   }
 }
