@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T13:21:07.868683346Z",
+  "generatedAt": "2026-11-23T16:56:27.045094643Z",
   "products": [
     {
       "id": "airflow",
@@ -1273,6 +1273,6 @@
   ],
   "epss": {
     "path": "epss.json",
-    "sha256": "9f2535398369ef50c9f219c667adb340326e692366a1e0499f615dbc4a4f9a47"
+    "sha256": "f93cad46a84134154b043f70841c412144b3e09a8652e7ef35c2e2539b69ef43"
   }
 }
