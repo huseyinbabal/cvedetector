@@ -106,6 +106,7 @@ CVE veritabanları imaja göre değil **ürüne** göre tutulur: NVD'de "`cpe:2.
 Bilinen tuzaklar:
 - CoreDNS NVD'de bulunmuyor, OSV Go modülü kullanılıyor.
 - Prometheus ve Grafana'nın Go modül sürümleri imaj tag'leriyle uyuşmuyor, NVD CPE kullanılıyor.
+- Aynı CVE'nin kayıtları çelişebiliyor: Go vulnerability DB, sürüm tag'leri Go modül sürümü olmayan projelerde (Harbor'ın modülü `src/` altında, Traefik ve Argo CD'de major path uyuşmazlığı) "introduced 0, düzeltme yok" yazıyor; aynı CVE'nin GitHub kaydı ise "son etkilenen 2.15.0" diyor. Aralıklar birleştirilirken bu boş aralık her sürümü etkilenmiş gösteriyordu (24 CVE, ör. Harbor 2.15.4'te CVE-2026-4404). Sınırı belli bir aralık varsa boş aralık atılıyor; tek bilgi boş aralıksa korunuyor.
 - Probe'da external-dns, kube-state-metrics, metrics-server, node-exporter, thanos, rook ve longhorn için OSV hiç kayıt döndürmedi; katalogda yoklar.
 
 ### 4.3 Saklama: `data` branch'i

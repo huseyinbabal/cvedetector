@@ -31,6 +31,31 @@ func TestMerge(t *testing.T) {
 	}
 }
 
+// CVE-2026-4404 in Harbor: GitHub says "last affected 2.15.0", the Go
+// database (same module, its own record) says "introduced 0, no fix". The
+// fixed 2.15.4 must not match.
+func TestMergeDropsUnboundedNextToBounded(t *testing.T) {
+	osv := []feed.Vuln{
+		{ID: "CVE-2026-4404", Aliases: []string{"GHSA-hj7x-hmf2-hc2p"}, Sources: []string{"osv"}, Affected: []feed.Range{{LTE: "2.15.0"}}},
+		{ID: "GO-2026-4845", Aliases: []string{"CVE-2026-4404", "GHSA-hj7x-hmf2-hc2p"}, Sources: []string{"osv"}, Affected: []feed.Range{{}}},
+	}
+	got := Merge(osv)
+	if len(got) != 1 || len(got[0].Affected) != 1 || got[0].Affected[0] != (feed.Range{LTE: "2.15.0"}) {
+		t.Fatalf("merged: %+v", got)
+	}
+	if ok, _ := got[0].Match("2.15.4"); ok {
+		t.Error("2.15.4 matched")
+	}
+	if ok, _ := got[0].Match("2.14.1"); !ok {
+		t.Error("2.14.1 not matched")
+	}
+	// A lone "all versions" range is kept.
+	got = Merge([]feed.Vuln{{ID: "CVE-2026-1", Sources: []string{"osv"}, Affected: []feed.Range{{}}}})
+	if len(got[0].Affected) != 1 {
+		t.Errorf("lone unbounded range dropped: %+v", got[0].Affected)
+	}
+}
+
 func TestEnrich(t *testing.T) {
 	vs := []feed.Vuln{{ID: "GHSA-x", Aliases: []string{"CVE-2024-1"}}, {ID: "CVE-2024-2"}}
 	Enrich(vs, map[string]bool{"CVE-2024-1": true}, map[string]float64{"CVE-2024-2": 0.3})

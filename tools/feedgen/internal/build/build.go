@@ -11,8 +11,10 @@ import (
 )
 
 // Merge combines vulnerabilities from several sources, keyed by ID and alias.
-// Affected ranges are unioned (conservative). NVD's CVSS wins over OSV's when
-// both exist; the shorter OSV summary wins over NVD's description.
+// Affected ranges are unioned (conservative), except that an unbounded range
+// ("all versions") is dropped when another range has bounds: see dropUnbounded.
+// NVD's CVSS wins over OSV's when both exist; the shorter OSV summary wins over
+// NVD's description.
 func Merge(lists ...[]feed.Vuln) []feed.Vuln {
 	byID := map[string]*feed.Vuln{}
 	alias := map[string]string{}
@@ -50,7 +52,7 @@ func Merge(lists ...[]feed.Vuln) []feed.Vuln {
 	out := make([]feed.Vuln, 0, len(order))
 	for _, k := range order {
 		v := byID[k]
-		v.Affected = dedupRanges(v.Affected)
+		v.Affected = dropUnbounded(dedupRanges(v.Affected))
 		v.Aliases = dedupStrings(v.Aliases, v.ID)
 		v.References = dedupStrings(v.References, "")
 		sort.Strings(v.Sources)
@@ -85,6 +87,20 @@ func mergeInto(cur *feed.Vuln, v feed.Vuln) {
 	if v.Modified.After(cur.Modified) {
 		cur.Modified = v.Modified
 	}
+}
+
+// dropUnbounded removes "all versions" ranges ({}) when there are bounded ones.
+// Records disagree this way when a database can't express the fix in the
+// product's versions: the Go vulnerability database says "introduced 0, no
+// fix" for modules whose release tags aren't Go module versions (Harbor's
+// module is in src/, Argo CD v3 tags under a /v2 path...), while the GitHub
+// advisory for the same CVE says "last affected 2.15.0". Unioned, {} made every
+// version affected, including fixed ones. A lone {} stays: it's all we know.
+func dropUnbounded(rs []feed.Range) []feed.Range {
+	if !slices.ContainsFunc(rs, func(r feed.Range) bool { return r != feed.Range{} }) {
+		return rs
+	}
+	return slices.DeleteFunc(rs, func(r feed.Range) bool { return r == feed.Range{} })
 }
 
 func dedupRanges(rs []feed.Range) []feed.Range {
