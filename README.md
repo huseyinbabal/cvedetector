@@ -47,7 +47,9 @@ The feed knows which product an image is from `catalog/<id>.yaml` on the [`data`
 ## Develop
 
 ```sh
-make dev-db                          # PostgreSQL in docker on 127.0.0.1:55499
+make dev KUBE_CONTEXT=<ctx>          # everything below in one terminal (Ctrl+C stops it)
+
+make dev-db                          # PostgreSQL in docker on 127.0.0.1:55499 (make dev-db-stop)
 make dev-api                         # API on 127.0.0.1:28090, published feed (token from `gh auth token`)
 make dev-agent KUBE_CONTEXT=<ctx>    # agent reporting that kubeconfig context (read-only)
 make dev-ui                          # UI with hot reload on http://127.0.0.1:5180

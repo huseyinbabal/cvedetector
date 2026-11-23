@@ -1,4 +1,4 @@
-.PHONY: test test-db lint ui build images catalog feed feed-validate dev-db dev-api dev-agent dev-ui
+.PHONY: test test-db lint ui build images catalog feed feed-validate dev dev-db dev-db-stop dev-api dev-agent dev-ui
 
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 REGISTRY ?= ghcr.io/huseyinbabal
@@ -59,7 +59,21 @@ feed: $(if $(filter .catalog,$(CATALOG)),catalog)
 feed-validate: $(if $(filter .catalog,$(CATALOG)),catalog)
 	go run ./tools/feedgen -config $(CATALOG) -validate
 
-# ---- local stack: make dev-db, then dev-api, dev-agent and dev-ui in separate terminals
+# ---- local stack
+# `make dev KUBE_CONTEXT=<ctx>` runs everything in one terminal (Ctrl+C stops it;
+# the database keeps running, `make dev-db-stop` stops it). Or run dev-db, then
+# dev-api, dev-agent and dev-ui in separate terminals.
+
+# With LOGTAG set (make dev), each line is prefixed with the component name.
+logtag = $(if $(LOGTAG),2>&1 | awk '{ print "[$(1)] " $$0; fflush() }')
+
+dev: dev-db build
+	@echo "UI  http://127.0.0.1:$(DEV_UI_PORT)    API  http://127.0.0.1:$(DEV_API_PORT)    agent  $(or $(KUBE_CONTEXT),off (set KUBE_CONTEXT=<context>))"
+	@$(MAKE) --no-print-directory -j3 LOGTAG=1 dev-api dev-ui $(if $(KUBE_CONTEXT),dev-agent)
+
+dev-db-stop:
+	docker stop cvedetector-pg-dev
+
 dev-db:
 	@docker start cvedetector-pg-dev >/dev/null 2>&1 || docker run -d --name cvedetector-pg-dev -e POSTGRES_USER=cvedetector -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=cvedetector \
 		-p 127.0.0.1:$(DEV_DB_PORT):5432 postgres:18.6-alpine >/dev/null
@@ -71,13 +85,13 @@ dev-db:
 dev-api: build
 	DATABASE_URL='$(DEV_DB_URL)' INGEST_TOKEN=dev-token FEED_URL='$(FEED_URL)' \
 		FEED_TOKEN="$${FEED_TOKEN:-$$(gh auth token 2>/dev/null)}" \
-		LISTEN_ADDR=127.0.0.1:$(DEV_API_PORT) LOG_FORMAT=text ./dist/api
+		LISTEN_ADDR=127.0.0.1:$(DEV_API_PORT) LOG_FORMAT=text ./dist/api $(call logtag,api)
 
 # Reports one kubeconfig context (read-only: lists pods, replicasets, jobs) to the local API.
 dev-agent: build
 	@test -n "$(KUBE_CONTEXT)" || { echo "Set KUBE_CONTEXT, e.g. make dev-agent KUBE_CONTEXT=kind-dev"; exit 1; }
 	CLUSTER_NAME=local KUBE_CONTEXT='$(KUBE_CONTEXT)' API_URL=http://127.0.0.1:$(DEV_API_PORT) INGEST_TOKEN=dev-token \
-		LISTEN_ADDR=127.0.0.1:$(DEV_AGENT_PORT) LOG_FORMAT=text ./dist/agent
+		LISTEN_ADDR=127.0.0.1:$(DEV_AGENT_PORT) LOG_FORMAT=text ./dist/agent $(call logtag,agent)
 
 dev-ui:
-	cd apps/ui && API_URL=http://127.0.0.1:$(DEV_API_PORT) npx vite --host 127.0.0.1 --port $(DEV_UI_PORT) --strictPort
+	cd apps/ui && API_URL=http://127.0.0.1:$(DEV_API_PORT) npx vite --host 127.0.0.1 --port $(DEV_UI_PORT) --strictPort $(call logtag,ui)
