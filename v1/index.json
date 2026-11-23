@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-22T11:45:31.788792264Z",
+  "generatedAt": "2026-11-23T12:57:37.36922775Z",
   "products": [
     {
       "id": "airflow",
@@ -52,7 +52,7 @@
         "quay.io/argoproj/argocd"
       ],
       "shard": "products/argo-cd.json",
-      "sha256": "0afc36c319860a5967d89a8290aa59caa94ee60401b19a0cf5e7b6d5960a2d1e",
+      "sha256": "930bbc9e1cd8eb7c45c623973c6292ffb48ef9a6814627dab08d9c3ca93b072d",
       "vulnCount": 48
     },
     {
@@ -258,7 +258,7 @@
         "ghcr.io/dexidp/dex"
       ],
       "shard": "products/dex.json",
-      "sha256": "b1edf34aba4e10ac297f1d74827ce53ecf26e46d961e6902483c63be2b18c43b",
+      "sha256": "7893dc6da44e14cf53d8ab4c71ddf00bb7c6752d83a4d5181ae5ca727901d849",
       "vulnCount": 4
     },
     {
@@ -412,7 +412,7 @@
         "docker.gitea.com/gitea"
       ],
       "shard": "products/gitea.json",
-      "sha256": "e60e7aa5e19191127b5e9bf85e5f54b5430df67c7ceb34b32b8a8a98cbf853bc",
+      "sha256": "bcd76d885a1b6d36ead678af49e67086c10b91da341f7b84ec22913362746f75",
       "vulnCount": 161
     },
     {
@@ -472,7 +472,7 @@
         "docker.io/goharbor/harbor-jobservice"
       ],
       "shard": "products/harbor.json",
-      "sha256": "c878a341e4d28005dceadf962e3c6d3dfce1bd9ce09779448ebf2550a6421782",
+      "sha256": "ba5e72280485cd7486d2034ee5d27b96889126372e8bb8f2319e237ab2ba58a2",
       "vulnCount": 23
     },
     {
@@ -675,7 +675,7 @@
         "ghcr.io/kyverno/cleanup-controller"
       ],
       "shard": "products/kyverno.json",
-      "sha256": "649cf7abf78936ddb5f12ffb305c82aa3c4d474c146a0b322ee0dc21e5286ffb",
+      "sha256": "6168e25e220bf865ee8e17aa5c3e409dd39f023b9d20fc7da38a667615e4e5e2",
       "vulnCount": 26
     },
     {
@@ -696,7 +696,7 @@
         "docker.io/grafana/loki"
       ],
       "shard": "products/loki.json",
-      "sha256": "fb19c0565668df7a934f3efca2c3cd169bde294cd7cdbd0a75ace2e74bced803",
+      "sha256": "a23d47f0813a53a037ce226375e99fa4523da9cb5bbfaa7550e462d2733c9d14",
       "vulnCount": 2
     },
     {
@@ -1182,7 +1182,7 @@
         "docker.io/traefik/traefik"
       ],
       "shard": "products/traefik.json",
-      "sha256": "dab8f361f0474fcc83b13ba301524507a6326f858d84277bde0798ae7de7fb5c",
+      "sha256": "b2e9abd430c850dda188fce9216267f373e4e0297560b4748ce61e1e9ee0934b",
       "vulnCount": 69
     },
     {
@@ -1273,6 +1273,6 @@
   ],
   "epss": {
     "path": "epss.json",
-    "sha256": "f191659dd05a727e89789553544f22f2c5a5f1511beeed77d2782d8bccbedecb"
+    "sha256": "9f2535398369ef50c9f219c667adb340326e692366a1e0499f615dbc4a4f9a47"
   }
 }

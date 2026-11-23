@@ -1,0 +1,207 @@
+{
+  "date": "2026-11-23",
+  "added": [],
+  "updated": [
+    {
+      "product": "argo-cd",
+      "id": "CVE-2026-42880",
+      "severity": "CRITICAL",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "argo-cd",
+      "id": "CVE-2026-45737",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "argo-cd",
+      "id": "CVE-2026-45738",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "dex",
+      "id": "CVE-2024-23656",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "gitea",
+      "id": "CVE-2025-68939",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "gitea",
+      "id": "CVE-2026-58439",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "harbor",
+      "id": "CVE-2025-32019",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "harbor",
+      "id": "CVE-2026-4404",
+      "severity": "CRITICAL",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "kyverno",
+      "id": "CVE-2025-15613",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "kyverno",
+      "id": "CVE-2026-41068",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "kyverno",
+      "id": "CVE-2026-84196",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "loki",
+      "id": "CVE-2026-21726",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "postgresql",
+      "id": "CVE-2019-9193",
+      "severity": "HIGH",
+      "fields": [
+        "summary"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2025-66491",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-25949",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-29777",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-32695",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-54761",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-54762",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-54765",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-65602",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-67309",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-71326",
+      "severity": "LOW",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-71327",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-88004",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    }
+  ],
+  "removed": []
+}
