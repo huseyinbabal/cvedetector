@@ -1,4 +1,4 @@
-.PHONY: test test-db lint ui build images catalog feed feed-validate dev dev-db dev-db-stop dev-api dev-agent dev-ui
+.PHONY: test test-db lint ui build images catalog feed feed-validate dev dev-db dev-db-stop dev-api dev-agent dev-ui demo-cluster demo-cluster-delete demo docs
 
 VERSION  ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 REGISTRY ?= ghcr.io/huseyinbabal
@@ -95,3 +95,27 @@ dev-agent: build
 
 dev-ui:
 	cd apps/ui && API_URL=http://127.0.0.1:$(DEV_API_PORT) npx vite --host 127.0.0.1 --port $(DEV_UI_PORT) --strictPort $(call logtag,ui)
+
+# Docs demo: a kind cluster with well-known software and cvedetector installed
+# from a local chart (huseyinbabal/charts checkout). Kubeconfig in .demo/.
+CHART ?= ../charts/stable/cvedetector
+DEMO_PORT ?= 28180
+
+demo-cluster:
+	apps/ui/demo/cluster.sh up $(CHART)
+
+demo-cluster-delete:
+	apps/ui/demo/cluster.sh down
+
+# Re-records docs/public/demo.gif and docs/public/screenshots/ from the demo cluster.
+demo:
+	@KUBECONFIG=$(CURDIR)/.demo/kubeconfig kubectl -n cvedetector port-forward svc/cvedetector-ui $(DEMO_PORT):8080 >/dev/null & pf=$$!; \
+	trap "kill $$pf" EXIT; sleep 2; \
+	cd apps/ui && export CVEDETECTOR_DEMO_URL=http://127.0.0.1:$(DEMO_PORT) && \
+	npx playwright install chromium && \
+	npx playwright test -c playwright.demo.config.ts screenshots && \
+	npx playwright test -c playwright.demo.config.ts record && ./demo/to-gif.sh ../../docs/public/demo.gif
+
+# Docs site with hot reload.
+docs:
+	cd docs && bun install && bun run dev

@@ -59,4 +59,4 @@ go run ./tools/feedgen/discover -products .catalog -dry-run -report /tmp/report.
 
 ## Code
 
-See the [README](README.md#develop) for the local stack. Run `make lint test-db` before opening a pull request.
+See [Development](https://huseyinbabal.github.io/cvedetector/guides/development/) ([source](docs/src/content/docs/guides/development.md)) for the local stack. Run `make lint test-db` before opening a pull request.

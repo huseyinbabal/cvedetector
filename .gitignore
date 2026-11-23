@@ -5,3 +5,4 @@ apps/ui/dist/
 .DS_Store
 .discover-cache.json
 /.catalog/
+/.demo/

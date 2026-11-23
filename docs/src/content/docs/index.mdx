@@ -1,0 +1,44 @@
+---
+title: cvedetector
+description: Known CVEs in the container images running in your Kubernetes clusters, without scanning.
+template: splash
+hero:
+  tagline: See which known CVEs affect the container images running in your Kubernetes clusters right now, and track them over time. Nothing is pulled or scanned.
+  image:
+    html: '<img src="/cvedetector/demo.gif" alt="cvedetector demo: overview, image detail, a known exploited CVE, the vulnerability list and coverage gaps" width="1100" height="688" />'
+  actions:
+    - text: Quick start
+      link: /cvedetector/getting-started/quick-start/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/huseyinbabal/cvedetector
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components'
+
+<CardGrid>
+  <Card title="No scanning" icon="rocket">
+    The version comes from the image tag (`nginx:1.27.1` → NGINX 1.27.1) and is matched against a CVE feed. No image
+    pulls, no SBOMs, no registry credentials.
+  </Card>
+  <Card title="What runs, not what's stored" icon="seti:kubernetes">
+    A read-only agent watches pods, so the list follows what is actually deployed: workloads, pods and digests for every
+    image.
+  </Card>
+  <Card title="Prioritized" icon="warning">
+    Known exploited (CISA KEV) first, then severity, CVSS, EPSS and how many workloads are affected. Fixed versions are
+    shown next to every finding.
+  </Card>
+  <Card title="History" icon="document">
+    Every finding has a first-seen and resolved date. A 30-day trend shows whether things are getting better.
+  </Card>
+  <Card title="Many clusters, one view" icon="list-format">
+    Agents in each cluster report to one API. Filter by cluster or look at all of them together.
+  </Card>
+  <Card title="Open feed" icon="github">
+    The feed is rebuilt daily from NVD, OSV, CISA KEV and EPSS on GitHub. Missing an image? Add it with a pull request,
+    straight from the UI.
+  </Card>
+</CardGrid>

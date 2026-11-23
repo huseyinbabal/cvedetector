@@ -63,13 +63,15 @@ cvedetector/
 │   ├── agent/          # Go. cmd/agent, internal/{discovery,report}. Dockerfile (distroless)
 │   ├── api/            # Go. cmd/api, internal/{db,store,matcher,feedsync,httpapi,metrics}. Dockerfile (distroless)
 │   └── ui/             # React + TS + Vite + Tailwind + shadcn/ui. Dockerfile (nginx-unprivileged), nginx.conf.template
+│                       # demo/: docs için kind demo cluster'ı, Playwright kaydı ve ekran görüntüleri (make demo-cluster, make demo)
+├── docs/               # Starlight dokümantasyon sitesi → GitHub Pages (docs.yml); README sadece buraya yönlendirir
 ├── tools/feedgen/      # feed üretici (NVD, OSV, CISA KEV, EPSS); discover/ = otomatik keşif
 ├── pkg/
 │   ├── feed/           # feed şeması + aralık eşleştirme
 │   ├── inventory/      # agent → API rapor sözleşmesi
 │   ├── version/        # gevşek semver karşılaştırma
 │   └── imageref/       # imaj referansı normalizasyonu
-└── .github/workflows/{ci,feed,release}.yml
+└── .github/workflows/{ci,docs,feed,discover,release}.yml
 ```
 
 - Tek Go modülü.
