@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T12:57:37.36922775Z",
+  "generatedAt": "2026-11-23T13:21:07.868683346Z",
   "products": [
     {
       "id": "airflow",
@@ -10,7 +10,7 @@
         "docker.io/bitnami/airflow"
       ],
       "shard": "products/airflow.json",
-      "sha256": "5b74a05e09c10043b6d7a23741acfaa5b9749c9796a472b46ed8b630f887eb3f",
+      "sha256": "ff75f46c3aeec43c5128dd21b52906bf381704cf1e55ef014c1642ec74624b13",
       "vulnCount": 158
     },
     {
@@ -32,7 +32,7 @@
         "docker.io/grafana/alloy"
       ],
       "shard": "products/alloy.json",
-      "sha256": "e666154e74374119f583166e0ebd82f76e6573aa0ea451dc0df2619cc38cf5c7",
+      "sha256": "1ace159b9983e0173e1a074fed92359b97bb229c4e115d15d7fabd47bbf5501c",
       "vulnCount": 1
     },
     {
@@ -42,7 +42,7 @@
         "docker.io/apache/apisix"
       ],
       "shard": "products/apisix.json",
-      "sha256": "27f9a112db6f2a2e5db5a9c1e6aae5eb23cff8cf367ca57172ca6246ba593a5b",
+      "sha256": "6d336eb32c2d5b0adc43e9a348824dc69811742eb48682c95d9996980a5d0fcb",
       "vulnCount": 29
     },
     {
@@ -52,7 +52,7 @@
         "quay.io/argoproj/argocd"
       ],
       "shard": "products/argo-cd.json",
-      "sha256": "930bbc9e1cd8eb7c45c623973c6292ffb48ef9a6814627dab08d9c3ca93b072d",
+      "sha256": "c30cb25e4d649191199ad34469b908e76cd60679fadf08466364e152f8e2c968",
       "vulnCount": 48
     },
     {
@@ -64,7 +64,7 @@
         "quay.io/argoproj/argoexec"
       ],
       "shard": "products/argo-workflows.json",
-      "sha256": "717a724e8da737f33a65b8e5e25554137e16d9ad6f98d2f6c25f8bb0839d861e",
+      "sha256": "6cc5efe8bd0ecb85cae095b1125de603e018d4e50c7c129d74490c078ac20ee5",
       "vulnCount": 19
     },
     {
@@ -94,7 +94,7 @@
         "ghcr.io/backstage/backstage"
       ],
       "shard": "products/backstage.json",
-      "sha256": "2ff9d95b3a5b8a82348f006ff749cf758042326dd972bb93dd428853bf3df51d",
+      "sha256": "68ff684705fd844cee226e030729a0baaab1a925057a6311bfa1a54e68f81e64",
       "vulnCount": 50
     },
     {
@@ -125,7 +125,7 @@
         "docker.io/library/caddy"
       ],
       "shard": "products/caddy.json",
-      "sha256": "cfed7d8ac3767585dc5e744d2105762dd2ebe7439a30540fc36f8e4905a7feff",
+      "sha256": "d4b26b926c66cee6b43b5da9ba5aaf699ab6d58d17c67b056dc26d6c4abb7bcc",
       "vulnCount": 19
     },
     {
@@ -151,7 +151,7 @@
         "docker.io/bitnami/cassandra"
       ],
       "shard": "products/cassandra.json",
-      "sha256": "647bbf698ae6ccf909e2653d13cd360516dabd9a56e932fc38a34aed77fc1cef",
+      "sha256": "6ce6fc4900456b1f327994fc28230381fd67de3be56e7a6a436cc78f63b064fc",
       "vulnCount": 16
     },
     {
@@ -173,7 +173,7 @@
         "ghcr.io/chaos-mesh/chaos-mesh"
       ],
       "shard": "products/chaos-mesh.json",
-      "sha256": "948d2278a136baf8abdb8a0cebbdc41a30065eeba6c2cb83b5bea5d4f9df9bec",
+      "sha256": "3d378a534699c3de885b37741a0d4ed3fa5c6572a21d607901fae06c56637333",
       "vulnCount": 5
     },
     {
@@ -195,7 +195,7 @@
         "quay.io/cilium/hubble-relay"
       ],
       "shard": "products/cilium.json",
-      "sha256": "174862ed2974cd8ed9cb538322f432e145b1f71004c5715397822290b4989413",
+      "sha256": "189e75e435f3d91d1db16ec1bbf2caa81ff4f1085da921b0098d15e9ccf53a47",
       "vulnCount": 39
     },
     {
@@ -205,7 +205,7 @@
         "docker.io/clamav/clamav"
       ],
       "shard": "products/clamav.json",
-      "sha256": "eece520cf1c7c1c697d3e645ecf51f31562e02010d5bf2e54c7203e765d91807",
+      "sha256": "77b4b69ca289b87d672df7abce46990a9eb65e3a1a0c4d894f8dce1df41836f3",
       "vulnCount": 103
     },
     {
@@ -216,7 +216,7 @@
         "docker.io/bitnami/clickhouse"
       ],
       "shard": "products/clickhouse.json",
-      "sha256": "1b495d7e5bcafb7b5115a565cc2c45eff3138410f16791c5a25386adea84fc75",
+      "sha256": "1b7957019bc334edffad114ec9a6c5e9d63aef0547e404c73522e1a116f7e596",
       "vulnCount": 24
     },
     {
@@ -238,7 +238,7 @@
         "docker.io/coredns/coredns"
       ],
       "shard": "products/coredns.json",
-      "sha256": "5501303fa69d2f3fb5b592377baf6b460df5370342b0bbb394ff6a78f35f72e8",
+      "sha256": "0696bb31de1fc721601ec003a9937810fbda50fa0b6520f0d79f3dde8f45b9ca",
       "vulnCount": 19
     },
     {
@@ -248,7 +248,7 @@
         "docker.io/library/couchdb"
       ],
       "shard": "products/couchdb.json",
-      "sha256": "d7cd71b7af6cfb3f5202e3ad97d9307e59bf48bd735bed794370df2c4918aa0c",
+      "sha256": "e0020552fac57c489179d27e184bb2082caec28a138e1a7025ad0e13847aee42",
       "vulnCount": 19
     },
     {
@@ -269,7 +269,7 @@
         "mcr.microsoft.com/dotnet/runtime"
       ],
       "shard": "products/dotnet.json",
-      "sha256": "a231f3a9ae63da9b31342df26f42fb0da4c5c35519c70e600e81b3395989784b",
+      "sha256": "85e4ebbbef4447cb0418535a7d091f9387153e82336f4a6b2e2d5746ca3133a9",
       "vulnCount": 165
     },
     {
@@ -289,7 +289,7 @@
         "docker.io/library/drupal"
       ],
       "shard": "products/drupal.json",
-      "sha256": "a5f552c70c22ece8772daee6ecd14715b54807827d5bab35183e28bbbad8cfbf",
+      "sha256": "864c6a59831a9ee10d0f2a3e6e10c842787210a812909212e315eebc7cc5e470",
       "vulnCount": 278
     },
     {
@@ -301,7 +301,7 @@
         "docker.io/bitnami/elasticsearch"
       ],
       "shard": "products/elasticsearch.json",
-      "sha256": "5b4955731334f9128b1dbeb82de604cc834eae6b87f331f8548421b5c5fcb336",
+      "sha256": "4879e7b4d4ba4f9d9545ff822b6668dcca4c4a65da0a2a85cb5fd29b38e81776",
       "vulnCount": 91
     },
     {
@@ -322,7 +322,7 @@
       ],
       "versionPattern": "^(?:distroless-|contrib-)?v?(?P\u003cversion\u003e\\d+(?:\\.\\d+){0,3})",
       "shard": "products/envoy.json",
-      "sha256": "4223d8efce1501f1c4d50182f70b072aeb0fadf71b613f840853ced2117ef099",
+      "sha256": "4c4aa0b6ceb91b01aaf214ba110e36369ce31b49e89269b1472b02fc76f86185",
       "vulnCount": 127
     },
     {
@@ -356,7 +356,7 @@
         "docker.io/library/flink"
       ],
       "shard": "products/flink.json",
-      "sha256": "38a3704cd8ff689c0a7dc8cfb52344699d6abe47e02e5db4b12078bc9493ff97",
+      "sha256": "bdf07a441eb1bd9ca99b88341316417054dbb9782bd1d2decda1153ec7490353",
       "vulnCount": 4
     },
     {
@@ -366,7 +366,7 @@
         "docker.io/flowiseai/flowise"
       ],
       "shard": "products/flowise.json",
-      "sha256": "5f95bee874fda1077c0efec197b4b130e8ec76a843f871482273a86eb3d12b27",
+      "sha256": "36b4e320c5cfaa99117cb15ec416d54803e0b429094c5db3c1f8e3f80a0f2f73",
       "vulnCount": 128
     },
     {
@@ -401,7 +401,7 @@
         "docker.io/bitnami/ghost"
       ],
       "shard": "products/ghost.json",
-      "sha256": "85ff224c81369ba7606d3567afb5dd609d27114d25d34388c29fd7ee76df3f40",
+      "sha256": "c0fb1a72103b567ed276b18c20ba6fee444270fe24e9f168c5b911c1c2cd6322",
       "vulnCount": 30
     },
     {
@@ -412,7 +412,7 @@
         "docker.gitea.com/gitea"
       ],
       "shard": "products/gitea.json",
-      "sha256": "bcd76d885a1b6d36ead678af49e67086c10b91da341f7b84ec22913362746f75",
+      "sha256": "4bb835e0da7d170995c442db1421c39fbbfe35ba23e67ab7dc7b89e2dfd321ed",
       "vulnCount": 161
     },
     {
@@ -423,7 +423,7 @@
         "docker.io/gitlab/gitlab-ee"
       ],
       "shard": "products/gitlab.json",
-      "sha256": "6e3aa1523b812d96d0c07efaff2050a2cb56190bc22fb8ea81e03c0ee6f321cd",
+      "sha256": "aa6bd547f69515a0f1fb56749b8dfe94bc9465360126ef21ffa7a70a389c8409",
       "vulnCount": 1507
     },
     {
@@ -447,7 +447,7 @@
         "docker.io/bitnami/grafana"
       ],
       "shard": "products/grafana.json",
-      "sha256": "04dd27a3e6adece3e4497c8be61d622c6174f1ed5b409a964da1ac9b43737b74",
+      "sha256": "eeeecc06c11ff5b405f9f2df2caf472c82b4f54d6745a6bf13220f99836980a4",
       "vulnCount": 104
     },
     {
@@ -459,7 +459,7 @@
         "docker.io/haproxytech/haproxy-debian"
       ],
       "shard": "products/haproxy.json",
-      "sha256": "d6b2730607a1fd9c6248c95c0adbc0f4ecb12ae4f0f9cf2eb2819db727ea375b",
+      "sha256": "549a6ac4a71f81ec28d719aaf41c93dda622e462f2f2ae3614cf9a4707cd994a",
       "vulnCount": 34
     },
     {
@@ -472,7 +472,7 @@
         "docker.io/goharbor/harbor-jobservice"
       ],
       "shard": "products/harbor.json",
-      "sha256": "ba5e72280485cd7486d2034ee5d27b96889126372e8bb8f2319e237ab2ba58a2",
+      "sha256": "c941e7bee74edc5f4e1739738565cab7f2247ccd18599a31d97ef80a3a2c2a4a",
       "vulnCount": 23
     },
     {
@@ -492,7 +492,7 @@
         "ghcr.io/home-assistant/home-assistant"
       ],
       "shard": "products/home-assistant.json",
-      "sha256": "4baca65665588e3da6e5ff295ce545bd6a7ab7949ebb09572ba94fd47f33e21e",
+      "sha256": "ae963b226241bdc09b19744e4257a2114364946a91ef3a7e023a49afe92b5bdb",
       "vulnCount": 16
     },
     {
@@ -503,7 +503,7 @@
         "docker.io/bitnami/apache"
       ],
       "shard": "products/httpd.json",
-      "sha256": "e0211542bbb77ce3d4cc2a2701b1039d91e79aa296425efb4256f30469c053d0",
+      "sha256": "27a70804d333fc24a5a93f5417ca78a80a2ce3470d7fc3e90277c34d3f6095b9",
       "vulnCount": 344
     },
     {
@@ -580,7 +580,7 @@
         "docker.io/jenkins/jenkins"
       ],
       "shard": "products/jenkins.json",
-      "sha256": "b0135e86d67221d25b1f4df356e81ae601fdab7ab9272a6f3e0fe2c10bea643d",
+      "sha256": "63360d436b8ca9d78d266c1215ba1679068ffcf2b7c9f7b41f9bd4a78f555c27",
       "vulnCount": 293
     },
     {
@@ -591,7 +591,7 @@
         "docker.io/bitnami/kafka"
       ],
       "shard": "products/kafka.json",
-      "sha256": "feeecf5d6202eeb1f152e38a46d6f5968b45961282bf6be28b541514a6b78fa2",
+      "sha256": "3771e97c5653df946b328ec68747ed59a1c1acf5990b2865889d4f4a9f954631",
       "vulnCount": 17
     },
     {
@@ -615,7 +615,7 @@
         "docker.io/keycloak/keycloak"
       ],
       "shard": "products/keycloak.json",
-      "sha256": "9bb1442e036f1580fe1de29a369076d97faa67a9491d06449c3e48543b997c72",
+      "sha256": "7c4c2757a5dbacbab5498e5d3436a15512b00e954180eec5677b8f1bf6bacbcc",
       "vulnCount": 80
     },
     {
@@ -627,7 +627,7 @@
         "docker.io/bitnami/kibana"
       ],
       "shard": "products/kibana.json",
-      "sha256": "0b5b8af25018644f68eac8cacefcdf2821c1a72ebdc413c6d2139f95de0ec41d",
+      "sha256": "1e7213161b1eb6a6559732cee1fd4e3c3cc86ce1ad849ece3ef59b2c60a06650",
       "vulnCount": 188
     },
     {
@@ -652,7 +652,7 @@
         "ghcr.io/loft-sh/kubernetes"
       ],
       "shard": "products/kubernetes.json",
-      "sha256": "946dfc400b6e68a55dc3d5fc80020ffb16be47240ff9755f9efacd37315cc5b0",
+      "sha256": "36babaf954324411a81e1649df9d52a57c8ffb9a8ad7576256f0883187399a7d",
       "vulnCount": 51
     },
     {
@@ -686,7 +686,7 @@
         "docker.io/library/logstash"
       ],
       "shard": "products/logstash.json",
-      "sha256": "0a7add9553eeabc54192b34e384aafccac2e1b65353bf3b7cb2907c4f57cf4b1",
+      "sha256": "d6fa3cf6bf4a290efd39665b14a196337f6a297b53ec3aa52d655eba2b7dfd28",
       "vulnCount": 13
     },
     {
@@ -706,7 +706,7 @@
         "docker.io/axllent/mailpit"
       ],
       "shard": "products/mailpit.json",
-      "sha256": "c63a0d0ce7a7ec58cf7469b0200129203779e9e55d50fb551f8d2c84246238be",
+      "sha256": "d8e4bb98be93fc0a434a5f848950d76e56044679bafbb41748aa866cb6fe9237",
       "vulnCount": 10
     },
     {
@@ -717,7 +717,7 @@
         "docker.io/bitnami/mariadb"
       ],
       "shard": "products/mariadb.json",
-      "sha256": "309af638d70b7900c1781a54383a8436e41e4dcb325f3e8d5a9956ab11bc7faf",
+      "sha256": "a133d19c4b7c0d75ad1c50ab6c46c900c2a3c1d60ea90789d797eb3163ee629b",
       "vulnCount": 430
     },
     {
@@ -728,7 +728,7 @@
         "docker.io/mattermost/mattermost-enterprise-edition"
       ],
       "shard": "products/mattermost.json",
-      "sha256": "46c6abb9583db8306ed03b5fd82deb00399754b1cd402ef2e2fc69299512020f",
+      "sha256": "e9049241094c1207c82b476fa4232c0152f016ec4939c5d6695b24c4481ab90d",
       "vulnCount": 506
     },
     {
@@ -749,7 +749,7 @@
         "docker.io/burakince/mlflow"
       ],
       "shard": "products/mlflow.json",
-      "sha256": "95f5da29c0a59b47296a93321f7cad5a73f7325d9231f91ccddbecb7592f2d4c",
+      "sha256": "74ba40a132f798a6b7d1669c8fd51c5db0237f7f7bc5a19c755007cbae6b76fa",
       "vulnCount": 72
     },
     {
@@ -771,7 +771,7 @@
         "docker.io/bitnamilegacy/mongodb"
       ],
       "shard": "products/mongodb.json",
-      "sha256": "9c69904da06f585a57476995eed32334643539cf3b18cdc25051de8c04a6c1f8",
+      "sha256": "cb313faca9370d58432528f73e7c662a248ab60ea171300686d36cbf8af7f55e",
       "vulnCount": 188
     },
     {
@@ -792,7 +792,7 @@
         "docker.io/bitnami/mysql"
       ],
       "shard": "products/mysql.json",
-      "sha256": "34dce9366343428740b43f242c9c5a56ab25b3e0a11b81f361513677256def9a",
+      "sha256": "336f875564c3a9928a6f353a68cc34c508e34df12fe6cfddf25ba7e514a28b2e",
       "vulnCount": 1723
     },
     {
@@ -802,7 +802,7 @@
         "docker.io/n8nio/n8n"
       ],
       "shard": "products/n8n.json",
-      "sha256": "8c60b409b45517ac0d97199b3ee6789d41432c4e0e2cc2f09402c7ab71872f56",
+      "sha256": "4d51bd360de9096b3ad2da0b59933c8ea7cbe0abf9c558865610a5bd1027a5b6",
       "vulnCount": 179
     },
     {
@@ -813,7 +813,7 @@
         "docker.io/bitnami/nats"
       ],
       "shard": "products/nats.json",
-      "sha256": "11e584c078df03ccf4a7a3cd6e58dd59bd80630e99c7f8497b0e1ee84750754c",
+      "sha256": "0f695e62cd3eccf9bd05220fd6da9c2cbe7d16dc2f49e5f83ceb822bedf12a15",
       "vulnCount": 34
     },
     {
@@ -823,7 +823,7 @@
         "docker.io/library/neo4j"
       ],
       "shard": "products/neo4j.json",
-      "sha256": "014d11b589f77ced8385b2610d97403aa6d7fc17d789cc3841138050d7d5f313",
+      "sha256": "68536c9d87528e814370dd6687616f23cfcf3505a92705813305eab60b3dc068",
       "vulnCount": 9
     },
     {
@@ -854,7 +854,7 @@
         "docker.io/library/nextcloud"
       ],
       "shard": "products/nextcloud.json",
-      "sha256": "fabc1992355e44cb5166c8baea4f570c6d96dc7a6d9e05e01946862f6c7025c1",
+      "sha256": "12bc7ddcb56f01d0503722a43c2f7eed63d8407371b0b012f7a41e0a2bddafd8",
       "vulnCount": 189
     },
     {
@@ -864,7 +864,7 @@
         "docker.io/sonatype/nexus3"
       ],
       "shard": "products/nexus.json",
-      "sha256": "1f6590199729516dfc407ced0c55f7ec1ecb29e64cbe06556c9fdbecafa5c8d7",
+      "sha256": "e489ddf8e4dd4566ac62f740aa0a85283d4509ede7c6d3b202bc4f0a4d7ca134",
       "vulnCount": 66
     },
     {
@@ -876,7 +876,7 @@
         "docker.io/bitnami/nginx"
       ],
       "shard": "products/nginx.json",
-      "sha256": "89b884ca3f157f8ceab62e37aef5c3291ad09b80bee0f312cb7e6e6230b90d6d",
+      "sha256": "dc639cf405d2cd5f1ab362e3d0098a2adcb50d47ece0293daade86a5e1b53019",
       "vulnCount": 41
     },
     {
@@ -887,7 +887,7 @@
         "docker.io/bitnami/node"
       ],
       "shard": "products/nodejs.json",
-      "sha256": "23f786392d79f5c74427a77bc8773548fde5cfb0aedc308b29acd1d3d590384d",
+      "sha256": "0bcbb9dae3143e7cd714da1f2574edc193ec0e36a3d0941488f4e8212c3a5353",
       "vulnCount": 187
     },
     {
@@ -908,7 +908,7 @@
         "docker.io/bitnami/oauth2-proxy"
       ],
       "shard": "products/oauth2-proxy.json",
-      "sha256": "c598df35b49f17806d4e3e2602d6fb8caa3550f6ee2163a0df4b86f35238dc66",
+      "sha256": "e87abf1568fc25c4f41275e8dc524f1ec15b6726c35a3cd448b06b570ebb79b8",
       "vulnCount": 9
     },
     {
@@ -918,7 +918,7 @@
         "docker.io/ollama/ollama"
       ],
       "shard": "products/ollama.json",
-      "sha256": "b818b619d656fd37c735cc522c694407aa5c2865188baff13c58f4fa95dfadf2",
+      "sha256": "c03ff82a4a8fafd972a286286cfad07f665685861c3dc451dd94daa1d0caa91e",
       "vulnCount": 25
     },
     {
@@ -928,7 +928,7 @@
         "docker.io/openfga/openfga"
       ],
       "shard": "products/openfga.json",
-      "sha256": "76d797ee2f0ea17fef12d7eeb406ec13ab5f0f594a2de15f7a48324237a1e6f9",
+      "sha256": "ca2090320e68f5a5750ce7379b1666cc12bfcc1d8d6e66e4eed9c75b3c7f8ff7",
       "vulnCount": 26
     },
     {
@@ -939,7 +939,7 @@
         "docker.io/jpgouin/openldap"
       ],
       "shard": "products/openldap.json",
-      "sha256": "0b0d5f0ead3d142103fcdd0f80af1b7ed40123a7e5598e778b4eaebcbb2737b1",
+      "sha256": "f1400983d1d26546c9ce2910d944b4a8b7c9d197698838b8be99119bf2a6b3aa",
       "vulnCount": 59
     },
     {
@@ -950,7 +950,7 @@
         "docker.io/bitnami/opensearch"
       ],
       "shard": "products/opensearch.json",
-      "sha256": "7bf5b4f9a2cec43955db7c57b2ee8bc38f61a08369c392db999b0b7335f9b1a8",
+      "sha256": "083b99d82820ffa083b4c0eaa93a78ae8ebef7559fd19392c21a25e16a7d06f8",
       "vulnCount": 11
     },
     {
@@ -960,7 +960,7 @@
         "docker.io/alpine/openssl"
       ],
       "shard": "products/openssl.json",
-      "sha256": "9baeae623979caefc58409153f64e55ddab9c173028f3d407e0e4e4b4014fadd",
+      "sha256": "8a2c1901faf565203dd9d846d5ce788917f3991af07f19096114d4982e5108f3",
       "vulnCount": 322
     },
     {
@@ -992,7 +992,7 @@
         "docker.io/bitnami/php-fpm"
       ],
       "shard": "products/php.json",
-      "sha256": "15adf0c5b361e5af921244c560b690368fed468974c9f25142db00484ebde1fd",
+      "sha256": "6be53b443e9043448254efc5e58844d3393fa3e9e3efc91d41a87b8a123795cd",
       "vulnCount": 738
     },
     {
@@ -1016,7 +1016,7 @@
       ],
       "minSegments": 2,
       "shard": "products/postgresql.json",
-      "sha256": "774e54cf4ce0d5063b4775afda4b9c71f6c6d2a55a80d2c789b9331167eee65d",
+      "sha256": "f51eae6e494e171ab1feea552f3b4e277b78f5b8244d1189c0fc09ad69762080",
       "vulnCount": 202
     },
     {
@@ -1039,7 +1039,7 @@
         "docker.io/bitnami/python"
       ],
       "shard": "products/python.json",
-      "sha256": "7ae9a2ff1b6c5a57f9a7e92334c44ae6bd623f520b34f7a18fc6783b213b1c52",
+      "sha256": "8627426cc39a55fd798565385e46493d984f09cfc13d3bbf7ffba8442af28c90",
       "vulnCount": 140
     },
     {
@@ -1086,7 +1086,7 @@
         "docker.io/bitnami/ruby"
       ],
       "shard": "products/ruby.json",
-      "sha256": "d7877969770c4d5e5fb5e37caf0c06562507345fe2094cebfa266aecd55477b6",
+      "sha256": "20b7386dcd6095bd610ab11f2df00476e58783f3a5b67951e70ab7a9d631e741",
       "vulnCount": 93
     },
     {
@@ -1108,7 +1108,7 @@
         "docker.io/bitnami/solr"
       ],
       "shard": "products/solr.json",
-      "sha256": "24b512e48474b74bb97430a00915b4461bd0fa4a4a0eaca02ae247c10b7b0ceb",
+      "sha256": "948cf1b24403b64b41bf007fae3388daf527323ee8dc4b0d4f86ed188bc5a477",
       "vulnCount": 47
     },
     {
@@ -1140,7 +1140,7 @@
         "docker.io/bitnami/spark"
       ],
       "shard": "products/spark.json",
-      "sha256": "f9a35f50c1d01657d01661d2b9730f046ab388bc50002d897ed8d56c950a2cc5",
+      "sha256": "64446db2c7caf6b579062dd1f7044ad42409b8101f02f153df79b8a9b30f8ffd",
       "vulnCount": 23
     },
     {
@@ -1160,7 +1160,7 @@
         "docker.io/apache/superset"
       ],
       "shard": "products/superset.json",
-      "sha256": "da25c61bb6ff66a4c2849ebe2b6b939a88108a65df1f8c025d3755bd624cb715",
+      "sha256": "044f79d3db4851a5e54319a8618af8ec127d3bfdfb2d46a957cccd72568ede6d",
       "vulnCount": 70
     },
     {
@@ -1171,7 +1171,7 @@
         "docker.io/bitnami/tomcat"
       ],
       "shard": "products/tomcat.json",
-      "sha256": "e8b2431af211fd8635f087afc70cdd26a086688e4552cda994fd1794341d2f01",
+      "sha256": "18acdb214e21b7c06cb1a0fdd3ec6165c5deac1df95a9b1e37cd0b981283fe4e",
       "vulnCount": 272
     },
     {
@@ -1182,7 +1182,7 @@
         "docker.io/traefik/traefik"
       ],
       "shard": "products/traefik.json",
-      "sha256": "b2e9abd430c850dda188fce9216267f373e4e0297560b4748ce61e1e9ee0934b",
+      "sha256": "37cff266830d1e0e7d222057c7c5c7f7da4dcb8583e7a1040e0cbc655d81e28f",
       "vulnCount": 69
     },
     {
@@ -1224,7 +1224,7 @@
         "docker.io/library/vault"
       ],
       "shard": "products/vault.json",
-      "sha256": "1b7da01c1cdb56671ea939a9325dd93adf7fe3a9867cf6f3cf6e21534fd7b800",
+      "sha256": "24b6c89e834c97441fd0be7f6d288c45323a39ef6ab6b05a37709df668a38dc9",
       "vulnCount": 72
     },
     {
@@ -1256,7 +1256,7 @@
         "docker.io/bitnami/wordpress"
       ],
       "shard": "products/wordpress.json",
-      "sha256": "4a989a944c2ef528b0a6a7c442d3220fa759a8f9fba15486e37fac3548a9b34f",
+      "sha256": "5d41578326e52f30b8fcad82a6d0fdbe10b7c48bc8da743cd619e4e1da40f119",
       "vulnCount": 353
     },
     {
@@ -1267,7 +1267,7 @@
         "docker.io/bitnami/zookeeper"
       ],
       "shard": "products/zookeeper.json",
-      "sha256": "79241cd36c3586b8c03edc415d6738de30c2f5d44b33ac16bd75f74a72a84c7f",
+      "sha256": "f4df672971f4a1806010c661e6e56153a93956d277a66221c8b9f7407fc9637f",
       "vulnCount": 16
     }
   ],
