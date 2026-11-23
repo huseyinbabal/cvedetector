@@ -3,6 +3,7 @@ name: "Apache ZooKeeper"
 images:
   - docker.io/library/zookeeper
   - docker.io/bitnami/zookeeper
+  - docker.io/signoz/zookeeper
 nvd:
   cpes:
     - cpe:2.3:a:apache:zookeeper
