@@ -130,7 +130,7 @@ func convertOSV(o osvVuln, ecosystem, pkg string) (feed.Vuln, bool) {
 	if len(v.Affected) == 0 {
 		return feed.Vuln{}, false
 	}
-	v.Summary = o.Summary
+	v.Summary = cleanText(o.Summary)
 	if v.Summary == "" {
 		v.Summary = truncate(o.Details, 600)
 	}

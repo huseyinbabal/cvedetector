@@ -35,7 +35,7 @@ const columns = [
     id: "summary",
     header: "Summary",
     enableSorting: false,
-    cell: (c) => <span className="line-clamp-2 max-w-[480px] text-muted-foreground">{c.getValue()}</span>,
+    cell: (c) => <span title={c.getValue()} className="line-clamp-2 max-w-[480px] min-w-48 text-muted-foreground [overflow-wrap:anywhere]">{c.getValue()}</span>,
   }),
 ];
 

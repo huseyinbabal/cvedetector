@@ -6,8 +6,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
+	"unicode/utf8"
 
 	"github.com/huseyinbabal/cvedetector/pkg/feed"
 )
@@ -116,5 +118,17 @@ func TestOSVFetch(t *testing.T) {
 	}
 	if vs[1].ID != "GHSA-bbbb" || vs[1].Severity != feed.SeverityMedium || vs[1].Affected[0].EQ != "1.0.0" {
 		t.Errorf("second: %+v", vs[1])
+	}
+}
+
+func TestTruncateCleansAndKeepsRunes(t *testing.T) {
+	// No-break spaces and newlines become plain spaces.
+	if got := truncate("When multiple server blocks\n are", 100); got != "When multiple server blocks are" {
+		t.Errorf("clean: %q", got)
+	}
+	// The cut never lands inside a multi-byte rune.
+	got := truncate(strings.Repeat("é", 10), 5)
+	if !utf8.ValidString(got) || got != "éé…" {
+		t.Errorf("cut: %q", got)
 	}
 }

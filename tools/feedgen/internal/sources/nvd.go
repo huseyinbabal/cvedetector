@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"unicode/utf8"
 
 	"github.com/huseyinbabal/cvedetector/pkg/feed"
 )
@@ -244,12 +245,24 @@ func parseNVDTime(s string) time.Time {
 	return time.Time{}
 }
 
+// truncate cleans s (see cleanText) and cuts it to about n bytes on a rune
+// boundary.
 func truncate(s string, n int) string {
-	s = strings.TrimSpace(s)
+	s = cleanText(s)
 	if len(s) <= n {
 		return s
 	}
+	for n > 0 && !utf8.RuneStart(s[n]) {
+		n--
+	}
 	return strings.TrimSpace(s[:n]) + "…"
+}
+
+// cleanText collapses all whitespace, including no-break spaces and newlines,
+// to single spaces. Some NVD descriptions join words with U+00A0, which the
+// UI can't wrap.
+func cleanText(s string) string {
+	return strings.Join(strings.Fields(s), " ")
 }
 
 const nvdCPEURL = "https://services.nvd.nist.gov/rest/json/cpes/2.0"

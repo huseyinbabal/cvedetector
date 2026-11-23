@@ -155,7 +155,13 @@ const vulnColumns = [
     id: "summary",
     header: "Summary",
     enableSorting: false,
-    cell: (c) => <span className="line-clamp-2 max-w-[520px] text-muted-foreground">{c.getValue()}</span>,
+    // overflow-wrap:anywhere: some NVD descriptions join words with no-break
+    // spaces, and that unbreakable run set the table's minimum width.
+    cell: (c) => (
+      <span title={c.getValue()} className="line-clamp-2 max-w-[520px] min-w-48 text-muted-foreground [overflow-wrap:anywhere]">
+        {c.getValue()}
+      </span>
+    ),
   }),
 ];
 
@@ -187,8 +193,8 @@ export function ImageDetailPage({ route }: { route: Route }) {
       />
       {img.status !== "matched" && <Callout tone="info">{statusDescription(img.status)}</Callout>}
 
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)]">
-        <div className="grid gap-4">
+      <div className="grid items-start gap-4 2xl:grid-cols-[minmax(0,2fr)_minmax(260px,1fr)]">
+        <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
           <Section title={`Vulnerabilities (${vulns.length})`} icon={<ShieldAlert className="size-3.5" />}>
             {vulns.length ? (
               <div className="-mx-4 -mb-4">
@@ -226,7 +232,7 @@ export function ImageDetailPage({ route }: { route: Route }) {
           )}
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid items-start gap-4 md:grid-cols-2 2xl:grid-cols-1">
           <Section title="Used by" icon={<Layers className="size-3.5" />}>
             <ul className="grid gap-1.5">
               {data.workloads.map((w) => (
