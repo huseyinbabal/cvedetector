@@ -17,16 +17,6 @@ helm repo add huseyinbabal https://huseyinbabal.github.io/charts
 helm install cvedetector huseyinbabal/cvedetector -n cvedetector --create-namespace
 ```
 
-:::note[Private feed]
-While the repository is private, the API needs a GitHub token to read the feed. Create the Secret before installing and add `--set api.feed.existingTokenSecret=cvedetector-feed`:
-
-```sh
-kubectl -n cvedetector create secret generic cvedetector-feed --from-literal=token=<github token>
-```
-
-A fine-grained token with read-only *Contents* access to `huseyinbabal/cvedetector` is enough.
-:::
-
 ## Open the UI
 
 ```sh

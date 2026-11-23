@@ -18,7 +18,7 @@ Everything is set through Helm values. The chart turns them into environment var
 | `api.replicas` | `1` | Stateless; feed sync runs on one replica at a time |
 | `api.feed.url` | `data` branch on raw.githubusercontent.com | Directory that contains `v1/index.json`. Point it at a mirror for air-gapped clusters. |
 | `api.feed.refreshInterval` | `1h` | How often the API checks for a new feed |
-| `api.feed.existingTokenSecret` | | Secret with a GitHub token for a private feed (key `token`) |
+| `api.feed.existingTokenSecret` | | Secret with a bearer token for a mirror that needs one (key `token`) |
 | `api.retention` | `8760h` | How long resolved findings are kept |
 | `api.extraTokensSecret.name` | | Secret with more agent tokens, comma-separated, one per remote cluster |
 | `api.workloadMetrics` | `false` | One metric series per workload |
@@ -48,7 +48,7 @@ Everything is set through Helm values. The chart turns them into environment var
 | `INGEST_TOKEN`, `INGEST_TOKENS` | at least one | `INGEST_TOKENS` is comma-separated |
 | `FEED_URL` | `https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/` | |
 | `FEED_REFRESH_INTERVAL` | `1h` | |
-| `FEED_TOKEN` | | Bearer token for a private feed. Not sent when a redirect goes to another host. |
+| `FEED_TOKEN` | | Bearer token for a mirror that needs one. Not sent when a redirect goes to another host. |
 | `RETENTION` | `8760h` | |
 | `WORKLOAD_METRICS` | `false` | |
 | `LISTEN_ADDR`, `LOG_LEVEL`, `LOG_FORMAT` | `:8080`, `info`, `json` | |

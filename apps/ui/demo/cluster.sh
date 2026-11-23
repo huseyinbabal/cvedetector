@@ -66,13 +66,9 @@ kubectl -n shop set env deploy/postgres POSTGRES_PASSWORD=demo >/dev/null
 kubectl -n web set env deploy/wordpress WORDPRESS_DB_HOST=127.0.0.1 >/dev/null
 kubectl -n security set env deploy/keycloak KEYCLOAK_ADMIN=admin KEYCLOAK_ADMIN_PASSWORD=admin >/dev/null
 
-# cvedetector. The feed repository is private: the API reads it with your gh token.
-kubectl create ns cvedetector --dry-run=client -o yaml | kubectl apply -f - >/dev/null
-kubectl -n cvedetector create secret generic feed-token --from-literal=token="${FEED_TOKEN:-$(gh auth token)}" \
-  --dry-run=client -o yaml | kubectl apply -f - >/dev/null
-helm upgrade --install cvedetector "$CHART" -n cvedetector \
+# cvedetector itself.
+helm upgrade --install cvedetector "$CHART" -n cvedetector --create-namespace \
   --set agent.clusterName=kind-demo \
-  --set api.feed.existingTokenSecret=feed-token \
   --set image.pullPolicy=Never \
   --set postgresql.persistence.size=1Gi \
   --wait --timeout 5m >/dev/null

@@ -1,6 +1,6 @@
 # SPEC: cvedetector
 
-> Durum: v0.7, Helm chart huseyinbabal/charts reposuna, ürün kataloğu `data` branch'ine taşındı · Tarih: 2026-11-19
+> Durum: v0.8, repo public, dokümantasyon sitesi (docs/) eklendi, Helm chart huseyinbabal/charts reposuna, ürün kataloğu `data` branch'ine taşındı · Tarih: 2026-11-23
 
 ## 1. Amaç
 
@@ -144,12 +144,12 @@ Bunun yerine `v1/` altında **ürün başına güncel durum** tutuluyor; tarihç
 ### 4.4 Workflow (`feed.yml`)
 - Her gün 03:17 UTC'de çalışır; ayrıca elle, `main`'de `tools/feedgen` değişince ve `data`'da katalog değişikliği merge edilince (`catalog.yml` üzerinden) tetiklenir.
 - Adımlar: testler → `data` branch'i bir worktree'ye alınır → `feedgen -config data/catalog -out data -changes data/changes -commit-message …` → değişiklik varsa `github-actions[bot]` adına commit ve push. Özet, job'ın Summary sayfasına yazılır.
-- `NVD_API_KEY` secret'ı opsiyonel. Anahtarsız bir çalışma yaklaşık 5 dakika, anahtarla yaklaşık 1 dakika sürer. Private repoda Actions dakikaları aylık kotadan düşer.
-- Cosign imzası kaldırıldı: keyless imza herkese açık transparency log'a (Rekor) private reponun adını yazardı. Repo public olunca geri eklenebilir.
+- `NVD_API_KEY` secret'ı opsiyonel. Anahtarsız bir çalışma yaklaşık 5 dakika, anahtarla yaklaşık 1 dakika sürer. Repo public olduğu için Actions dakikaları ücretsiz.
+- Release imajları cosign ile keyless imzalanır (repo public olduğu için Rekor'a reponun adının yazılması sorun değil).
 
 ### 4.5 Tüketim
 - API feed'i `https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/` adresinden okur.
-- Repo private olduğu için `FEED_TOKEN` gerekir: `contents: read` yetkili, fine-grained bir GitHub token'ı. Helm'de `api.feed.existingTokenSecret` ile verilir.
+- Repo public; token gerekmez. Kimlik doğrulama isteyen bir ayna için `FEED_TOKEN` (Helm'de `api.feed.existingTokenSecret`) bearer token olarak gönderilir.
 - Go HTTP istemcisi, bir yönlendirme başka bir host'a giderse `Authorization` başlığını göndermez; token sızmaz.
 - Index'te `epss.json`'un checksum'ı da var; API, EPSS dosyası ya da shard'lar değişince skorları yeniden uygular.
 
@@ -249,7 +249,7 @@ CVE listesinin varsayılan sırası önceliklendirmeye göre: önce KEV, sonra s
 | `DATABASE_URL` / `PG*` | zorunlu |
 | `INGEST_TOKEN`, `INGEST_TOKENS` (virgülle ayrılmış ek token'lar) | en az biri zorunlu |
 | `FEED_URL`, `FEED_REFRESH_INTERVAL` | `https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/`, `1h` |
-| `FEED_TOKEN` | boş (private repo için gerekli) |
+| `FEED_TOKEN` | boş (kimlik doğrulama isteyen bir ayna için) |
 | `RETENTION` | `8760h` |
 | `WORKLOAD_METRICS` | `false` |
 | `LISTEN_ADDR`, `LOG_LEVEL`, `LOG_FORMAT` | `:8080`, `info`, `json` |

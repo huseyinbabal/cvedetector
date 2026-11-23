@@ -10,7 +10,7 @@ TEST_DB_URL ?= postgres://cvedetector:dev@127.0.0.1:$(DEV_DB_PORT)/cvedetector_t
 DEV_API_PORT   ?= 28090
 DEV_AGENT_PORT ?= 28091
 DEV_UI_PORT    ?= 5180
-# Published feed (data branch). Private repo: the token comes from `gh auth token`.
+# Published feed (data branch).
 # FEED_URL=file://$(CURDIR)/dist/feed/ uses the one `make feed` builds.
 FEED_URL       ?= https://raw.githubusercontent.com/huseyinbabal/cvedetector/data/
 # Required by dev-agent: the agent reads this context, never the current one.
@@ -84,7 +84,6 @@ dev-db:
 
 dev-api: build
 	DATABASE_URL='$(DEV_DB_URL)' INGEST_TOKEN=dev-token FEED_URL='$(FEED_URL)' \
-		FEED_TOKEN="$${FEED_TOKEN:-$$(gh auth token 2>/dev/null)}" \
 		LISTEN_ADDR=127.0.0.1:$(DEV_API_PORT) LOG_FORMAT=text ./dist/api $(call logtag,api)
 
 # Reports one kubeconfig context (read-only: lists pods, replicasets, jobs) to the local API.

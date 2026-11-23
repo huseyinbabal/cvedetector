@@ -3,7 +3,7 @@ title: Development
 description: Run the whole stack locally, test it, and re-record these docs.
 ---
 
-Requirements: Go, Node.js, Docker, and the `gh` CLI (the API reads the private feed with your GitHub token).
+Requirements: Go, Node.js and Docker; kind and Helm for the demo cluster.
 
 ## Local stack
 

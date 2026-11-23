@@ -18,5 +18,4 @@ changes/YYYY/MM/DD.json  what changed that day: added, updated, removed vulnerab
   `git log -p -- v1/products/nginx.json` shows how NGINX's CVEs evolved.
 - A commit is made only when something changed. The commit message lists new CVEs.
 - The cvedetector API reads `v1/` from
-  `https://raw.githubusercontent.com/<owner>/cvedetector/data/` (a token is needed while
-  the repository is private: `FEED_TOKEN`).
+  `https://raw.githubusercontent.com/<owner>/cvedetector/data/`.
