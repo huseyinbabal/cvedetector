@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-24",
+  "added": [],
+  "updated": [
+    {
+      "product": "kyverno",
+      "id": "CVE-2026-41068",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "kyverno",
+      "id": "CVE-2026-84196",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58208",
+      "severity": "MEDIUM",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58209",
+      "severity": "MEDIUM",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58210",
+      "severity": "HIGH",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58213",
+      "severity": "HIGH",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58214",
+      "severity": "MEDIUM",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "nats",
+      "id": "CVE-2026-58254",
+      "severity": "MEDIUM",
+      "fields": [
+        "aliases",
+        "references"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-35051",
+      "severity": "CRITICAL",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-39858",
+      "severity": "CRITICAL",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-40912",
+      "severity": "HIGH",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-41174",
+      "severity": "MEDIUM",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-41263",
+      "severity": "LOW",
+      "fields": [
+        "affected"
+      ]
+    },
+    {
+      "product": "traefik",
+      "id": "CVE-2026-54765",
+      "severity": "MEDIUM",
+      "fields": [
+        "summary",
+        "aliases",
+        "references"
+      ]
+    }
+  ],
+  "removed": []
+}

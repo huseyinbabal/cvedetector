@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-23T16:56:27.045094643Z",
+  "generatedAt": "2026-11-24T14:02:42.985011894Z",
   "products": [
     {
       "id": "airflow",
@@ -675,7 +675,7 @@
         "ghcr.io/kyverno/cleanup-controller"
       ],
       "shard": "products/kyverno.json",
-      "sha256": "6168e25e220bf865ee8e17aa5c3e409dd39f023b9d20fc7da38a667615e4e5e2",
+      "sha256": "a4f427394ec2e74638a525ead6138274e887d8b200ad9418304c8a29c76a3062",
       "vulnCount": 26
     },
     {
@@ -813,7 +813,7 @@
         "docker.io/bitnami/nats"
       ],
       "shard": "products/nats.json",
-      "sha256": "0f695e62cd3eccf9bd05220fd6da9c2cbe7d16dc2f49e5f83ceb822bedf12a15",
+      "sha256": "a616c97381d993f138b789017e761c3b5a75978b7b518a56d18f2e7848b305fd",
       "vulnCount": 34
     },
     {
@@ -1182,7 +1182,7 @@
         "docker.io/traefik/traefik"
       ],
       "shard": "products/traefik.json",
-      "sha256": "37cff266830d1e0e7d222057c7c5c7f7da4dcb8583e7a1040e0cbc655d81e28f",
+      "sha256": "e0b9ade5af0a7f4873a2cb0a0050ac3f56b8c4823f55de7f78aa1ca27bcb9707",
       "vulnCount": 69
     },
     {
