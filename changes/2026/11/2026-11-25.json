@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-25",
+  "added": [
+    {
+      "product": "elasticsearch",
+      "id": "CVE-2026-133981",
+      "severity": "MEDIUM"
+    },
+    {
+      "product": "python",
+      "id": "CVE-2026-2297",
+      "severity": "MEDIUM"
+    }
+  ],
+  "updated": [
+    {
+      "product": "traefik",
+      "id": "CVE-2026-53622",
+      "severity": "CRITICAL",
+      "fields": [
+        "affected"
+      ]
+    }
+  ],
+  "removed": []
+}
